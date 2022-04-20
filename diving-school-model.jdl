@@ -1,0 +1,152 @@
+entity Student {
+	firstName String required
+    middleName String
+    lastName String required
+    birthDate LocalDate required
+    gender Gender
+    email String
+	phoneNumber String
+    language Language
+    homeAddress Location
+    photo Byte
+}
+
+entity Instructor {
+	firstName String required
+    middleName String
+    lastName String required
+    birthDate LocalDate required
+    gender Gender
+    email String
+	phoneNumber String
+    language Language
+    homeAddress Location
+    photo Byte
+    statusTeaching StatusTeaching required
+}
+
+entity Course {
+    name String required
+    level Level
+}
+
+entity TeachingCourse {
+    status StatusTeachingCourse
+    
+}
+
+entity Slot {
+     title String
+     startingDate LocalDate required
+     endingDate LocalDate
+     location Location
+     status SlotStatus
+}
+
+enum SlotStatus {
+    ON,
+    OFF
+}
+
+
+enum StatusTeaching {
+    TEACHING, 
+    NOT_TEACHING
+}
+
+enum StatusTeachingCourse {
+    TEACHING, 
+    NOT_TEACHING
+}
+
+enum Level {
+    EASY, 
+    MEDIUM, 
+    DIFFICULT
+}
+
+enum Gender {
+    MALE, 
+    FEMALE, 
+    OTHER
+}
+
+enum Language {
+    PORTUGUESE,
+    FRENCH, 
+    ENGLISH, 
+    SPANISH
+}
+
+entity Location {
+	streetAddress String
+	postalCode String
+	city String
+	stateProvince String
+    country Country
+}
+
+entity Region {
+	regionName String
+}
+
+entity Country {
+	countryName String
+}
+
+relationship OneToOne {
+	Instructor{location} to Location
+}
+
+relationship OneToOne {
+	Student{location} to Location
+}
+
+relationship OneToOne {
+	Slot{location} to Location
+}
+
+relationship ManyToMany {
+	Instructor{Slot(title)} to Slot{instructor}
+}
+
+relationship ManyToMany {
+	Student{Slot(title)} to Slot{student}
+}
+
+relationship OneToMany {
+	Course to Slot{course}
+}
+
+relationship OneToMany {
+	Instructor to TeachingCourse{instructor}
+}
+
+relationship ManyToOne {
+	Slot{course} to Course
+}
+
+relationship ManyToOne {
+	TeachingCourse{course} to Instructor
+}
+
+
+// defining multiple oneToOne relationships
+//relationship OneToOne {
+//	JobHistory{job} to Job
+//	JobHistory{department} to Department
+//	JobHistory{employee} to Employee
+//}
+
+// Set pagination options
+//paginate JobHistory, Employee with infinite-scroll
+//paginate Job with pagination
+
+// Use Data Transfer Objects (DTO)
+// dto * with mapstruct
+
+// Set service options to all except few
+//service all with serviceImpl except Employee, Job
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
