@@ -1,18 +1,28 @@
 package com.zem.zemdivingschool.persistence.model;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 
+@Entity
 public class Card {
-
+    @Id
     private Long id;
+    @Column(name = "course")
     String course;
+    @Column(name = "student_name")
     String studentName;
+    @Column(name = "start_date")
     Date startDate ;
+    @Column(name = "end_date")
     Date endDate;
+    @Enumerated(EnumType.STRING)
     Country country;
+    @Column(name = "instructor_name")
     String instructorName;
 
+    // TODO: create the relationship to student
+    @Transient
     Student student;
 
     //
@@ -33,7 +43,7 @@ public class Card {
         this.instructorName = instructorName;
     }
 
-//
+    //
     // Methods
     //
 
@@ -105,11 +115,9 @@ public class Card {
         this.student = student;
     }
 
-
     //
     //
     //
-
 
     @Override
     public boolean equals(Object o) {

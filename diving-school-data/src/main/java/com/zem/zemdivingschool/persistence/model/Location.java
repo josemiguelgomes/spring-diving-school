@@ -1,12 +1,21 @@
 package com.zem.zemdivingschool.persistence.model;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
 public class Location {
+    @Id
+    Long id;
+    @Column(name = "street_address")
     String streetAddress;
+    @Column(name = "postal_code")
     String postalCode;
+    @Column(name = "city")
     String city;
+    @Column(name = "state_province")
     String stateProvince;
+    @Enumerated(EnumType.STRING)
     Country country;
 
     //

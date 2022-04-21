@@ -1,21 +1,41 @@
 package com.zem.zemdivingschool.persistence.model;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Objects;
+import javax.persistence.*;
 
+import java.util.*;
+
+@Entity
 public class Instructor {
+    @Id
+    Long id;
+
+    @Column(name = "first_name")
     String firstName;
+    @Column(name = "middle_name")
     String middleName;
+    @Column(name = "last_Name")
     String lastName;
+    @Column(name = "birthdate")
     Date birthDate;
+    @Enumerated(EnumType.STRING)
     Gender gender;
+    @Column(name = "email")
     String email;
+    @Column(name = "phone_number")
     String phoneNumber;
+    @Enumerated(EnumType.STRING)
     Language language;
+    // TODO: create the relationship to location
+    @Transient
     Location homeAddress;
+    @Column(name = "photo")
     Byte[] photo;
+    @Enumerated(EnumType.STRING)
     StatusTeaching statusTeaching;
+    // TODO: create the relationship to slot
+    @Transient
+    List<Slot> slots = new ArrayList<>();
+
 
     //
     // Constructors
@@ -134,6 +154,14 @@ public class Instructor {
 
     public void setStatusTeaching(StatusTeaching statusTeaching) {
         this.statusTeaching = statusTeaching;
+    }
+
+    public List<Slot> getSlots() {
+        return slots;
+    }
+
+    public void setSlots(List<Slot> slots) {
+        this.slots = slots;
     }
 
     //

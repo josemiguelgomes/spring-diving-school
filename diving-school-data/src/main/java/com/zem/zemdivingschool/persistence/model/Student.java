@@ -1,22 +1,39 @@
 package com.zem.zemdivingschool.persistence.model;
 
+import javax.persistence.*;
 import java.util.*;
 
-
+@Entity
 public class Student {
+    @Id
     private Long id;
+    @Column(name = "first_name")
     private String firstName;
+    @Column(name = "middle_name")
     private String middleName;
+    @Column(name = "last_name")
     private String lastName;
+    @Column(name = "birthdate")
     private Date birthdate;
+    @Enumerated(EnumType.STRING)
     private Gender gender;
+    @Column(name = "email")
     private String email;
+    @Column(name = "phone_number")
     private String phoneNumber;
+    @Enumerated(EnumType.STRING)
     private Language language;
+    // TODO: create the relationship to location
+    @Transient
     private Location homeAddress;
+    @Column(name = "photo")
     private Byte[] photo;
 
+    // TODO: create the relationship to cards
+    @Transient
  	private List<Card> cards = new ArrayList<>();
+    // TODO: create the relationship to slot
+    @Transient
 	private List<Slot> slots = new ArrayList<>();
 
     //

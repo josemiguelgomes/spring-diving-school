@@ -1,20 +1,38 @@
 package com.zem.zemdivingschool.persistence.model;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
 public class Slot {
-    String title;
-    Date startingDate;
-    Date endingDate;
-    Location location;
-    SlotStatus status;
+    @Id
+    Long id;
 
+    @Column(name = "title")
+    String title;
+    @Column(name = "starting_date")
+    Date startingDate;
+    @Column(name = "ending_date")
+    Date endingDate;
+    // TODO: create the relationship to location
+    @Transient
+    Location location;
+    @Enumerated(EnumType.STRING)
+    SlotStatus status;
+    // TODO: create the relationship to course
+    @Transient
     Course course;
+    // TODO: create the relationship to languages
+    @Transient
     List<Language> languages = new ArrayList<>();
+    // TODO: create the relationship to students
+    @Transient
     List<Student> students = new ArrayList<>();
+    // TODO: create the relationship to instructors
+    @Transient
     List<Instructor> instructors = new ArrayList<>();
 
     //
