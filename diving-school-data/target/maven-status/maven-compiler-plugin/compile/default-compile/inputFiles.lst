@@ -1,6 +1,7 @@
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/model/Student.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/model/Level.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/model/Card.java
+/Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/model/BaseEntity.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/model/Language.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/model/Gender.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/model/StatusTeaching.java

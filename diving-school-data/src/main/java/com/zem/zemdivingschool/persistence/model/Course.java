@@ -6,19 +6,14 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Course {
-
-    @Id
-    Long id;
-
+@Table(name = "courses")
+public class Course extends BaseEntity {
     @Column(name = "name")
-    String name;
-
+    private String name;
     @Enumerated(EnumType.STRING)
-    Level level;
+    private Level level;
 
-    // TODO: create the relationship to slots
-    @Transient
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<Slot> slots = new ArrayList<>();
 
     //
@@ -26,10 +21,11 @@ public class Course {
     //
 
     public Course() {
+        super();
     }
 
     public Course(Long id, String name, Level level, List<Slot> slots) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.level = level;
         this.slots = slots;
@@ -43,15 +39,6 @@ public class Course {
     //
     // Setters & Getters
     //
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -86,22 +73,23 @@ public class Course {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Course course = (Course) o;
-        return Objects.equals(id, course.id)
-                && Objects.equals(name, course.name) && level == course.level && Objects.equals(slots, course.slots);
+        return Objects.equals(getId(), course.getId())
+                && Objects.equals(name, course.name)
+                && level == course.level
+                && Objects.equals(slots, course.slots);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, level, slots);
+        return Objects.hash(getId(), name, level);
     }
 
     @Override
     public String toString() {
         return "Course{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", name='" + name + '\'' +
                 ", level=" + level +
-                ", slots=" + slots +
                 '}';
     }
 }

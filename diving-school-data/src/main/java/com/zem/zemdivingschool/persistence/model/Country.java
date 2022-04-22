@@ -7,13 +7,13 @@ public enum Country {
     SPAIN("ESP"),
     UKRAINE("UKR");
 
-    private String description;
+    private final String field;
 
-    private Country(String country) {
-        this.description = country;
+    private Country(String field) {
+        this.field = field;
     }
 
     public String getCountry() {
-        return description;
+        return field;
     }
 }

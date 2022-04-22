@@ -4,28 +4,30 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-public class Location {
-    @Id
-    Long id;
+@Table(name = "locations")
+public class Location extends BaseEntity {
     @Column(name = "street_address")
-    String streetAddress;
+    private String streetAddress;
     @Column(name = "postal_code")
-    String postalCode;
+    private String postalCode;
     @Column(name = "city")
-    String city;
+    private String city;
     @Column(name = "state_province")
-    String stateProvince;
+    private String stateProvince;
     @Enumerated(EnumType.STRING)
-    Country country;
+    private Country country;
 
     //
     // Constructors
     //
 
     public Location() {
+        super();
     }
 
-    public Location(String streetAddress, String postalCode, String city, String stateProvince, Country country) {
+    public Location(Long id, String streetAddress, String postalCode, String city, String stateProvince,
+                    Country country) {
+        super(id);
         this.streetAddress = streetAddress;
         this.postalCode = postalCode;
         this.city = city;

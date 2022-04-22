@@ -8,13 +8,13 @@ public enum Language {
     SPANISH("spa"),
     UKRANIAN("ukr");
 
-    private String description;
+    private final String field;
 
-    private Language(String language) {
-        this.description = language;
+    private Language(String field) {
+        this.field = field;
     }
 
     public String getLanguage() {
-        return description;
+        return field;
     }
 }

@@ -4,13 +4,13 @@ public enum StatusTeachingCourse {
     TEACHING("T"),
     NOT_TEACHING("N");
 
-    private String description;
+    private final String field;
 
-    private StatusTeachingCourse(String statusTeachingCourse) {
-        this.description = statusTeachingCourse;
+    private StatusTeachingCourse(String field) {
+        this.field = field;
     }
 
     public String getStatusTeachingCourse() {
-        return description;
+        return field;
     }
 }

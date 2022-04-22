@@ -5,13 +5,13 @@ public enum Level {
     MEDIUM("M"),
     DIFFICULT("D");
 
-    private String description;
+    private final String field;
 
-    private Level(String level) {
-        this.description = level;
+    private Level(String field) {
+        this.field = field;
     }
 
     public String getLevel() {
-        return description;
+        return field;
     }
 }

@@ -4,13 +4,13 @@ public enum SlotStatus {
     ON("1"),
     OFF("0");
 
-    private String description;
+    private final String field;
 
-    private SlotStatus(String slotStatus) {
-        this.description = slotStatus;
+    private SlotStatus(String field) {
+        this.field = field;
     }
 
     public String getSlotStatus() {
-        return description;
+        return field;
     }
 }

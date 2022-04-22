@@ -5,36 +5,36 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
-public class Card {
-    @Id
-    private Long id;
+@Table(name = "cards")
+public class Card extends BaseEntity {
     @Column(name = "course")
-    String course;
+    private String course;
     @Column(name = "student_name")
-    String studentName;
+    private String studentName;
     @Column(name = "start_date")
-    Date startDate ;
+    private Date startDate ;
     @Column(name = "end_date")
-    Date endDate;
+    private Date endDate;
     @Enumerated(EnumType.STRING)
-    Country country;
+    private Country country;
     @Column(name = "instructor_name")
-    String instructorName;
+    private String instructorName;
 
-    // TODO: create the relationship to student
-    @Transient
-    Student student;
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "student_id", nullable = false)
+    private Student student;
 
     //
     // Constructors
     //
 
     public Card() {
+        super();
     }
 
     public Card(Long id, String course, String studentName, Date startDate, Date endDate, Country country,
                 String instructorName) {
-        this.id = id;
+        super(id);
         this.course = course;
         this.studentName = studentName;
         this.startDate = startDate;
@@ -50,14 +50,6 @@ public class Card {
     //
     // Setters & Getters
     //
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getCourse() {
         return course;
@@ -124,7 +116,7 @@ public class Card {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return Objects.equals(id, card.id)
+        return Objects.equals(getId(), card.getId())
             && Objects.equals(course, card.course)
             && Objects.equals(studentName, card.studentName)
             && Objects.equals(startDate, card.startDate)
@@ -135,13 +127,13 @@ public class Card {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, course, studentName, startDate, endDate, country, instructorName);
+        return Objects.hash(getId(), course, studentName, startDate, endDate, country, instructorName);
     }
 
     @Override
     public String toString() {
         return "Card{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", course='" + course + '\'' +
                 ", studentName='" + studentName + '\'' +
                 ", startDate=" + startDate +

@@ -7,43 +7,50 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Slot {
-    @Id
-    Long id;
-
+@Table(name = "slots")
+public class Slot extends BaseEntity {
     @Column(name = "title")
-    String title;
+    private String title;
     @Column(name = "starting_date")
-    Date startingDate;
+    private Date startingDate;
     @Column(name = "ending_date")
-    Date endingDate;
-    // TODO: create the relationship to location
-    @Transient
-    Location location;
+    private Date endingDate;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    private Location location;
     @Enumerated(EnumType.STRING)
-    SlotStatus status;
-    // TODO: create the relationship to course
-    @Transient
-    Course course;
-    // TODO: create the relationship to languages
-    @Transient
-    List<Language> languages = new ArrayList<>();
-    // TODO: create the relationship to students
-    @Transient
-    List<Student> students = new ArrayList<>();
-    // TODO: create the relationship to instructors
-    @Transient
-    List<Instructor> instructors = new ArrayList<>();
+    private SlotStatus status;
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
+    @OneToMany(mappedBy = "slot", cascade = { CascadeType.ALL })
+    private List<SlotLanguage> languages = new ArrayList<>();
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "Slot_Student",
+            joinColumns = { @JoinColumn(name = "slot_id") },
+            inverseJoinColumns = { @JoinColumn(name = "student_id") }
+    )
+    private List<Student> students = new ArrayList<>();
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "Slot_Instructor",
+            joinColumns = { @JoinColumn(name = "slot_id") },
+            inverseJoinColumns = { @JoinColumn(name = "instructor_id") }
+    )
+    private List<Instructor> instructors = new ArrayList<>();
 
     //
     // Constructors
     //
 
     public Slot() {
+        super();
     }
 
-    public Slot(String title, Date startingDate, Date endingDate, Location location, SlotStatus status, Course course,
-                List<Language> languages, List<Student> students, List<Instructor> instructors) {
+    public Slot(Long id, String title, Date startingDate, Date endingDate, Location location, SlotStatus status,
+                Course course, List<SlotLanguage> languages, List<Student> students, List<Instructor> instructors) {
+        super(id);
         this.title = title;
         this.startingDate = startingDate;
         this.endingDate = endingDate;
@@ -58,10 +65,10 @@ public class Slot {
     //
     // Methods
     //
-    public void addLanguage(Language language) {
+    public void addLanguage(SlotLanguage language) {
         this.languages.add(language);
     }
-    public void deleteLanguage(Language language) { this.languages.remove(language); }
+    public void deleteLanguage(SlotLanguage language) { this.languages.remove(language); }
 
     public void addStudent(Student student) {
         this.students.add(student);
@@ -125,11 +132,11 @@ public class Slot {
         this.course = course;
     }
 
-    public List<Language> getLanguages() {
+    public List<SlotLanguage> getLanguages() {
         return languages;
     }
 
-    public void setLanguages(List<Language> languages) {
+    public void setLanguages(List<SlotLanguage> languages) {
         this.languages = languages;
     }
 

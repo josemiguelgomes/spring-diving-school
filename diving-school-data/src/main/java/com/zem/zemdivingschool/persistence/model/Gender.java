@@ -5,13 +5,13 @@ public enum Gender {
     FEMALE("F"),
     OTHER("O");
 
-    private String description;
+    private final String field;
 
-    private Gender(String gender) {
-        this.description = gender;
+    private Gender(String field) {
+        this.field = field;
     }
 
     public String getGender() {
-        return description;
+        return field;
     }
 }

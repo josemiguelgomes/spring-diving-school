@@ -5,36 +5,33 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
-public class Instructor {
-    @Id
-    Long id;
-
+@Table(name = "instructors")
+public class Instructor extends BaseEntity {
     @Column(name = "first_name")
-    String firstName;
+    private String firstName;
     @Column(name = "middle_name")
-    String middleName;
+    private String middleName;
     @Column(name = "last_Name")
-    String lastName;
+    private String lastName;
     @Column(name = "birthdate")
-    Date birthDate;
+    private Date birthDate;
     @Enumerated(EnumType.STRING)
-    Gender gender;
+    private Gender gender;
     @Column(name = "email")
-    String email;
+    private String email;
     @Column(name = "phone_number")
-    String phoneNumber;
+    private String phoneNumber;
     @Enumerated(EnumType.STRING)
-    Language language;
-    // TODO: create the relationship to location
-    @Transient
-    Location homeAddress;
+    private Language language;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    private Location homeAddress;
     @Column(name = "photo")
-    Byte[] photo;
+    private Byte[] photo;
     @Enumerated(EnumType.STRING)
-    StatusTeaching statusTeaching;
-    // TODO: create the relationship to slot
-    @Transient
-    List<Slot> slots = new ArrayList<>();
+    private StatusTeaching statusTeaching;
+    @ManyToMany(mappedBy = "instructors")
+    private List<Slot> slots = new ArrayList<>();
 
 
     //
@@ -42,11 +39,13 @@ public class Instructor {
     //
 
     public Instructor() {
+        super();
     }
 
-    public Instructor(String firstName, String middleName, String lastName, Date birthDate, Gender gender, String email,
-                      String phoneNumber, Language language, Location homeAddress, Byte[] photo,
-                      StatusTeaching statusTeaching) {
+    public Instructor(Long id, String firstName, String middleName, String lastName, Date birthDate, Gender gender,
+                      String email, String phoneNumber, Language language, Location homeAddress,
+                      Byte[] photo, StatusTeaching statusTeaching) {
+        super(id);
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
