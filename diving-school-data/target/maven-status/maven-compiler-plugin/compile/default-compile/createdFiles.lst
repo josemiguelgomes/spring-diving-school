@@ -7,6 +7,7 @@ com/zem/zemdivingschool/persistence/model/Student.class
 com/zem/zemdivingschool/persistence/services/impl/map/LocationMapService.class
 com/zem/zemdivingschool/persistence/services/impl/map/SlotLanguageMapService.class
 com/zem/zemdivingschool/persistence/services/impl/map/AbstractMapService.class
+com/zem/zemdivingschool/persistence/bootstrap/DivingSchoolBootstrap.class
 com/zem/zemdivingschool/persistence/model/Language.class
 com/zem/zemdivingschool/persistence/services/CardService.class
 com/zem/zemdivingschool/persistence/services/impl/map/StudentMapService.class

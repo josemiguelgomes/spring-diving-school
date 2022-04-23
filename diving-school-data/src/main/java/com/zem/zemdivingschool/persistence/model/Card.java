@@ -21,7 +21,6 @@ public class Card extends BaseEntity {
     private String instructorName;
 
     @OneToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
     //

@@ -9,7 +9,6 @@ public class SlotLanguage extends BaseEntity {
     private Language language;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "slot_id", nullable = false)
     private Slot slot;
 
     public SlotLanguage() {
