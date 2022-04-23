@@ -3,13 +3,30 @@ package com.zem.zemdivingschool.dto;
 import com.zem.zemdivingschool.persistence.model.Country;
 
 public class LocationDto {
+    private Long id;
     private String streetAddress;
     private String postalCode;
     private String city;
     private String stateProvince;
     private Country country;
 
+    //
+    // Constructor
+    //
     public LocationDto() {
+    }
+
+    //
+    // Getters & Setters
+    //
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getStreetAddress() {

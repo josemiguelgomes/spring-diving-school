@@ -2,13 +2,20 @@ package com.zem.zemdivingschool.dto;
 
 import com.zem.zemdivingschool.persistence.model.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class InstructorDto {
+    private final SimpleDateFormat dateFormat
+            = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+    private Long id;
     private String firstName;
     private String middleName;
     private String lastName;
-    private Date birthDate;
+    private String birthDate;
     private Gender gender;
     private String email;
     private String phoneNumber;
@@ -16,7 +23,34 @@ public class InstructorDto {
     private Byte[] photo;
     private StatusTeaching statusTeaching;
 
+    //
+    // Constructor
+    //
     public InstructorDto() {
+    }
+
+    //
+    // Conversions
+    //
+    public Date getSubmissionBirthDateConverted(String timezone) throws ParseException {
+        dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
+        return dateFormat.parse(this.birthDate);
+    }
+
+    public void setSubmissionBirthDate(Date date, String timezone) {
+        dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
+        this.birthDate = dateFormat.format(date);
+    }
+
+    //
+    // Getters & Setters
+    //
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -43,11 +77,11 @@ public class InstructorDto {
         this.lastName = lastName;
     }
 
-    public Date getBirthDate() {
+    public String getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
 

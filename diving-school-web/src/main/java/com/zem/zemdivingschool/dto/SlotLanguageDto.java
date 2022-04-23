@@ -3,10 +3,26 @@ package com.zem.zemdivingschool.dto;
 import com.zem.zemdivingschool.persistence.model.Language;
 
 
-public class SlotLanguage {
+public class SlotLanguageDto {
+    private Long id;
     private Language language;
 
-    public SlotLanguage() {
+    //
+    // Constructor
+    //
+    public SlotLanguageDto() {
+    }
+
+    //
+    // Getters & Setters
+    //
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Language getLanguage() {

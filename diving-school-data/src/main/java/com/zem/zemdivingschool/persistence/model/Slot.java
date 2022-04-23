@@ -11,10 +11,10 @@ import java.util.Objects;
 public class Slot extends BaseEntity {
     @Column(name = "title")
     private String title;
-    @Column(name = "starting_date")
-    private Date startingDate;
-    @Column(name = "ending_date")
-    private Date endingDate;
+    @Column(name = "start_date")
+    private Date startDate;
+    @Column(name = "end_date")
+    private Date endDate;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;
@@ -52,8 +52,8 @@ public class Slot extends BaseEntity {
                 Course course, List<SlotLanguage> languages, List<Student> students, List<Instructor> instructors) {
         super(id);
         this.title = title;
-        this.startingDate = startingDate;
-        this.endingDate = endingDate;
+        this.startDate = startingDate;
+        this.endDate = endingDate;
         this.location = location;
         this.status = status;
         this.course = course;
@@ -92,20 +92,20 @@ public class Slot extends BaseEntity {
         this.title = title;
     }
 
-    public Date getStartingDate() {
-        return startingDate;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setStartingDate(Date startingDate) {
-        this.startingDate = startingDate;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public Date getEndingDate() {
-        return endingDate;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setEndingDate(Date endingDate) {
-        this.endingDate = endingDate;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public Location getLocation() {
@@ -167,8 +167,8 @@ public class Slot extends BaseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         Slot slot = (Slot) o;
         return Objects.equals(title, slot.title)
-            && Objects.equals(startingDate, slot.startingDate)
-            && Objects.equals(endingDate, slot.endingDate)
+            && Objects.equals(startDate, slot.startDate)
+            && Objects.equals(endDate, slot.endDate)
             && Objects.equals(location, slot.location)
             && status == slot.status
             && Objects.equals(course, slot.course);
@@ -176,15 +176,15 @@ public class Slot extends BaseEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, startingDate, endingDate, location, status, course);
+        return Objects.hash(title, startDate, endDate, location, status, course);
     }
 
     @Override
     public String toString() {
         return "Slot{" +
                 "title='" + title + '\'' +
-                ", startingDate=" + startingDate +
-                ", endingDate=" + endingDate +
+                ", startingDate=" + startDate +
+                ", endingDate=" + endDate +
                 ", location=" + location +
                 ", status=" + status +
                 ", course=" + course +
