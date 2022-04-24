@@ -219,7 +219,7 @@ public class DivingSchoolBootstrap implements ApplicationListener<ContextRefresh
         student1.setMiddleName("Ortacula");
         student1.setLastName("Brunheta");
         try {
-            student1.setBirthdate(sdf.parse("2001-07-21"));
+            student1.setBirthDate(sdf.parse("2001-07-21"));
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -249,7 +249,7 @@ public class DivingSchoolBootstrap implements ApplicationListener<ContextRefresh
         student2.setMiddleName("Mein");
         student2.setLastName("Fagor");
         try {
-            student2.setBirthdate(sdf.parse("1955-02-12"));
+            student2.setBirthDate(sdf.parse("1955-02-12"));
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }

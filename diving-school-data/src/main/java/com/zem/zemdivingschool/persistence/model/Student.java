@@ -12,8 +12,8 @@ public class Student extends BaseEntity {
     private String middleName;
     @Column(name = "last_name")
     private String lastName;
-    @Column(name = "birthdate")
-    private Date birthdate;
+    @Column(name = "birth_date")
+    private Date birthDate;
     @Enumerated(EnumType.STRING)
     private Gender gender;
     @Column(name = "email")
@@ -47,7 +47,7 @@ public class Student extends BaseEntity {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
-        this.birthdate = birthdate;
+        this.birthDate = birthdate;
         this.gender = gender;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -92,11 +92,11 @@ public class Student extends BaseEntity {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public Date getBirthdate() {
-        return birthdate;
+    public Date getBirthDate() {
+        return birthDate;
     }
-    public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
     public Gender getGender() {
         return gender;
@@ -159,7 +159,7 @@ public class Student extends BaseEntity {
             && Objects.equals(firstName, student.firstName)
             && Objects.equals(middleName, student.middleName)
             && Objects.equals(lastName, student.lastName)
-            && Objects.equals(birthdate, student.birthdate)
+            && Objects.equals(birthDate, student.birthDate)
             && gender == student.gender
             && Objects.equals(email, student.email)
             && Objects.equals(phoneNumber, student.phoneNumber)
@@ -170,7 +170,7 @@ public class Student extends BaseEntity {
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(getId(), firstName, middleName, lastName, birthdate, gender,
+        int result = Objects.hash(getId(), firstName, middleName, lastName, birthDate, gender,
                 email, phoneNumber, language, homeAddress);
         result = 31 * result + Arrays.hashCode(photo);
         return result;
@@ -183,7 +183,7 @@ public class Student extends BaseEntity {
                 ", firstName='" + firstName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", birthdate=" + birthdate +
+                ", birthdate=" + birthDate +
                 ", gender=" + gender +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +

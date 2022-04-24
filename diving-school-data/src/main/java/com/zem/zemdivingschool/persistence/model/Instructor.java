@@ -13,7 +13,7 @@ public class Instructor extends BaseEntity {
     private String middleName;
     @Column(name = "last_Name")
     private String lastName;
-    @Column(name = "birthdate")
+    @Column(name = "birth_Date")
     private Date birthDate;
     @Enumerated(EnumType.STRING)
     private Gender gender;

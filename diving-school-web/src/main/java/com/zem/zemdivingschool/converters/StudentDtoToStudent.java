@@ -25,7 +25,7 @@ public class StudentDtoToStudent implements Converter<StudentDto, Student> {
         student.setMiddleName(dto.getMiddleName());
         student.setLastName(dto.getLastName());
         try {
-            student.setBirthdate(dto.getSubmissionBirthDateConverted(TimeZone.getDefault().toString()));
+            student.setBirthDate(dto.getSubmissionBirthDateConverted(TimeZone.getDefault().toString()));
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }

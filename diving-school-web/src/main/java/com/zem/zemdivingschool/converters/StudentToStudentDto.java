@@ -6,10 +6,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.TimeZone;
 
 @Component
@@ -28,7 +24,7 @@ public class StudentToStudentDto implements Converter<Student, StudentDto> {
         studentDto.setFirstName(entity.getFirstName());
         studentDto.setMiddleName(entity.getMiddleName());
         studentDto.setLastName(entity.getLastName());
-        studentDto.setSubmissionBirthDate(entity.getBirthdate(), TimeZone.getDefault().toString());
+        studentDto.setSubmissionBirthDate(entity.getBirthDate(), TimeZone.getDefault().toString());
         studentDto.setGender(entity.getGender());
         studentDto.setEmail(entity.getEmail());
         studentDto.setPhoneNumber(entity.getPhoneNumber());
