@@ -1,13 +1,12 @@
 package com.zem.zemdivingschool.persistence.bootstrap;
 
 import com.zem.zemdivingschool.persistence.model.*;
-import com.zem.zemdivingschool.persistence.repositories.*;
+import com.zem.zemdivingschool.persistence.services.*;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,44 +14,39 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@Profile("demo")
-public class DivingSchoolBootstrap implements ApplicationListener<ContextRefreshedEvent> {
+@Profile("demo2")
+public class DataLoaderByService implements ApplicationListener<ContextRefreshedEvent> {
 
-    // Repositories Beans
-    private final CardRepository cardRepository;
-    private final CourseRepository courseRepository;
-    private final InstructorRepository instructorRepository;
-    private final LocationRepository locationRepository;
-    private final SlotLanguageRepository slotLanguageRepository;
-    private final SlotRepository slotRepository;
-    private final StudentRepository studentRepository;
+    private final CardService cardService;
+    private final CourseService courseService;
+    private final InstructorService instructorService;
+    private final LocationService locationService;
+    private final SlotLanguageService slotLanguageService;
+    private final SlotService slotService;
+    private final StudentService studentService;
 
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    //
-    // Constructor with DI
-    //
-    public DivingSchoolBootstrap(CardRepository cardRepository, CourseRepository courseRepository,
-                                 InstructorRepository instructorRepository, LocationRepository locationRepository,
-                                 SlotLanguageRepository slotLanguageRepository, SlotRepository slotRepository,
-                                 StudentRepository studentRepository) {
-        this.cardRepository = cardRepository;
-        this.courseRepository = courseRepository;
-        this.instructorRepository = instructorRepository;
-        this.locationRepository = locationRepository;
-        this.slotLanguageRepository = slotLanguageRepository;
-        this.slotRepository = slotRepository;
-        this.studentRepository = studentRepository;
+    public DataLoaderByService(CardService cardService, CourseService courseService,
+                               InstructorService instructorService, LocationService locationService,
+                               SlotLanguageService slotLanguageService, SlotService slotService,
+                               StudentService studentService) {
+        this.cardService = cardService;
+        this.courseService = courseService;
+        this.instructorService = instructorService;
+        this.locationService = locationService;
+        this.slotLanguageService = slotLanguageService;
+        this.slotService = slotService;
+        this.studentService = studentService;
     }
 
     @Override
-    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        instructorRepository.saveAll(getInstructors());
-        courseRepository.saveAll(getCourses());
-        studentRepository.saveAll(getStudents());
-        slotRepository.saveAll(getSlots());
-        cardRepository.saveAll(getCards());
+        instructorService.saveAll(getInstructors());
+        courseService.saveAll(getCourses());
+        studentService.saveAll(getStudents());
+        slotService.saveAll(getSlots());
+        cardService.saveAll(getCards());
     }
 
     private List<Instructor> getInstructors() {
@@ -207,6 +201,7 @@ public class DivingSchoolBootstrap implements ApplicationListener<ContextRefresh
         return courses;
 
     }
+
     private List<Student> getStudents() {
 
         List<Student> students = new ArrayList<>(2);
@@ -274,6 +269,7 @@ public class DivingSchoolBootstrap implements ApplicationListener<ContextRefresh
         //
         return students;
     }
+
     private List<Slot> getSlots() {
 
         List<Slot> slots = new ArrayList<>(2);
@@ -302,7 +298,7 @@ public class DivingSchoolBootstrap implements ApplicationListener<ContextRefresh
         location1.setStateProvince("");
         location1.setCountry(Country.UNITED_KINGDOM);
         slot1.setLocation(location1);
-        Optional<Course> course1 = courseRepository.findByName("GUE Rec1");
+        Optional<Course> course1 = courseService.findByName("GUE Rec1");
         if (course1.isEmpty()) {
             throw new RuntimeException("Please provide a course that exists");
         }
@@ -325,13 +321,13 @@ public class DivingSchoolBootstrap implements ApplicationListener<ContextRefresh
         // Associate instructor(s) to the slot
         List<Instructor> instructors1 = new ArrayList<>();
 
-        Optional<Instructor> instructor1A = instructorRepository.findByFirstName("Jose");
+        Optional<Instructor> instructor1A = instructorService.findByFirstName("Jose");
         if (instructor1A.isEmpty()) {
             throw new RuntimeException("Please provide an instructor that exists");
         }
         instructors1.add(instructor1A.get());
 
-        Optional<Instructor> instructor1B = instructorRepository.findByFirstName("Antonio");
+        Optional<Instructor> instructor1B = instructorService.findByFirstName("Antonio");
         if (instructor1B.isEmpty()) {
             throw new RuntimeException("Please provide an instructor that exists");
         }
@@ -341,7 +337,7 @@ public class DivingSchoolBootstrap implements ApplicationListener<ContextRefresh
 
         // Associate student(s) to the slot
         List<Student> student1 = new ArrayList<>();
-        Optional<Student> student1A = studentRepository.findByFirstName("Grody");
+        Optional<Student> student1A = studentService.findByFirstName("Grody");
         if (student1A.isEmpty()) {
             throw new RuntimeException("Please provide an student that exists");
         }
@@ -376,7 +372,7 @@ public class DivingSchoolBootstrap implements ApplicationListener<ContextRefresh
         location2.setStateProvince("");
         location2.setCountry(Country.PORTUGAL);
         slot2.setLocation(location2);
-        Optional<Course> course2 = courseRepository.findByName("GUE Fundamentals");
+        Optional<Course> course2 = courseService.findByName("GUE Fundamentals");
         if (course2.isEmpty()) {
             throw new RuntimeException("Please provide a course that exists");
         }
@@ -393,7 +389,7 @@ public class DivingSchoolBootstrap implements ApplicationListener<ContextRefresh
         // Associate instructor(s) to the slot
         List<Instructor> instructors2 = new ArrayList<>();
 
-        Optional<Instructor> instructor2A = instructorRepository.findByFirstName("Cruzeta");
+        Optional<Instructor> instructor2A = instructorService.findByFirstName("Cruzeta");
         if (instructor2A.isEmpty()) {
             throw new RuntimeException("Please provide an instructor that exists");
         }
@@ -406,6 +402,7 @@ public class DivingSchoolBootstrap implements ApplicationListener<ContextRefresh
         //
         return slots;
     }
+
     private List<Card> getCards() {
 
         List<Card> allCards = new ArrayList<>(2);
@@ -413,7 +410,7 @@ public class DivingSchoolBootstrap implements ApplicationListener<ContextRefresh
         //
         // Student 1
         //
-        Optional<Student> student1 = studentRepository.findByFirstName("Joaquina");
+        Optional<Student> student1 = studentService.findByFirstName("Joaquina");
         if (student1.isEmpty()) {
             throw new RuntimeException("Please provide a student that exists");
         }

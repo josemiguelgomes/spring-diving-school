@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -76,5 +79,16 @@ public class StudentMapService extends AbstractMapService<Student, Long>
     @Transactional
     public Student findById(Long id) {
         return super.findById(id);
+    }
+
+    @Override
+    @Transactional
+    public Optional<Student> findByFirstName(String firstName) {
+        for(Student student : map.values()) {
+            if (student.getFirstName().equals(firstName)) {
+                return Optional.of(student);
+            }
+        }
+        return Optional.empty();
     }
 }

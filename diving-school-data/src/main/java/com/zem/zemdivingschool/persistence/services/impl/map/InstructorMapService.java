@@ -1,12 +1,14 @@
 package com.zem.zemdivingschool.persistence.services.impl.map;
 
 import com.zem.zemdivingschool.persistence.model.Instructor;
+import com.zem.zemdivingschool.persistence.model.Student;
 import com.zem.zemdivingschool.persistence.services.InstructorService;
 import com.zem.zemdivingschool.persistence.services.LocationService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -61,4 +63,16 @@ public class InstructorMapService extends AbstractMapService<Instructor, Long>
     public Instructor findById(Long id) {
         return super.findById(id);
     }
+
+    @Override
+    @Transactional
+    public Optional<Instructor> findByFirstName(String firstName) {
+        for(Instructor instructor : map.values()) {
+            if (instructor.getFirstName().equals(firstName)) {
+                return Optional.of(instructor);
+            }
+        }
+        return Optional.empty();
+    }
+
 }

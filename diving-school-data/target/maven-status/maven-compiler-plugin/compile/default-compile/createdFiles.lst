@@ -1,4 +1,5 @@
 com/zem/zemdivingschool/persistence/services/impl/map/CourseMapService.class
+com/zem/zemdivingschool/persistence/bootstrap/DataLoaderByService.class
 com/zem/zemdivingschool/persistence/repositories/LocationRepository.class
 com/zem/zemdivingschool/persistence/services/CrudService.class
 com/zem/zemdivingschool/persistence/model/Location.class
@@ -7,7 +8,6 @@ com/zem/zemdivingschool/persistence/model/Student.class
 com/zem/zemdivingschool/persistence/services/impl/map/LocationMapService.class
 com/zem/zemdivingschool/persistence/services/impl/map/SlotLanguageMapService.class
 com/zem/zemdivingschool/persistence/services/impl/map/AbstractMapService.class
-com/zem/zemdivingschool/persistence/bootstrap/DivingSchoolBootstrap.class
 com/zem/zemdivingschool/persistence/model/Language.class
 com/zem/zemdivingschool/persistence/services/CardService.class
 com/zem/zemdivingschool/persistence/services/impl/map/StudentMapService.class
@@ -19,6 +19,7 @@ com/zem/zemdivingschool/persistence/model/Card.class
 com/zem/zemdivingschool/persistence/model/StatusTeachingCourse.class
 com/zem/zemdivingschool/persistence/services/SlotLanguageService.class
 com/zem/zemdivingschool/persistence/model/SlotStatus.class
+com/zem/zemdivingschool/persistence/bootstrap/DataLoaderByRepo.class
 com/zem/zemdivingschool/persistence/model/Gender.class
 com/zem/zemdivingschool/persistence/repositories/SlotLanguageRepository.class
 com/zem/zemdivingschool/persistence/services/LocationService.class
