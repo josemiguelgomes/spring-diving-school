@@ -1,7 +1,7 @@
 package com.zem.zemdivingschool.persistence.bootstrap;
 
 import com.zem.zemdivingschool.persistence.model.*;
-import com.zem.zemdivingschool.persistence.repositories.*;
+import com.zem.zemdivingschool.persistence.services.*;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -15,27 +15,27 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@Profile("demo1")
+@Profile("demobyrepo")
 public class DataLoaderByRepo implements ApplicationListener<ContextRefreshedEvent> {
 
     // Repositories Beans
-    private final CardRepository cardRepository;
-    private final CourseRepository courseRepository;
-    private final InstructorRepository instructorRepository;
-    private final LocationRepository locationRepository;
-    private final SlotLanguageRepository slotLanguageRepository;
-    private final SlotRepository slotRepository;
-    private final StudentRepository studentRepository;
+    private final CardService cardRepository;
+    private final CourseService courseRepository;
+    private final InstructorService instructorRepository;
+    private final LocationService locationRepository;
+    private final SlotLanguageService slotLanguageRepository;
+    private final SlotService slotRepository;
+    private final StudentService studentRepository;
 
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     //
     // Constructor with DI
     //
-    public DataLoaderByRepo(CardRepository cardRepository, CourseRepository courseRepository,
-                            InstructorRepository instructorRepository, LocationRepository locationRepository,
-                            SlotLanguageRepository slotLanguageRepository, SlotRepository slotRepository,
-                            StudentRepository studentRepository) {
+    public DataLoaderByRepo(CardService cardRepository, CourseService courseRepository,
+                            InstructorService instructorRepository, LocationService locationRepository,
+                            SlotLanguageService slotLanguageRepository, SlotService slotRepository,
+                            StudentService studentRepository) {
         this.cardRepository = cardRepository;
         this.courseRepository = courseRepository;
         this.instructorRepository = instructorRepository;

@@ -11,21 +11,17 @@ import java.util.Set;
 @Service
 @Profile({"default", "map"})
 public class SlotLanguageMapService extends AbstractMapService<SlotLanguage, Long>
-        implements SlotLanguageService {
+                                    implements SlotLanguageService {
     @Override
     @Transactional
     public Set<SlotLanguage> findAll() {
         return super.findAll();
     }
-    @Override
+
+     @Override
     @Transactional
-    public void deleteById(Long id) {
-        super.deleteById(id);
-    }
-    @Override
-    @Transactional
-    public void delete(SlotLanguage object) {
-        super.delete(object);
+    public SlotLanguage findById(Long id) {
+        return super.findById(id);
     }
     @Override
     @Transactional
@@ -37,7 +33,13 @@ public class SlotLanguageMapService extends AbstractMapService<SlotLanguage, Lon
     }
     @Override
     @Transactional
-    public SlotLanguage findById(Long id) {
-        return super.findById(id);
+    public void delete(SlotLanguage object) {
+        super.delete(object);
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        super.deleteById(id);
     }
 }

@@ -16,12 +16,12 @@
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/model/StatusTeachingCourse.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/services/CardService.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/services/CrudService.java
+/Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/bootstrap/DataLoaderByRepo.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/model/Location.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/services/SlotService.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/services/impl/map/AbstractMapService.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/services/InstructorService.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/model/Slot.java
-/Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/bootstrap/DivingSchoolBootstrap.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/model/Level.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/model/Card.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/model/Language.java
@@ -35,5 +35,6 @@
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/repositories/SlotLanguageRepository.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/services/StudentService.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/model/Country.java
+/Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/bootstrap/DataLoaderByService.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/model/Instructor.java
 /Users/zem/Projects/spring-diving-school/spring-diving-school/diving-school-data/src/main/java/com/zem/zemdivingschool/persistence/model/Course.java

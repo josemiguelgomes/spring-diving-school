@@ -1,21 +1,19 @@
 package com.zem.zemdivingschool.persistence.services.impl.map;
 
 import com.zem.zemdivingschool.persistence.model.Student;
-import com.zem.zemdivingschool.persistence.services.LocationService;
 import com.zem.zemdivingschool.persistence.services.StudentService;
+import com.zem.zemdivingschool.persistence.services.LocationService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 @Service
 @Profile({"default", "map"})
 public class StudentMapService extends AbstractMapService<Student, Long>
-        implements StudentService {
+                               implements StudentService {
 
     LocationService locationService;
 
@@ -28,16 +26,13 @@ public class StudentMapService extends AbstractMapService<Student, Long>
     public Set<Student> findAll() {
         return super.findAll();
     }
+
     @Override
     @Transactional
-    public void deleteById(Long id) {
-        super.deleteById(id);
+    public Student findById(Long id) {
+        return super.findById(id);
     }
-    @Override
-    @Transactional
-    public void delete(Student object) {
-        super.delete(object);
-    }
+
     @Override
     @Transactional
     public Student save(Student object) {
@@ -77,8 +72,14 @@ public class StudentMapService extends AbstractMapService<Student, Long>
     }
     @Override
     @Transactional
-    public Student findById(Long id) {
-        return super.findById(id);
+    public void delete(Student object) {
+        super.delete(object);
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        super.deleteById(id);
     }
 
     @Override

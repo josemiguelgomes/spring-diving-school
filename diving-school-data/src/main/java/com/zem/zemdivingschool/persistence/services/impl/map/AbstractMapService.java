@@ -3,7 +3,6 @@ package com.zem.zemdivingschool.persistence.services.impl.map;
 import com.zem.zemdivingschool.persistence.model.BaseEntity;
 import org.jetbrains.annotations.NotNull;
 
-import javax.transaction.Transactional;
 import java.util.*;
 
 public abstract class AbstractMapService <T extends BaseEntity, I extends Long> {
@@ -32,15 +31,13 @@ public abstract class AbstractMapService <T extends BaseEntity, I extends Long> 
 
         return object;
     }
-
-    void deleteById(I id) {
-        map.remove(id);
-    }
-
     void delete(T object) {
         map.entrySet().removeIf(entry -> entry.getValue().equals(object));
     }
 
+    void deleteById(I id) {
+        map.remove(id);
+    }
 
     public <S extends T> List<S> saveAll(@NotNull Iterable<S> entities) {
 

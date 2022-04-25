@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,9 +15,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@Profile("demo2")
+@Profile("demobyservice")
 public class DataLoaderByService implements ApplicationListener<ContextRefreshedEvent> {
 
+    // Services Beans
     private final CardService cardService;
     private final CourseService courseService;
     private final InstructorService instructorService;
@@ -26,6 +28,11 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
     private final StudentService studentService;
 
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+    //
+    // Constructor with DI
+    //
+
 
     public DataLoaderByService(CardService cardService, CourseService courseService,
                                InstructorService instructorService, LocationService locationService,
@@ -41,6 +48,7 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
     }
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         instructorService.saveAll(getInstructors());
         courseService.saveAll(getCourses());
@@ -201,7 +209,6 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
         return courses;
 
     }
-
     private List<Student> getStudents() {
 
         List<Student> students = new ArrayList<>(2);
@@ -269,7 +276,6 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
         //
         return students;
     }
-
     private List<Slot> getSlots() {
 
         List<Slot> slots = new ArrayList<>(2);
@@ -402,7 +408,6 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
         //
         return slots;
     }
-
     private List<Card> getCards() {
 
         List<Card> allCards = new ArrayList<>(2);

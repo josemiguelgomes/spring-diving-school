@@ -1,7 +1,11 @@
 package com.zem.zemdivingschool.persistence.services.impl.map;
 
+import com.zem.zemdivingschool.persistence.services.SlotService;
+import com.zem.zemdivingschool.persistence.services.CourseService;
+import com.zem.zemdivingschool.persistence.services.SlotLanguageService;
+import com.zem.zemdivingschool.persistence.services.StudentService;
+import com.zem.zemdivingschool.persistence.services.InstructorService;
 import com.zem.zemdivingschool.persistence.model.Slot;
-import com.zem.zemdivingschool.persistence.services.*;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +15,12 @@ import java.util.Set;
 @Service
 @Profile({"default", "map"})
 public class SlotMapService extends AbstractMapService<Slot, Long>
-        implements SlotService {
-     CourseService courseService;
-     SlotLanguageService slotLanguageService;
-     StudentService studentService;
-     InstructorService instructorService;
+                            implements SlotService {
+
+    CourseService courseService;
+    SlotLanguageService slotLanguageService;
+    StudentService studentService;
+    InstructorService instructorService;
 
     public SlotMapService(CourseService courseService, SlotLanguageService slotLanguageService,
                           StudentService studentService, InstructorService instructorService) {
@@ -32,13 +37,8 @@ public class SlotMapService extends AbstractMapService<Slot, Long>
     }
     @Override
     @Transactional
-    public void deleteById(Long id) {
-        super.deleteById(id);
-    }
-    @Override
-    @Transactional
-    public void delete(Slot object) {
-        super.delete(object);
+    public Slot findById(Long id) {
+        return  super.findById(id);
     }
     @Override
     @Transactional
@@ -96,7 +96,14 @@ public class SlotMapService extends AbstractMapService<Slot, Long>
     }
     @Override
     @Transactional
-    public Slot findById(Long id) {
-        return  super.findById(id);
+    public void delete(Slot object) {
+        super.delete(object);
     }
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        super.deleteById(id);
+    }
+
+
 }

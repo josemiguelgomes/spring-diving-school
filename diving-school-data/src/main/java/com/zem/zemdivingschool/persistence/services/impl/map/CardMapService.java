@@ -18,6 +18,7 @@ public class CardMapService extends AbstractMapService<Card, Long>
     public CardMapService(StudentService studentService) {
         this.studentService = studentService;
     }
+
     @Override
     @Transactional
     public Set<Card> findAll() {
@@ -55,5 +56,4 @@ public class CardMapService extends AbstractMapService<Card, Long>
     public void deleteById(Long id) {
         super.deleteById(id);
     }
-
 }

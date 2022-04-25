@@ -1,7 +1,6 @@
 package com.zem.zemdivingschool.persistence.services.impl.map;
 
 import com.zem.zemdivingschool.persistence.model.Instructor;
-import com.zem.zemdivingschool.persistence.model.Student;
 import com.zem.zemdivingschool.persistence.services.InstructorService;
 import com.zem.zemdivingschool.persistence.services.LocationService;
 import org.springframework.context.annotation.Profile;
@@ -14,7 +13,7 @@ import java.util.Set;
 @Service
 @Profile({"default", "map"})
 public class InstructorMapService extends AbstractMapService<Instructor, Long>
-        implements InstructorService {
+                                  implements InstructorService {
     LocationService locationService;
 
     public InstructorMapService(LocationService locationService) {
@@ -27,9 +26,10 @@ public class InstructorMapService extends AbstractMapService<Instructor, Long>
     }
     @Override
     @Transactional
-    public void deleteById(Long id) {
-        super.deleteById(id);
+    public Instructor findById(Long id) {
+        return super.findById(id);
     }
+
     @Override
     @Transactional
     public Instructor save(Instructor object) {
@@ -60,8 +60,8 @@ public class InstructorMapService extends AbstractMapService<Instructor, Long>
 
     @Override
     @Transactional
-    public Instructor findById(Long id) {
-        return super.findById(id);
+    public void deleteById(Long id) {
+        super.deleteById(id);
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.util.Set;
 @Service
 @Profile({"default", "map"})
 public class LocationMapService extends AbstractMapService<Location, Long>
-        implements LocationService {
+                                implements LocationService {
 
     @Override
     @Transactional
@@ -20,13 +20,8 @@ public class LocationMapService extends AbstractMapService<Location, Long>
     }
     @Override
     @Transactional
-    public void deleteById(Long id) {
-        super.deleteById(id);
-    }
-    @Override
-    @Transactional
-    public void delete(Location object) {
-        super.delete(object);
+    public Location findById(Long id) {
+        return super.findById(id);
     }
     @Override
     @Transactional
@@ -39,7 +34,12 @@ public class LocationMapService extends AbstractMapService<Location, Long>
     }
     @Override
     @Transactional
-    public Location findById(Long id) {
-        return super.findById(id);
+    public void delete(Location object) {
+        super.delete(object);
+    }
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        super.deleteById(id);
     }
 }
