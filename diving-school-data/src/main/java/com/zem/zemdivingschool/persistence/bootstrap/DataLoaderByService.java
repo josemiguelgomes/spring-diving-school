@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@Profile("demobyservice")
+@Profile("demobyservices")
 public class DataLoaderByService implements ApplicationListener<ContextRefreshedEvent> {
 
     // Services Beans
