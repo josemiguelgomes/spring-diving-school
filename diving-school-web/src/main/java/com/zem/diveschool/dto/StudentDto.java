@@ -2,12 +2,13 @@ package com.zem.diveschool.dto;
 
 import com.zem.diveschool.persistence.model.*;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class StudentDto {
+public class StudentDto extends GenericDto<StudentDto> {
     private final SimpleDateFormat dateFormat
             = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
@@ -15,7 +16,7 @@ public class StudentDto {
     private String firstName;
     private String middleName;
     private String lastName;
-    private String birthdate;
+    private String birthDate;
     private Gender gender;
     private String email;
     private String phoneNumber;
@@ -33,12 +34,12 @@ public class StudentDto {
     //
     public Date getSubmissionBirthDateConverted(String timezone) throws ParseException {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
-        return dateFormat.parse(this.birthdate);
+        return dateFormat.parse(this.birthDate);
     }
 
     public void setSubmissionBirthDate(Date date, String timezone) {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
-        this.birthdate = dateFormat.format(date);
+        this.birthDate = dateFormat.format(date);
     }
 
 
@@ -78,12 +79,12 @@ public class StudentDto {
         this.lastName = lastName;
     }
 
-    public String getBirthdate() {
-        return birthdate;
+    public String getBirthDate() {
+        return birthDate;
     }
 
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 
     public Gender getGender() {

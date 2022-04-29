@@ -2,6 +2,7 @@ package com.zem.diveschool.persistence.model;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -41,6 +42,7 @@ public class Card extends BaseEntity {
         this.country = country;
         this.instructorName = instructorName;
     }
+
 
     //
     // Methods

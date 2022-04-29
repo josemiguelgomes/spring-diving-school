@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'slots')}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Slot Form</title>
+</head>
+<body>
+   <div class="container-fluid">
+   <!--/*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Slot"*/-->
+      <h2>Slot Form</h2>
+      <form  th:object="${slot}" th:action="@{/slots/}" method="post">
+         <input type="hidden" th:field="*{id}"/>
+         <div class="card-body">
+            <p class="mb-0"><strong class="pr-1">Title </strong>
+               <input type="text" class="form-control" th:field="*{title}"/>
+            </p>
+            <p class="mb-0"><strong class="pr-1">Start Date </strong>
+               <input type="text" class="form-control" th:field="*{startDate}"/>
+            </p>
+            <p class="mb-0"><strong class="pr-1">End Date </strong>
+               <input type="text" class="form-control" th:field="*{endDate}"/>
+            </p>
+            <label>Status </label>
+            <select class="form-control" th:field="*{status}">
+               <option th:each="slotStatusValue : ${T(com.zem.diveschool.persistence.model.SlotStatus).values()}"
+                       th:value="${slotStatusValue.name()}"
+                       th:text="${slotStatusValue.name()}"
+               >val</option>
+            </select>
+
+            <h3>Home Address</h3>
+            <div th:object="${location}">
+               <p class="mb-0"><strong class="pr-1">Street </strong>
+                  <input type="text" class="form-control" th:field="*{streetAddress}"/>
+               </p>
+               <p class="mb-0"><strong class="pr-1">Postal Code </strong>
+                  <input type="text" class="form-control" th:field="*{postalCode}"/>
+               </p>
+               <p class="mb-0"><strong class="pr-1">City </strong>
+                  <input type="text" class="form-control" th:field="*{city}"/>
+               </p>
+               <p class="mb-0"><strong class="pr-1">State/Province </strong>
+                  <input type="text" class="form-control" th:field="*{stateProvince}"/>
+               </p>
+               <label>Country </label>
+               <select class="form-control" th:field="*{country}">
+                  <option th:each="countryValue : ${T(com.zem.diveschool.persistence.model.Country).values()}"
+                          th:value="${countryValue.name()}"
+                          th:text="${countryValue.name()}"
+                  >val</option>
+               </select>
+            </div>
+
+         </div>
+
+         <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+
+      <hr>
+      <a th:href="@{/students}"> Back to Students List</a>
+   </div>
+</body>
+</html>

@@ -3,7 +3,7 @@ package com.zem.diveschool.dto;
 import com.zem.diveschool.persistence.model.Language;
 
 
-public class SlotLanguageDto {
+public class SlotLanguageDto extends GenericDto<SlotLanguageDto> {
     private Long id;
     private Language language;
 

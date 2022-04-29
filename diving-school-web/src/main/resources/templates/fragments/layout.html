@@ -10,7 +10,7 @@
 
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/resources/images/favicon.png}">
 
-    <title>ZEM Diving School :: a Spring Framework App</title>
+    <title>ZEM Dive School :: a Spring Framework App</title>
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -51,17 +51,22 @@
 
                   <li th:replace="::menuItem ('/instructors/find','instructors','find instructors','search','Find instructors')">
                       <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                      <span>Find owners</span>
+                      <span>Find instructors</span>
+                  </li>
+
+                  <li th:replace="::menuItem ('/students/find','students','find students','search','Find students')">
+                      <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                      <span>Find students</span>
                   </li>
 
                   <li th:replace="::menuItem ('/courses/find','courses','find courses','search','Find courses')">
                       <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                      <span>Find owners</span>
+                      <span>Find courses</span>
                   </li>
 
                   <li th:replace="::menuItem ('/slots.html','slots','slots','th-list','Classroom Slots')">
                       <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-                      <span>Veterinarians</span>
+                      <span>Find slots</span>
                   </li>
 
                   <li th:replace="::menuItem ('/oups','error','trigger a RuntimeException to see how it is handled','warning-sign','Error')">

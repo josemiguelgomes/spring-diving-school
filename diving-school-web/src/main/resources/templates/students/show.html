@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'students')}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Student Detail</title>
+</head>
+<body>
+   <div class="container">
+   <!--/*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Student"*/-->
+      <h2>Student</h2>
+      <form action="#" th:action="@{/show}" th:object="${student}"  method="POST">
+         <div class="card-header bg-transparent text-center">
+            <th th:field="${student.photo} == null ? _ : @{'data:image/png;base64,'+${student.photo}}"
+                         width="225" height="225"></th>
+         </div>
+         <div class="card-body">
+            <p class="mb-0"><strong class="pr-1">First Name </strong><th th:text="${student.firstName}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Middle Name </strong><th th:text="${student.middleName}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Last Name </strong><th th:text="${student.lastName}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Birthdate </strong><th th:text="${student.birthDate}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Gender </strong><th th:text="${student.gender}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Email </strong><th th:text="${student.email}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Phone </strong><th th:text="${student.phoneNumber}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Language </strong><th th:text="${student.language}"></th></p>
+         </div>
+
+         <hr>
+<!--
+         <h3>Home Address</h3>
+         <div class="card-body">
+            /*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Location"*/
+            <p class="mb-0"><strong class="pr-1">Street </strong><th th:text="${location.streetAddress}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Postal Code </strong><th th:text="${location.postalCode}"></th></p>
+            <p class="mb-0"><strong class="pr-1">City </strong><th th:text="${location.city}"></th></p>
+            <p class="mb-0"><strong class="pr-1">State/Province </strong><th th:text="${location.stateProvince}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Country </strong><th th:text="${location.country}"></th></p>
+         </div>
+-->
+
+         <hr>
+
+         <h3>Cards</h3>
+         <div class="card-body">
+            <table id="cards" class="table table-striped">
+               <thead>
+               <tr>
+                  <th>Course</th>
+                  <th>Student Name</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Country</th>
+                  <th>Instructor Name</th>
+               </tr>
+               </thead>
+               <tbody>
+               <tr th:each="card : ${cards}">
+                  <td th:text="${card.course}"></td>
+                  <td th:text="${card.studentName}"></td>
+                  <td th:text="${card.startDate}"></td>
+                  <td th:text="${card.endDate}"></td>
+                  <td th:text="${card.country}"></td>
+                  <td th:text="${card.instructorName}"></td>
+               </tr>
+               </tbody>
+            </table>
+         </div>
+
+         <hr>
+
+         <h3>Scheduled Classes</h3>
+         <div class="card-body">
+            <table id="slots" class="table table-striped">
+               <thead>
+               <tr>
+                  <th>Title</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Status</th>
+               </tr>
+               </thead>
+               <tbody>
+               <tr th:each="slot : ${slots}">
+                  <td th:text="${slot.title}"></td>
+                  <td th:text="${slot.startDate}"></td>
+                  <td th:text="${slot.endDate}"></td>
+                  <td th:text="${slot.status}"></td>
+               </tr>
+               </tbody>
+            </table>
+         </div>
+
+      </form>
+
+      <hr>
+      <a th:href="@{/students}"> Back to Students List</a>
+   </div>
+</body>
+</html>

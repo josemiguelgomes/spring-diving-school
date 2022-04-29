@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'courses')}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Courses Detail</title>
+</head>
+<body>
+   <div class="container">
+   <!--/*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Course"*/-->
+      <h2>Course</h2>
+      <form action="#" th:action="@{/show}" th:object="${course}"  method="POST">
+         <div class="card-body">
+            <p class="mb-0"><strong class="pr-1">Name </strong><th th:text="${course.name}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Level </strong><th th:text="${course.level}"></th></p>
+         </div>
+
+      </form>
+
+      <hr>
+      <a th:href="@{/courses}"> Back to Courses List</a>
+   </div>
+</body>
+</html>

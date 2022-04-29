@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class InstructorDto {
+public class InstructorDto extends GenericDto<InstructorDto> {
     private final SimpleDateFormat dateFormat
             = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 

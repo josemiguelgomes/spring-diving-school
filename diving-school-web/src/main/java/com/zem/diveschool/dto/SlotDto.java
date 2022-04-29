@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class SlotDto {
+public class SlotDto extends GenericDto<SlotDto> {
     private final SimpleDateFormat dateFormat
             = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private Long id;

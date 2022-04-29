@@ -1,13 +1,14 @@
 package com.zem.diveschool.dto;
 
 import com.zem.diveschool.persistence.model.Country;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class CardDto {
+public class CardDto extends GenericDto<CardDto> {
     private final SimpleDateFormat dateFormat
             = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 

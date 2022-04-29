@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'instructors')}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Instructor Form</title>
+</head>
+<body>
+   <div class="container-fluid">
+   <!--/*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Instructor"*/-->
+      <h2>Instructor Form</h2>
+      <form  th:object="${instructor}" th:action="@{/instructors/}" method="post">
+         <input type="hidden" th:field="*{id}"/>
+         <div class="card-body">
+            <p class="mb-0"><strong class="pr-1">First Name </strong>
+               <input type="text" class="form-control" th:field="*{firstName}"/>
+            </p>
+            <p class="mb-0"><strong class="pr-1">Middle Name </strong>
+               <input type="text" class="form-control" th:field="*{middleName}"/>
+            </p>
+            <p class="mb-0"><strong class="pr-1">Last Name </strong>
+               <input type="text" class="form-control" th:field="*{lastName}"/>
+            </p>
+            <p class="mb-0"><strong class="pr-1">Birthdate </strong>
+               <input type="text" class="form-control" th:field="*{birthDate}"/>
+            </p>
+            <label>Gender </label>
+            <select class="form-control" th:field="*{gender}">
+               <option th:each="genderValue : ${T(com.zem.diveschool.persistence.model.Gender).values()}"
+                       th:value="${genderValue.name()}"
+                       th:text="${genderValue.name()}"
+               >val</option>
+            </select>
+            <p class="mb-0"><strong class="pr-1">Email </strong>
+               <input type="text" class="form-control" th:field="*{email}"/>
+            </p>
+            <p class="mb-0"><strong class="pr-1">Phone </strong>
+               <input type="text" class="form-control" th:field="*{phoneNumber}"/>
+            </p>
+            <label>Language </label>
+            <select class="form-control" th:field="*{language}">
+               <option th:each="languageValue : ${T(com.zem.diveschool.persistence.model.Language).values()}"
+                       th:value="${languageValue.name()}"
+                       th:text="${languageValue.name()}"
+               >val</option>
+            </select>
+            <label>Teaching Status </label>
+            <select class="form-control" th:field="*{statusTeaching}">
+               <option th:each="statusTeachingValue : ${T(com.zem.diveschool.persistence.model.StatusTeaching).values()}"
+                       th:value="${statusTeachingValue.name()}"
+                       th:text="${statusTeachingValue.name()}"
+               >val</option>
+            </select>
+
+            <h3>Home Address</h3>
+            <div th:object="${location}">
+               <p class="mb-0"><strong class="pr-1">Street </strong>
+                  <input type="text" class="form-control" th:field="*{streetAddress}"/>
+               </p>
+               <p class="mb-0"><strong class="pr-1">Postal Code </strong>
+                  <input type="text" class="form-control" th:field="*{postalCode}"/>
+               </p>
+               <p class="mb-0"><strong class="pr-1">City </strong>
+                  <input type="text" class="form-control" th:field="*{city}"/>
+               </p>
+               <p class="mb-0"><strong class="pr-1">State/Province </strong>
+                  <input type="text" class="form-control" th:field="*{stateProvince}"/>
+               </p>
+                <label>Country </label>
+               <select class="form-control" th:field="*{country}">
+                  <option th:each="countryValue : ${T(com.zem.diveschool.persistence.model.Country).values()}"
+                          th:value="${countryValue.name()}"
+                          th:text="${countryValue.name()}"
+                  >val</option>
+               </select>
+            </div>
+
+         </div>
+
+         <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+
+      <hr>
+      <a th:href="@{/instructors}"> Back to Instructors List</a>
+   </div>
+</body>
+</html>

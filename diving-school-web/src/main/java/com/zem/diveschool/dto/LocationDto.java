@@ -2,7 +2,7 @@ package com.zem.diveschool.dto;
 
 import com.zem.diveschool.persistence.model.Country;
 
-public class LocationDto {
+public class LocationDto extends GenericDto<LocationDto> {
     private Long id;
     private String streetAddress;
     private String postalCode;

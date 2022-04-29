@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'cards')}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of Cards</title>
+</head>
+<body>
+<!--/*@thymesVar id="course" type="com.zem.diveschool.persistence.model.Card"*/-->
+<h2>Cards</h2>
+<h3><a href="#" th:href="@{'/cards/new'}">New</a></h3>
+
+<table id="cards" class="table table-striped">
+    <thead>
+    <tr>
+        <th>Course</th>
+        <th>Student Name</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Country</th>
+        <th>Instructor Name</th>
+        <th>Show</th>
+        <th>Update</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="card : ${cards}">
+        <td th:text="${card.course}"></td>
+        <td th:text="${card.studentName}"></td>
+        <td th:text="${card.startDate}"></td>
+        <td th:text="${card.endDate}"></td>
+        <td th:text="${card.country}"></td>
+        <td th:text="${card.instructorName}"></td>
+        <td><a href="#" th:href="@{'/cards/' + ${card.id} + '/show'}">Show</a></td>
+        <td><a href="#" th:href="@{'/cards/' + ${card.id} + '/update'}">Update</a></td>
+        <td><a href="#" th:href="@{'/cards/' + ${card.id} + '/delete'}">Delete</a></td>
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/}"> Back Homepage</a>
+</body>
+</html>
