@@ -28,6 +28,7 @@ public class CardControllerTest {
     @Mock
     CardService cardService;
 
+
     @Mock
     ConvertObjectToObject<Card, CardDto> convertToDto;
     @Mock
@@ -43,7 +44,7 @@ public class CardControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new CardController(cardService, convertToDto, convertToEntity);
+        controller = new CardController(cardService);
     }
 
     @Test

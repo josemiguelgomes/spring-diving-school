@@ -43,7 +43,7 @@ public class LocationControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new LocationController(locationService, convertToDto, convertToEntity);
+        controller = new LocationController(locationService);
     }
 
     @Test

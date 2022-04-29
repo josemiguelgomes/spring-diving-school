@@ -1,5 +1,5 @@
 # spring-diving-school
-Diving School
+Dive School
 
 # Endpoints
 

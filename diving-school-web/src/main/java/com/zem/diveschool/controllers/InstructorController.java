@@ -5,6 +5,7 @@ import com.zem.diveschool.dto.InstructorDto;
 import com.zem.diveschool.dto.LocationDto;
 import com.zem.diveschool.persistence.model.Instructor;
 import com.zem.diveschool.persistence.services.InstructorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,15 +16,13 @@ import java.util.Set;
 public class InstructorController {
 
     private final InstructorService instructorService;
-    private final ConvertObjectToObject<Instructor, InstructorDto> convertToDto;
-    private final ConvertObjectToObject<InstructorDto, Instructor> convertToEntity;
+    @Autowired
+    private ConvertObjectToObject<Instructor, InstructorDto> convertToDto;
+    @Autowired
+    private ConvertObjectToObject<InstructorDto, Instructor> convertToEntity;
 
-    public InstructorController(InstructorService instructorService,
-                                ConvertObjectToObject<Instructor, InstructorDto> convertToDto,
-                                ConvertObjectToObject<InstructorDto, Instructor> convertToEntity) {
+    public InstructorController(InstructorService instructorService) {
         this.instructorService = instructorService;
-        this.convertToDto = convertToDto;
-        this.convertToEntity = convertToEntity;
     }
 
     @RequestMapping({"/instructors", "/instructors/index", "/instructors/index.html", "instructors.html"})

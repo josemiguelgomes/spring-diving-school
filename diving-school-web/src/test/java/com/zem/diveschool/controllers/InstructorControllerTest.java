@@ -43,7 +43,7 @@ public class InstructorControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new InstructorController(instructorService, convertToDto, convertToEntity);
+        controller = new InstructorController(instructorService);
     }
 
     @Test

@@ -5,6 +5,7 @@ import com.zem.diveschool.dto.CardDto;
 import com.zem.diveschool.persistence.model.Card;
 import com.zem.diveschool.persistence.services.CardService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,16 +16,15 @@ import java.util.Set;
 public class CardController {
 
     private final CardService cardService;
-    private final ConvertObjectToObject<Card, CardDto> convertToDto;
-    private final ConvertObjectToObject<CardDto, Card> convertToEntity;
+
+    @Autowired
+    private ConvertObjectToObject<Card, CardDto> convertToDto;
+    @Autowired
+    private ConvertObjectToObject<CardDto, Card> convertToEntity;
 
 
-    public CardController(CardService cardService,
-                          ConvertObjectToObject<Card, CardDto> convertToDto,
-                          ConvertObjectToObject<CardDto, Card> convertToEntity) {
+    public CardController(CardService cardService) {
         this.cardService = cardService;
-        this.convertToDto = convertToDto;
-        this.convertToEntity = convertToEntity;
     }
 
     @RequestMapping({"/cards", "/cards/index", "/cards/index.html", "cards.html"})

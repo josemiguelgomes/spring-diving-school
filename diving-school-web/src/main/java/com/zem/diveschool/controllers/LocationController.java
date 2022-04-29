@@ -4,6 +4,7 @@ import com.zem.diveschool.converters.ConvertObjectToObject;
 import com.zem.diveschool.dto.LocationDto;
 import com.zem.diveschool.persistence.model.Location;
 import com.zem.diveschool.persistence.services.LocationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,15 +15,13 @@ import java.util.Set;
 public class LocationController {
 
     private final LocationService locationService;
-    private final ConvertObjectToObject<Location, LocationDto> convertToDto;
-    private final ConvertObjectToObject<LocationDto, Location> convertToEntity;
+    @Autowired
+    private ConvertObjectToObject<Location, LocationDto> convertToDto;
+    @Autowired
+    private ConvertObjectToObject<LocationDto, Location> convertToEntity;
 
-    public LocationController(LocationService locationService,
-                              ConvertObjectToObject<Location, LocationDto> convertToDto,
-                              ConvertObjectToObject<LocationDto, Location> convertToEntity) {
+    public LocationController(LocationService locationService) {
         this.locationService = locationService;
-        this.convertToDto = convertToDto;
-        this.convertToEntity = convertToEntity;
     }
 
     @RequestMapping({"/locations", "/locations/index", "/locations/index.html", "locations.html"})

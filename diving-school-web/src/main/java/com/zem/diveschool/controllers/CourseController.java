@@ -6,6 +6,7 @@ import com.zem.diveschool.converters.impl.CourseToCourseDto;
 import com.zem.diveschool.dto.CourseDto;
 import com.zem.diveschool.persistence.model.Course;
 import com.zem.diveschool.persistence.services.CourseService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,16 +17,14 @@ import java.util.Set;
 public class CourseController {
 
     private final CourseService courseService;
-    private final ConvertObjectToObject<Course, CourseDto> convertToDto;
-    private final ConvertObjectToObject<CourseDto, Course> convertToEntity;
+    @Autowired
+    private ConvertObjectToObject<Course, CourseDto> convertToDto;
+    @Autowired
+    private ConvertObjectToObject<CourseDto, Course> convertToEntity;
 
 
-    public CourseController(CourseService courseService,
-                            ConvertObjectToObject<Course, CourseDto> convertToDto,
-                            ConvertObjectToObject<CourseDto, Course> convertToEntity) {
+    public CourseController(CourseService courseService) {
         this.courseService = courseService;
-        this.convertToDto = convertToDto;
-        this.convertToEntity = convertToEntity;
     }
 
     @RequestMapping({"/courses", "/courses/index", "/courses/index.html", "courses.html"})

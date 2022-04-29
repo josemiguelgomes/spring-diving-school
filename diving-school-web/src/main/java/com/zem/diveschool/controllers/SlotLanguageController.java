@@ -4,6 +4,7 @@ import com.zem.diveschool.converters.ConvertObjectToObject;
 import com.zem.diveschool.dto.SlotLanguageDto;
 import com.zem.diveschool.persistence.model.SlotLanguage;
 import com.zem.diveschool.persistence.services.SlotLanguageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,15 +15,13 @@ import java.util.Set;
 public class SlotLanguageController {
 
     private final SlotLanguageService slotLanguageService;
-    private final ConvertObjectToObject<SlotLanguage, SlotLanguageDto> convertToDto;
-    private final ConvertObjectToObject<SlotLanguageDto, SlotLanguage> convertToEntity;
+    @Autowired
+    private ConvertObjectToObject<SlotLanguage, SlotLanguageDto> convertToDto;
+    @Autowired
+    private ConvertObjectToObject<SlotLanguageDto, SlotLanguage> convertToEntity;
 
-    public SlotLanguageController(SlotLanguageService slotLanguageService,
-                                  ConvertObjectToObject<SlotLanguage, SlotLanguageDto> convertToDto,
-                                  ConvertObjectToObject<SlotLanguageDto, SlotLanguage> convertToEntity) {
+    public SlotLanguageController(SlotLanguageService slotLanguageService) {
         this.slotLanguageService = slotLanguageService;
-        this.convertToDto = convertToDto;
-        this.convertToEntity = convertToEntity;
     }
 
     @RequestMapping({"/slotLanguages", "/slotLanguages/index", "/slotLanguages/index.html", "slotLanguages.html"})

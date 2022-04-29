@@ -11,6 +11,7 @@ import com.zem.diveschool.persistence.model.Student;
 import com.zem.diveschool.persistence.services.CardService;
 import com.zem.diveschool.persistence.services.SlotService;
 import com.zem.diveschool.persistence.services.StudentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,31 +24,23 @@ public class StudentController {
     private final StudentService studentService;
     private final CardService cardService;
     private final SlotService slotService;
-    private final ConvertObjectToObject<Student, StudentDto> convertToDto;
-    private final ConvertObjectToObject<StudentDto, Student> convertToEntity;
-    private final ConvertObjectToObject<Card, CardDto> convertCardToDto;
-    private final ConvertObjectToObject<CardDto, Card> convertCardToEntity;
-    private final ConvertObjectToObject<Slot, SlotDto> convertSlotToDto;
-    private final ConvertObjectToObject<SlotDto, Slot> convertSlotToEntity;
+    @Autowired
+    private ConvertObjectToObject<Student, StudentDto> convertToDto;
+    @Autowired
+    private ConvertObjectToObject<StudentDto, Student> convertToEntity;
+    @Autowired
+    private ConvertObjectToObject<Card, CardDto> convertCardToDto;
+    @Autowired
+    private ConvertObjectToObject<CardDto, Card> convertCardToEntity;
+    @Autowired
+    private ConvertObjectToObject<Slot, SlotDto> convertSlotToDto;
+    @Autowired
+    private ConvertObjectToObject<SlotDto, Slot> convertSlotToEntity;
 
-
-
-    public StudentController(StudentService studentService, CardService cardService, SlotService slotService,
-                             ConvertObjectToObject<Student, StudentDto> convertToDto,
-                             ConvertObjectToObject<StudentDto, Student> convertToEntity,
-                             ConvertObjectToObject<Card, CardDto> convertCardToDto,
-                             ConvertObjectToObject<CardDto, Card> convertCardToEntity,
-                             ConvertObjectToObject<Slot, SlotDto> convertSlotToDto,
-                             ConvertObjectToObject<SlotDto, Slot> convertSlotToEntity) {
+    public StudentController(StudentService studentService, CardService cardService, SlotService slotService) {
         this.studentService = studentService;
         this.cardService = cardService;
         this.slotService = slotService;
-        this.convertToDto = convertToDto;
-        this.convertToEntity = convertToEntity;
-        this.convertCardToDto = convertCardToDto;
-        this.convertCardToEntity = convertCardToEntity;
-        this.convertSlotToDto = convertSlotToDto;
-        this.convertSlotToEntity = convertSlotToEntity;
     }
 
 

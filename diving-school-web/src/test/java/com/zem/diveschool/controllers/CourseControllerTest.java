@@ -43,7 +43,7 @@ public class CourseControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new CourseController(courseService, convertToDto, convertToEntity);
+        controller = new CourseController(courseService);
     }
 
     @Test

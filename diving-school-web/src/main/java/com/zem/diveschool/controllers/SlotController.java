@@ -7,6 +7,7 @@ import com.zem.diveschool.dto.SlotDto;
 import com.zem.diveschool.persistence.model.*;
 import com.zem.diveschool.persistence.services.CourseService;
 import com.zem.diveschool.persistence.services.SlotService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,25 +20,20 @@ public class SlotController {
 
     private final SlotService slotService;
     private final CourseService courseService;
-
-    private final ConvertObjectToObject<Slot, SlotDto> convertToDto;
-    private final ConvertObjectToObject<SlotDto, Slot> convertToEntity;
-    private final ConvertObjectToObject<Course, CourseDto> convertCourseToDto;
-    private final ConvertObjectToObject<CourseDto, Course> convertCourseToEntity;
+    @Autowired
+    private ConvertObjectToObject<Slot, SlotDto> convertToDto;
+    @Autowired
+    private ConvertObjectToObject<SlotDto, Slot> convertToEntity;
+    @Autowired
+    private ConvertObjectToObject<Course, CourseDto> convertCourseToDto;
+    @Autowired
+    private ConvertObjectToObject<CourseDto, Course> convertCourseToEntity;
 
 
     public SlotController(SlotService slotService,
-                          CourseService courseService,
-                          ConvertObjectToObject<Slot, SlotDto> convertToDto,
-                          ConvertObjectToObject<SlotDto, Slot> convertToEntity,
-                          ConvertObjectToObject<Course, CourseDto> convertCourseToDto,
-                          ConvertObjectToObject<CourseDto, Course> convertCourseToEntity) {
+                          CourseService courseService) {
         this.slotService = slotService;
         this.courseService = courseService;
-        this.convertToDto = convertToDto;
-        this.convertToEntity = convertToEntity;
-        this.convertCourseToDto = convertCourseToDto;
-        this.convertCourseToEntity = convertCourseToEntity;
     }
 
     @RequestMapping({"/slots", "/slots/index", "/slots/index.html", "slots.html"})
