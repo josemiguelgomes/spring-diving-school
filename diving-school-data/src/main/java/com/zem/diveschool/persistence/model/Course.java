@@ -1,9 +1,7 @@
 package com.zem.diveschool.persistence.model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "courses")
@@ -14,7 +12,7 @@ public class Course extends BaseEntity {
     private Level level;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<Slot> slots = new ArrayList<>();
+    private Set<Slot> slots = new HashSet<>();
 
     //
     // Constructors
@@ -24,7 +22,7 @@ public class Course extends BaseEntity {
         super();
     }
 
-    public Course(Long id, String name, Level level, List<Slot> slots) {
+    public Course(Long id, String name, Level level, Set<Slot> slots) {
         super(id);
         this.name = name;
         this.level = level;
@@ -55,11 +53,11 @@ public class Course extends BaseEntity {
         this.level = level;
     }
 
-    public List<Slot> getSlots() {
+    public Set<Slot> getSlots() {
         return slots;
     }
 
-    public void setSlots(List<Slot> slots) {
+    public void setSlots(Set<Slot> slots) {
         this.slots = slots;
     }
 

@@ -22,16 +22,16 @@ public class Student extends BaseEntity {
     private String phoneNumber;
     @Enumerated(EnumType.STRING)
     private Language language;
+    @Column(name = "photo")
+    private Byte[] photo;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location homeAddress;
-    @Column(name = "photo")
-    private Byte[] photo;
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
- 	private List<Card> cards = new ArrayList<>();
+ 	private Set<Card> cards = new HashSet<>();
     @ManyToMany(mappedBy = "students")
-	private List<Slot> slots = new ArrayList<>();
+	private Set<Slot> slots = new HashSet<>();
 
     //
     // Constructors
@@ -42,7 +42,7 @@ public class Student extends BaseEntity {
 
     public Student(Long id, String firstName, String middleName, String lastName, Date birthdate, Gender gender,
                    String email, String phoneNumber, Language language, Location homeAddress, Byte[] photo,
-                   List<Card> cards, List<Slot> slots) {
+                   Set<Card> cards, Set<Slot> slots) {
         super(id);
         this.firstName = firstName;
         this.middleName = middleName;
@@ -134,16 +134,16 @@ public class Student extends BaseEntity {
     public void setPhoto(Byte[] photo) {
         this.photo = photo;
     }
-    public List<Card> getCards() {
+    public Set<Card> getCards() {
         return cards;
     }
-    public void setCards(List<Card> cards) {
+    public void setCards(Set<Card> cards) {
         this.cards = cards;
     }
-    public List<Slot> getSlots() {
+    public Set<Slot> getSlots() {
         return slots;
     }
-    public void setSlots(List<Slot> slots) {
+    public void setSlots(Set<Slot> slots) {
         this.slots = slots;
     }
 

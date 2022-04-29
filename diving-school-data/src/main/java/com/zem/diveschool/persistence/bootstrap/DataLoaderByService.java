@@ -10,9 +10,7 @@ import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @Profile("demobyservices")
@@ -57,9 +55,9 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
         cardService.saveAll(getCards());
     }
 
-    private List<Instructor> getInstructors() {
+    private Set<Instructor> getInstructors() {
 
-        List<Instructor> instructors = new ArrayList<>(3);
+        Set<Instructor> instructors = new HashSet<>(3);
 
         //
         // Instructor 1
@@ -156,9 +154,9 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
         return instructors;
     }
 
-    private List<Course> getCourses() {
+    private Set<Course> getCourses() {
 
-        List<Course> courses = new ArrayList<>(5);
+        Set<Course> courses = new HashSet<>(5);
 
         //
         // Course 1
@@ -209,9 +207,9 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
         return courses;
 
     }
-    private List<Student> getStudents() {
+    private Set<Student> getStudents() {
 
-        List<Student> students = new ArrayList<>(2);
+        Set<Student> students = new HashSet<>(2);
 
         //
         // Student 1
@@ -276,9 +274,9 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
         //
         return students;
     }
-    private List<Slot> getSlots() {
+    private Set<Slot> getSlots() {
 
-        List<Slot> slots = new ArrayList<>(2);
+        Set<Slot> slots = new HashSet<>(2);
 
         //
         // Slot 1
@@ -311,7 +309,7 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
         slot1.setCourse(course1.get());
 
         // Associate Language(s) to the slot
-        List<SlotLanguage> slotLanguages1 = new ArrayList<>(2);
+        Set<SlotLanguage> slotLanguages1 = new HashSet<>(2);
         SlotLanguage slotLanguage1A = new SlotLanguage();
         slotLanguage1A.setLanguage(Language.ENGLISH);
         slotLanguage1A.setSlot(slot1);
@@ -325,7 +323,7 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
         slot1.setLanguages(slotLanguages1);
 
         // Associate instructor(s) to the slot
-        List<Instructor> instructors1 = new ArrayList<>();
+        Set<Instructor> instructors1 = new HashSet<>();
 
         Optional<Instructor> instructor1A = instructorService.findByFirstName("Jose");
         if (instructor1A.isEmpty()) {
@@ -342,7 +340,7 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
         slot1.setInstructors(instructors1);
 
         // Associate student(s) to the slot
-        List<Student> student1 = new ArrayList<>();
+        Set<Student> student1 = new HashSet<>();
         Optional<Student> student1A = studentService.findByFirstName("Grody");
         if (student1A.isEmpty()) {
             throw new RuntimeException("Please provide an student that exists");
@@ -384,7 +382,7 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
         }
         slot2.setCourse(course2.get());
 
-        List<SlotLanguage> slotLanguages2 = new ArrayList<>(1);
+        Set<SlotLanguage> slotLanguages2 = new HashSet<>(1);
         SlotLanguage slotLanguage2A = new SlotLanguage();
         slotLanguage2A.setLanguage(Language.ENGLISH);
         slotLanguage2A.setSlot(slot2);
@@ -393,7 +391,7 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
         slot2.setLanguages(slotLanguages2);
 
         // Associate instructor(s) to the slot
-        List<Instructor> instructors2 = new ArrayList<>();
+        Set<Instructor> instructors2 = new HashSet<>();
 
         Optional<Instructor> instructor2A = instructorService.findByFirstName("Cruzeta");
         if (instructor2A.isEmpty()) {
@@ -408,9 +406,9 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
         //
         return slots;
     }
-    private List<Card> getCards() {
+    private Set<Card> getCards() {
 
-        List<Card> allCards = new ArrayList<>(2);
+        Set<Card> allCards = new HashSet<>(2);
 
         //
         // Student 1
@@ -419,7 +417,7 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
         if (student1.isEmpty()) {
             throw new RuntimeException("Please provide a student that exists");
         }
-        List<Card> cards = new ArrayList<>(2);
+        Set<Card> cards = new HashSet<>(2);
         Card card1 = new Card();
         card1.setCourse("GUE Fundamentals (old style)");
         card1.setStudentName("Joaquinita Fundies");

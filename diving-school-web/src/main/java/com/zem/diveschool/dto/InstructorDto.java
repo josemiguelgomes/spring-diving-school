@@ -2,10 +2,13 @@ package com.zem.diveschool.dto;
 
 import com.zem.diveschool.persistence.model.*;
 
+import javax.persistence.CascadeType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.*;
 
 public class InstructorDto extends GenericDto<InstructorDto> {
     private final SimpleDateFormat dateFormat
@@ -22,6 +25,9 @@ public class InstructorDto extends GenericDto<InstructorDto> {
     private Language language;
     private Byte[] photo;
     private StatusTeaching statusTeaching;
+
+    private Location homeAddress;
+    private Set<Slot> slots = new HashSet<>();
 
     //
     // Constructor
@@ -131,5 +137,21 @@ public class InstructorDto extends GenericDto<InstructorDto> {
 
     public void setStatusTeaching(StatusTeaching statusTeaching) {
         this.statusTeaching = statusTeaching;
+    }
+
+    public Location getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(Location homeAddress) {
+        this.homeAddress = homeAddress;
+    }
+
+    public Set<Slot> getSlots() {
+        return slots;
+    }
+
+    public void setSlots(Set<Slot> slots) {
+        this.slots = slots;
     }
 }

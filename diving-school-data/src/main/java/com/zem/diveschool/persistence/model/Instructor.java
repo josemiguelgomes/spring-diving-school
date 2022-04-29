@@ -23,15 +23,17 @@ public class Instructor extends BaseEntity {
     private String phoneNumber;
     @Enumerated(EnumType.STRING)
     private Language language;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "location_id", referencedColumnName = "id")
-    private Location homeAddress;
     @Column(name = "photo")
     private Byte[] photo;
     @Enumerated(EnumType.STRING)
     private StatusTeaching statusTeaching;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    private Location homeAddress;
+
     @ManyToMany(mappedBy = "instructors")
-    private List<Slot> slots = new ArrayList<>();
+    private Set<Slot> slots = new HashSet<>();
 
 
     //
@@ -155,11 +157,11 @@ public class Instructor extends BaseEntity {
         this.statusTeaching = statusTeaching;
     }
 
-    public List<Slot> getSlots() {
+    public Set<Slot> getSlots() {
         return slots;
     }
 
-    public void setSlots(List<Slot> slots) {
+    public void setSlots(Set<Slot> slots) {
         this.slots = slots;
     }
 

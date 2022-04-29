@@ -2,11 +2,9 @@ package com.zem.diveschool.dto;
 
 import com.zem.diveschool.persistence.model.*;
 
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.*;
 
 public class StudentDto extends GenericDto<StudentDto> {
     private final SimpleDateFormat dateFormat
@@ -23,6 +21,9 @@ public class StudentDto extends GenericDto<StudentDto> {
     private Language language;
     private Byte[] photo;
 
+    private Location homeAddress;
+    private Set<Card> cards = new HashSet<>();
+    private Set<Slot> slots = new HashSet<>();
     //
     // Constructor
     //
@@ -46,7 +47,6 @@ public class StudentDto extends GenericDto<StudentDto> {
     //
     // Standard Getters & Setters
     //
-
     public Long getId() {
         return id;
     }
@@ -125,5 +125,29 @@ public class StudentDto extends GenericDto<StudentDto> {
 
     public void setPhoto(Byte[] photo) {
         this.photo = photo;
+    }
+
+    public Location getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(Location homeAddress) {
+        this.homeAddress = homeAddress;
+    }
+
+    public Set<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(Set<Card> cards) {
+        this.cards = cards;
+    }
+
+    public Set<Slot> getSlots() {
+        return slots;
+    }
+
+    public void setSlots(Set<Slot> slots) {
+        this.slots = slots;
     }
 }

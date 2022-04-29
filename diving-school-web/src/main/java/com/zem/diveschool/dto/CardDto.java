@@ -1,8 +1,11 @@
 package com.zem.diveschool.dto;
 
 import com.zem.diveschool.persistence.model.Country;
+import com.zem.diveschool.persistence.model.Student;
 import org.jetbrains.annotations.NotNull;
 
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,6 +22,8 @@ public class CardDto extends GenericDto<CardDto> {
     private String endDate;
     private Country country;
     private String instructorName;
+
+    private Student student;
 
     //
     // Constructor
@@ -53,7 +58,6 @@ public class CardDto extends GenericDto<CardDto> {
     //
     // Standard Getters & Setters
     //
-
     public Long getId() {
         return id;
     }
@@ -108,5 +112,13 @@ public class CardDto extends GenericDto<CardDto> {
 
     public void setInstructorName(String instructorName) {
         this.instructorName = instructorName;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
     }
 }

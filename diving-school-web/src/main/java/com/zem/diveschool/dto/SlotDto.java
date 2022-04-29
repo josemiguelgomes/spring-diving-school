@@ -2,10 +2,10 @@ package com.zem.diveschool.dto;
 
 import com.zem.diveschool.persistence.model.*;
 
+import javax.persistence.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.*;
 
 public class SlotDto extends GenericDto<SlotDto> {
     private final SimpleDateFormat dateFormat
@@ -16,6 +16,10 @@ public class SlotDto extends GenericDto<SlotDto> {
     private String endDate;
     private SlotStatus status;
 
+    private Course course;
+    private Set<SlotLanguage> languages = new HashSet<>();
+    private Set<Student> students = new HashSet<>();
+    private Set<Instructor> instructors = new HashSet<>();
     //
     // Constructor
     //
@@ -49,7 +53,6 @@ public class SlotDto extends GenericDto<SlotDto> {
     //
     // Standard Getters & Setters
     //
-
     public Long getId() {
         return id;
     }
@@ -88,5 +91,37 @@ public class SlotDto extends GenericDto<SlotDto> {
 
     public void setStatus(SlotStatus status) {
         this.status = status;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public Set<SlotLanguage> getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(Set<SlotLanguage> languages) {
+        this.languages = languages;
+    }
+
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
+    }
+
+    public Set<Instructor> getInstructors() {
+        return instructors;
+    }
+
+    public void setInstructors(Set<Instructor> instructors) {
+        this.instructors = instructors;
     }
 }

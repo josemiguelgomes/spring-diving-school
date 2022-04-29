@@ -1,10 +1,7 @@
 package com.zem.diveschool.persistence.model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "slots")
@@ -20,25 +17,26 @@ public class Slot extends BaseEntity {
     private Location location;
     @Enumerated(EnumType.STRING)
     private SlotStatus status;
+
     @OneToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
     @OneToMany(mappedBy = "slot", cascade = { CascadeType.ALL })
-    private List<SlotLanguage> languages = new ArrayList<>();
+    private Set<SlotLanguage> languages = new HashSet<>();
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "Slot_Student",
             joinColumns = { @JoinColumn(name = "slot_id") },
             inverseJoinColumns = { @JoinColumn(name = "student_id") }
     )
-    private List<Student> students = new ArrayList<>();
+    private Set<Student> students = new HashSet<>();
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "Slot_Instructor",
             joinColumns = { @JoinColumn(name = "slot_id") },
             inverseJoinColumns = { @JoinColumn(name = "instructor_id") }
     )
-    private List<Instructor> instructors = new ArrayList<>();
+    private Set<Instructor> instructors = new HashSet<>();
 
     //
     // Constructors
@@ -49,7 +47,7 @@ public class Slot extends BaseEntity {
     }
 
     public Slot(Long id, String title, Date startingDate, Date endingDate, Location location, SlotStatus status,
-                Course course, List<SlotLanguage> languages, List<Student> students, List<Instructor> instructors) {
+                Course course, Set<SlotLanguage> languages, Set<Student> students, Set<Instructor> instructors) {
         super(id);
         this.title = title;
         this.startDate = startingDate;
@@ -132,27 +130,27 @@ public class Slot extends BaseEntity {
         this.course = course;
     }
 
-    public List<SlotLanguage> getLanguages() {
+    public Set<SlotLanguage> getLanguages() {
         return languages;
     }
 
-    public void setLanguages(List<SlotLanguage> languages) {
+    public void setLanguages(Set<SlotLanguage> languages) {
         this.languages = languages;
     }
 
-    public List<Student> getStudents() {
+    public Set<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(List<Student> students) {
+    public void setStudents(Set<Student> students) {
         this.students = students;
     }
 
-    public List<Instructor> getInstructors() {
+    public Set<Instructor> getInstructors() {
         return instructors;
     }
 
-    public void setInstructors(List<Instructor> instructors) {
+    public void setInstructors(Set<Instructor> instructors) {
         this.instructors = instructors;
     }
 
