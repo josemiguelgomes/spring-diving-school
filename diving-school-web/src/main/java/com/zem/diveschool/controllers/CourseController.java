@@ -37,7 +37,7 @@ public class CourseController {
     @RequestMapping({"/courses/{id}/show"})
     public String showById(@PathVariable String id, Model model){
         Course course = courseService.findById(Long.valueOf(id));
-        model.addAttribute("course", course);
+        model.addAttribute("course", convertToDto.convert(course));
 
         return "courses/show";
     }

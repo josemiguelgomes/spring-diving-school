@@ -1,9 +1,9 @@
 package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.converters.ConvertObjectToObject;
-import com.zem.diveschool.dto.CourseDto;
-import com.zem.diveschool.persistence.model.Course;
-import com.zem.diveschool.persistence.services.CourseService;
+import com.zem.diveschool.dto.CardDto;
+import com.zem.diveschool.persistence.model.Card;
+import com.zem.diveschool.persistence.services.CardService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -23,90 +23,90 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-public class CourseControllerTest {
+public class CardControllerTest {
 
     @Mock
-    CourseService courseService;
+    CardService cardService;
 
     @Mock
-    ConvertObjectToObject<Course, CourseDto> convertToDto;
+    ConvertObjectToObject<Card, CardDto> convertToDto;
     @Mock
-    ConvertObjectToObject<CourseDto, Course> convertToEntity;
+    ConvertObjectToObject<CardDto, Card> convertToEntity;
 
 
     @Mock
     Model model;
 
-    CourseController controller;
+    CardController controller;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new CourseController(courseService, convertToDto, convertToEntity);
+        controller = new CardController(cardService, convertToDto, convertToEntity);
     }
 
     @Test
     public void testMockMVC() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
-        mockMvc.perform(get("/courses"))
+        mockMvc.perform(get("/cards"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("courses/index"));
+                .andExpect(view().name("cards/index"));
     }
 
     @Test
-    public void requestListCourses() throws Exception {
+    public void requestListCards() throws Exception {
         //given
-        Set<CourseDto> coursesDto = new HashSet<>();
+        Set<CardDto> cardsDto = new HashSet<>();
 
-        CourseDto courseDto1 = new CourseDto();
-        courseDto1.setId(1L);
-        coursesDto.add(courseDto1);
+        CardDto cardDto1 = new CardDto();
+        cardDto1.setId(1L);
+        cardsDto.add(cardDto1);
 
-        CourseDto courseDto2 = new CourseDto();
-        courseDto2.setId(2L);
-        coursesDto.add(courseDto2);
+        CardDto cardDto2 = new CardDto();
+        cardDto2.setId(2L);
+        cardsDto.add(cardDto2);
 
 
-        when(convertToDto.convert(courseService.findAll())).thenReturn(coursesDto);
+        when(convertToDto.convert(cardService.findAll())).thenReturn(cardsDto);
 
-        ArgumentCaptor<Set<CourseDto>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
+        ArgumentCaptor<Set<CardDto>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
 
         //when
-        String viewName = controller.listCourses(model);
+        String viewName = controller.listCards(model);
 
         //then
-        assertEquals("courses/index", viewName);
-        verify(model, times(1)).addAttribute(eq("courses"), argumentCaptor.capture());
-        Set<CourseDto> setInController = argumentCaptor.getValue();
-        assertEquals(coursesDto.size(), setInController.size());
+        assertEquals("cards/index", viewName);
+        verify(model, times(1)).addAttribute(eq("cards"), argumentCaptor.capture());
+        Set<CardDto> setInController = argumentCaptor.getValue();
+        assertEquals(cardsDto.size(), setInController.size());
     }
 
     @Test
     public void requestShowById() throws Exception {
         //given
-        CourseDto courseDto = new CourseDto();
-        courseDto.setId(1L);
+        CardDto cardDto = new CardDto();
+        cardDto.setId(1L);
 
-        when(convertToDto.convert(courseService.findById(1L))).thenReturn(courseDto);
+        when(convertToDto.convert(cardService.findById(1L))).thenReturn(cardDto);
 
-        ArgumentCaptor<CourseDto> argumentCaptor = ArgumentCaptor.forClass(CourseDto.class);
+        ArgumentCaptor<CardDto> argumentCaptor = ArgumentCaptor.forClass(CardDto.class);
 
         //when
         String id = Long.valueOf(1L).toString();
         String viewName = controller.showById(id, model);
 
         //then
-        assertEquals("courses/show", viewName);
-        verify(model, times(1)).addAttribute(eq("course"), argumentCaptor.capture());
-        CourseDto inController = argumentCaptor.getValue();
+        assertEquals("cards/show", viewName);
+        verify(model, times(1)).addAttribute(eq("card"), argumentCaptor.capture());
+        CardDto inController = argumentCaptor.getValue();
         assertEquals(Optional.of(1L), Optional.ofNullable(inController.getId()));
     }
 
 
     @Test
-    public void getNewCourse() throws Exception {
+    public void getNewCard() throws Exception {
         ///////// TODO
         //given
 
@@ -117,7 +117,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void getUpdateCourse() throws Exception {
+    public void getUpdateCard() throws Exception {
         ///////// TODO
         //given
 
