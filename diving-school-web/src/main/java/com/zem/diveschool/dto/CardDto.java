@@ -2,15 +2,18 @@ package com.zem.diveschool.dto;
 
 import com.zem.diveschool.persistence.model.Country;
 import com.zem.diveschool.persistence.model.Student;
-import org.jetbrains.annotations.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class CardDto extends GenericDto<CardDto> {
     private final SimpleDateFormat dateFormat
             = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -25,11 +28,6 @@ public class CardDto extends GenericDto<CardDto> {
 
     private Student student;
 
-    //
-    // Constructor
-    //
-    public CardDto() {
-    }
 
     //
     // Conversions
@@ -52,73 +50,5 @@ public class CardDto extends GenericDto<CardDto> {
     public void setSubmissionEndDate(Date date, String timezone) {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
         this.endDate = dateFormat.format(date);
-    }
-
-
-    //
-    // Standard Getters & Setters
-    //
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCourse() {
-        return course;
-    }
-
-    public void setCourse(String course) {
-        this.course = course;
-    }
-
-    public String getStudentName() {
-        return studentName;
-    }
-
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-    public Country getCountry() {
-        return country;
-    }
-
-    public void setCountry(Country country) {
-        this.country = country;
-    }
-
-    public String getInstructorName() {
-        return instructorName;
-    }
-
-    public void setInstructorName(String instructorName) {
-        this.instructorName = instructorName;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
     }
 }

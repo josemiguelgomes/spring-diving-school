@@ -94,7 +94,7 @@ public class StudentController {
         // Delete the link Student / Slot
         Student student = studentService.findById(Long.valueOf(id));
         for (Slot slot :student.getSlots()) {
-            slot.deleteStudent(student);
+            slot.delete(student);
         }
         // Delete the student
         studentService.deleteById(Long.valueOf(id));

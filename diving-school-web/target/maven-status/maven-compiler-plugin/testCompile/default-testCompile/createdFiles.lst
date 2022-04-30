@@ -1,1 +1,7 @@
+com/zem/diveschool/services/CourseServiceSDJparseImplTestCase.class
+com/zem/diveschool/controllers/CardControllerTest.class
 com/zem/diveschool/controllers/LocationControllerTest.class
+com/zem/diveschool/controllers/InstructorControllerTest.class
+com/zem/diveschool/controllers/IndexControllerTest.class
+com/zem/diveschool/ZemDivingSchoolApplicationTests.class
+com/zem/diveschool/controllers/CourseControllerTest.class

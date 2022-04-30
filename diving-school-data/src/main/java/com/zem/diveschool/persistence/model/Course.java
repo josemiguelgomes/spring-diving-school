@@ -1,8 +1,16 @@
 package com.zem.diveschool.persistence.model;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.*;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "courses")
 public class Course extends BaseEntity {
@@ -18,10 +26,7 @@ public class Course extends BaseEntity {
     // Constructors
     //
 
-    public Course() {
-        super();
-    }
-
+    @Builder
     public Course(Long id, String name, Level level, Set<Slot> slots) {
         super(id);
         this.name = name;
@@ -29,65 +34,11 @@ public class Course extends BaseEntity {
         this.slots = slots;
     }
 
-//
+    //
     // Methods
     //
-
-
-    //
-    // Setters & Getters
-    //
-    public String getName() {
-        return name;
+    public void add(Slot slot) {
+        this.slots.add(slot);
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Level getLevel() {
-        return level;
-    }
-
-    public void setLevel(Level level) {
-        this.level = level;
-    }
-
-    public Set<Slot> getSlots() {
-        return slots;
-    }
-
-    public void setSlots(Set<Slot> slots) {
-        this.slots = slots;
-    }
-
-
-    //
-    //
-    //
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Course course = (Course) o;
-        return Objects.equals(getId(), course.getId())
-                && Objects.equals(name, course.name)
-                && level == course.level
-                && Objects.equals(slots, course.slots);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), name, level);
-    }
-
-    @Override
-    public String toString() {
-        return "Course{" +
-                "id=" + getId() +
-                ", name='" + name + '\'' +
-                ", level=" + level +
-                '}';
-    }
+    public void delete(Slot slot) { this.slots.remove(slot); }
 }
