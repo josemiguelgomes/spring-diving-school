@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/josemiguelgomes/spring-diving-school/tree/main.svg?style=svg)](https://circleci.com/gh/josemiguelgomes/spring-diving-school/tree/main)
+
 # spring-diving-school
 Dive School
 
