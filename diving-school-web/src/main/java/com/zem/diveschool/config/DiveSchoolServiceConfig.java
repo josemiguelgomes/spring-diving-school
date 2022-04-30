@@ -9,6 +9,4 @@ public class DiveSchoolServiceConfig {
     public DiveSchoolServiceConfig() {
         super();
     }
-
-
 }
