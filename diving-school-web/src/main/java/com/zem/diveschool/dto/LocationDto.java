@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class LocationDto extends GenericDto<LocationDto> {
-    private Long id;
     private String streetAddress;
     private String postalCode;
     private String city;

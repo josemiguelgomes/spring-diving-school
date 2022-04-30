@@ -16,7 +16,6 @@ import java.util.*;
 public class SlotDto extends GenericDto<SlotDto> {
     private final SimpleDateFormat dateFormat
             = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private Long id;
     private String title;
     private String startDate;
     private String endDate;

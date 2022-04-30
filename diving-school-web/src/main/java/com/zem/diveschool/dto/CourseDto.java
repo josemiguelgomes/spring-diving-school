@@ -13,7 +13,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 public class CourseDto extends GenericDto<CourseDto> {
-    private Long id;
     private String name;
     private Level level;
 

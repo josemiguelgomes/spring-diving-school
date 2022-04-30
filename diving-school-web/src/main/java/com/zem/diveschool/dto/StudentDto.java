@@ -16,7 +16,6 @@ public class StudentDto extends GenericDto<StudentDto> {
     private final SimpleDateFormat dateFormat
             = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-    private Long id;
     private String firstName;
     private String middleName;
     private String lastName;
