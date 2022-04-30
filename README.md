@@ -61,4 +61,6 @@ http://localhost:8080/actuator/health/{component}/{instance} \
 http://localhost:8080/actuator/info \
 
 
+# Dive School Model
+
 ![Dive School Model](diving-school-model.png?raw=true "Dive School Model")
