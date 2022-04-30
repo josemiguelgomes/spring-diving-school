@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-//@ComponentScan({ "com.zem.dive.school.persistence.service" })
 public class VerifySpringConfig {
 
     @Bean(name="imAliveService")
