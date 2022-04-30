@@ -15,11 +15,13 @@ com/zem/diveschool/converters/ConvertObjectToObject.class
 com/zem/diveschool/dto/SlotLanguageDto.class
 com/zem/diveschool/controllers/InstructorController.class
 com/zem/diveschool/converters/impl/CardToCardDto.class
+com/zem/diveschool/config/VerifySpringConfig.class
 com/zem/diveschool/converters/impl/CardDtoToCard.class
 com/zem/diveschool/dto/SlotDto.class
 com/zem/diveschool/dto/StudentDto.class
 com/zem/diveschool/converters/impl/ConvertObject.class
 com/zem/diveschool/converters/impl/StudentToStudentDto.class
+com/zem/diveschool/ZemVerifySpringFeatures.class
 com/zem/diveschool/converters/impl/LocationToLocationDto.class
 com/zem/diveschool/dto/GenericDto.class
 com/zem/diveschool/dto/InstructorDto.class

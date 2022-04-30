@@ -7,6 +7,7 @@ com/zem/diveschool/persistence/services/impl/map/CourseServiceMapImpl.class
 com/zem/diveschool/persistence/model/Country.class
 com/zem/diveschool/persistence/model/SlotLanguage.class
 com/zem/diveschool/persistence/repositories/InstructorRepository.class
+com/zem/diveschool/persistence/services/impl/ImAliveManagerImpl.class
 com/zem/diveschool/persistence/services/impl/springdatajpa/SlotServiceSDJpaImpl.class
 com/zem/diveschool/persistence/bootstrap/DataLoaderByRepo.class
 com/zem/diveschool/persistence/services/impl/springdatajpa/InstructorServiceSDJpaImpl.class
@@ -38,6 +39,7 @@ com/zem/diveschool/persistence/services/CrudService.class
 com/zem/diveschool/persistence/repositories/CardRepository.class
 com/zem/diveschool/persistence/services/InstructorService.class
 com/zem/diveschool/persistence/model/Instructor.class
+com/zem/diveschool/persistence/services/ImAliveManager.class
 com/zem/diveschool/persistence/model/SlotLanguage$SlotLanguageBuilder.class
 com/zem/diveschool/persistence/services/CourseService.class
 com/zem/diveschool/persistence/repositories/CourseRepository.class
