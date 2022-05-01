@@ -1,4 +1,4 @@
-package com.zem.diveschool.converters.impl;
+package com.zem.diveschool.converters.impl.simple;
 
 import com.zem.diveschool.dto.CourseDto;
 import com.zem.diveschool.persistence.model.Course;
@@ -10,19 +10,11 @@ public class CourseToCourseDto extends ConvertObject<Course, CourseDto> {
     @Nullable
     @Override
     public CourseDto convert(Course entity) {
-/*
-        if (entity == null) {
-            return null;
-        }
-*/
-        final CourseDto courseDto = new CourseDto();
+        return CourseDto.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .level(entity.getLevel())
+                .build();
 
-        courseDto.setId(entity.getId());
-        courseDto.setName(entity.getName());
-        courseDto.setLevel(entity.getLevel());
-
-        return courseDto;
     }
-
-
 }

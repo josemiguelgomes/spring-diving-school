@@ -2,6 +2,7 @@ package com.zem.diveschool.dto;
 
 import com.zem.diveschool.persistence.model.Country;
 import com.zem.diveschool.persistence.model.Student;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,13 +28,34 @@ public class CardDto extends GenericDto<CardDto> {
 
     private Student student;
 
+    @Builder
+    public CardDto(Long id, String course, String studentName, String startDate, String endDate, Country country,
+                   String instructorName, Student student) {
+        super(id);
+        this.course = course;
+        this.studentName = studentName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.country = country;
+        this.instructorName = instructorName;
+        this.student = student;
+    }
 
     //
     // Conversions
     //
-    public Date getSubmissionStartDateConverted(String timezone) throws ParseException {
+    public Date getSubmissionStartDateConverted(String timezone)  {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
-        return dateFormat.parse(this.startDate);
+        try {
+            return dateFormat.parse(this.startDate);
+        } catch (ParseException e) {
+//            throw new RuntimeException(e);
+            try {
+                return dateFormat.parse("0001-01-01");
+            } catch (ParseException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
     public void setSubmissionStartDate(Date date, String timezone) {
@@ -41,9 +63,18 @@ public class CardDto extends GenericDto<CardDto> {
         this.startDate = dateFormat.format(date);
     }
 
-    public Date getSubmissionEndDateConverted(String timezone) throws ParseException {
+    public Date getSubmissionEndDateConverted(String timezone)  {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
-        return dateFormat.parse(this.endDate);
+        try {
+            return dateFormat.parse(this.endDate);
+        } catch (ParseException e) {
+//            throw new RuntimeException(e);
+            try {
+                return dateFormat.parse("0001-01-01");
+            } catch (ParseException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
     public void setSubmissionEndDate(Date date, String timezone) {

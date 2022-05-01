@@ -1,14 +1,11 @@
 package com.zem.diveschool.dto;
 
 import com.zem.diveschool.persistence.model.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.CascadeType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -34,13 +31,41 @@ public class InstructorDto extends GenericDto<InstructorDto> {
     private Location homeAddress;
     private Set<Slot> slots = new HashSet<>();
 
+    @Builder
+    public InstructorDto(Long id, String firstName, String middleName, String lastName, String birthDate,
+                         Gender gender, String email, String phoneNumber, Language language, Byte[] photo,
+                         StatusTeaching statusTeaching, Location homeAddress, Set<Slot> slots) {
+        super(id);
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.gender = gender;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.language = language;
+        this.photo = photo;
+        this.statusTeaching = statusTeaching;
+        this.homeAddress = homeAddress;
+        this.slots = slots;
+    }
 
     //
     // Conversions
     //
-    public Date getSubmissionBirthDateConverted(String timezone) throws ParseException {
+    public Date getSubmissionBirthDateConverted(String timezone)  {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
-        return dateFormat.parse(this.birthDate);
+        try {
+            return dateFormat.parse(this.birthDate);
+        } catch (ParseException e) {
+//            throw new RuntimeException(e);
+            try {
+                return dateFormat.parse("0001-01-01");
+            } catch (ParseException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+
     }
 
     public void setSubmissionBirthDate(Date date, String timezone) {

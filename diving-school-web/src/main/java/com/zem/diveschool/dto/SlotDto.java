@@ -1,11 +1,11 @@
 package com.zem.diveschool.dto;
 
 import com.zem.diveschool.persistence.model.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -26,22 +26,53 @@ public class SlotDto extends GenericDto<SlotDto> {
     private Set<Student> students = new HashSet<>();
     private Set<Instructor> instructors = new HashSet<>();
 
+    @Builder
+    public SlotDto(Long id, String title, String startDate, String endDate, SlotStatus status, Course course,
+                   Set<SlotLanguage> languages, Set<Student> students, Set<Instructor> instructors) {
+        super(id);
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.course = course;
+        this.languages = languages;
+        this.students = students;
+        this.instructors = instructors;
+    }
+
     //
     // Conversions
     //
-    public Date getSubmissionStartDateConverted(String timezone) throws ParseException {
+    public Date getSubmissionStartDateConverted(String timezone) {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
-        return dateFormat.parse(this.startDate);
-    }
+        try {
+            return dateFormat.parse(this.startDate);
+        } catch (ParseException e) {
+//            throw new RuntimeException(e);
+            try {
+                return dateFormat.parse("0001-01-01");
+            } catch (ParseException ex) {
+                throw new RuntimeException(ex);
+            }
+        }    }
 
     public void setSubmissionStartDate(Date date, String timezone) {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
         this.startDate = dateFormat.format(date);
     }
 
-    public Date getSubmissionEndDateConverted(String timezone) throws ParseException {
+    public Date getSubmissionEndDateConverted(String timezone) {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
-        return dateFormat.parse(this.endDate);
+        try {
+            return dateFormat.parse(this.endDate);
+        } catch (ParseException e) {
+//            throw new RuntimeException(e);
+            try {
+                return dateFormat.parse("0001-01-01");
+            } catch (ParseException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
     public void setSubmissionEndDate(Date date, String timezone) {
