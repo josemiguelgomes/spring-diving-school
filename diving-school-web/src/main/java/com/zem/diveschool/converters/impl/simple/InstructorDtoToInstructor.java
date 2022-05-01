@@ -2,10 +2,10 @@ package com.zem.diveschool.converters.impl.simple;
 
 import com.zem.diveschool.dto.InstructorDto;
 import com.zem.diveschool.persistence.model.*;
+import lombok.Synchronized;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
@@ -13,6 +13,7 @@ import java.util.TimeZone;
 public class InstructorDtoToInstructor extends ConvertObject<InstructorDto, Instructor> {
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
+    @Synchronized
     @Nullable
     @Override
     public Instructor convert(InstructorDto dto) {

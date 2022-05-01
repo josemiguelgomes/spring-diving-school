@@ -2,6 +2,7 @@ package com.zem.diveschool.converters.impl.simple;
 
 import com.zem.diveschool.dto.CardDto;
 import com.zem.diveschool.persistence.model.Card;
+import lombok.Synchronized;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import java.util.TimeZone;
 public class CardDtoToCard extends ConvertObject<CardDto, Card> {
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
+    @Synchronized
     @Nullable
     @Override
     public Card convert(CardDto dto) {

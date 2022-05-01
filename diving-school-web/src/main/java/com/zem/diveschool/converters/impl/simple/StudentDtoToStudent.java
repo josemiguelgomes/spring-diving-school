@@ -2,18 +2,18 @@ package com.zem.diveschool.converters.impl.simple;
 
 import com.zem.diveschool.dto.StudentDto;
 import com.zem.diveschool.persistence.model.*;
+import lombok.Synchronized;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
 @Component
 public class StudentDtoToStudent extends ConvertObject<StudentDto, Student> {
-
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
+    @Synchronized
     @Nullable
     @Override
     public Student convert(StudentDto dto) {
