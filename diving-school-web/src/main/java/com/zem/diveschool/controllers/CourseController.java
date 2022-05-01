@@ -1,8 +1,8 @@
 package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.converters.ConvertObjectToObject;
-import com.zem.diveschool.converters.impl.CourseDtoToCourse;
-import com.zem.diveschool.converters.impl.CourseToCourseDto;
+import com.zem.diveschool.converters.impl.simple.CourseDtoToCourse;
+import com.zem.diveschool.converters.impl.simple.CourseToCourseDto;
 import com.zem.diveschool.dto.CourseDto;
 import com.zem.diveschool.persistence.model.Course;
 import com.zem.diveschool.persistence.services.CourseService;

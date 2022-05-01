@@ -1,4 +1,4 @@
-package com.zem.diveschool.converters.impl;
+package com.zem.diveschool.converters.impl.simple;
 
 import com.zem.diveschool.dto.SlotLanguageDto;
 import com.zem.diveschool.persistence.model.SlotLanguage;
@@ -10,16 +10,9 @@ public class SlotLanguageToSlotLanguageDto extends ConvertObject<SlotLanguage, S
     @Nullable
     @Override
     public SlotLanguageDto convert(SlotLanguage entity) {
-/*
-        if (entity == null) {
-            return null;
-        }
-*/
-        final SlotLanguageDto slotLanguageDto = new SlotLanguageDto();
-
-        slotLanguageDto.setId(entity.getId());
-        slotLanguageDto.setLanguage(entity.getLanguage());
-
-        return slotLanguageDto;
+        return SlotLanguageDto.builder()
+                .id(entity.getId())
+                .language(entity.getLanguage())
+                .build();
     }
 }

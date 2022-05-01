@@ -1,4 +1,4 @@
-package com.zem.diveschool.converters.impl;
+package com.zem.diveschool.converters.impl.simple;
 
 import com.zem.diveschool.converters.ConvertObjectToObject;
 import org.springframework.core.convert.converter.Converter;
