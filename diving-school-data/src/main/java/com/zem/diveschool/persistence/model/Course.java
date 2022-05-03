@@ -13,7 +13,7 @@ import java.util.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "courses")
-public class Course extends BaseEntity {
+public class Course extends BaseEntity<Course> {
     @Column(name = "name")
     private String name;
     @Enumerated(EnumType.STRING)

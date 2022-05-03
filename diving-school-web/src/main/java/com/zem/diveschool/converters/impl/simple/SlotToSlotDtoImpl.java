@@ -1,7 +1,7 @@
 package com.zem.diveschool.converters.impl.simple;
 
-import com.zem.diveschool.dto.CardDto;
-import com.zem.diveschool.persistence.model.Card;
+import com.zem.diveschool.dto.SlotDto;
+import com.zem.diveschool.persistence.model.*;
 import lombok.Synchronized;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -10,25 +10,23 @@ import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
 @Component
-public class CardToCardDto extends ConvertObject<Card, CardDto> {
+public class SlotToSlotDtoImpl extends ConvertObject<Slot, SlotDto> {
     private final SimpleDateFormat dateFormat
             = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
     @Synchronized
     @Nullable
     @Override
-    public CardDto convert(Card entity) {
+    public SlotDto convert(Slot entity) {
+        if (entity == null) {
+            return null;
+        }
         dateFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().toString()));
-        return CardDto.builder()
+        return SlotDto.builder()
                 .id(entity.getId())
-                .course(entity.getCourse())
-                .studentName(entity.getStudentName())
+                .title(entity.getTitle())
                 .startDate(dateFormat.format(entity.getStartDate()))
                 .endDate(dateFormat.format(entity.getEndDate()))
-                .country(entity.getCountry())
-                .instructorName(entity.getInstructorName())
+                .status(entity.getStatus())
                 .build();
     }
-
-
 }

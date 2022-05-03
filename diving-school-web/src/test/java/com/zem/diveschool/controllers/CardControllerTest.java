@@ -1,11 +1,11 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.converters.ConvertObjectToObject;
+import com.zem.diveschool.data.CardDtoService;
 import com.zem.diveschool.dto.CardDto;
-import com.zem.diveschool.persistence.model.Card;
-import com.zem.diveschool.persistence.services.CardService;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -26,14 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CardControllerTest {
 
     @Mock
-    CardService cardService;
-
-
-    @Mock
-    ConvertObjectToObject<Card, CardDto> convertToDto;
-    @Mock
-    ConvertObjectToObject<CardDto, Card> convertToEntity;
-
+    CardDtoService cardDtoService;
 
     @Mock
     Model model;
@@ -44,7 +37,7 @@ public class CardControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new CardController(cardService);
+        controller = new CardController(cardDtoService);
     }
 
     @Test
@@ -70,7 +63,7 @@ public class CardControllerTest {
         cardsDto.add(cardDto2);
 
 
-        when(convertToDto.convert(cardService.findAll())).thenReturn(cardsDto);
+        when(cardDtoService.findAll()).thenReturn(cardsDto);
 
         ArgumentCaptor<Set<CardDto>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
 
@@ -90,7 +83,7 @@ public class CardControllerTest {
         CardDto cardDto = new CardDto();
         cardDto.setId(1L);
 
-        when(convertToDto.convert(cardService.findById(1L))).thenReturn(cardDto);
+        when(cardDtoService.findById(1L)).thenReturn(cardDto);
 
         ArgumentCaptor<CardDto> argumentCaptor = ArgumentCaptor.forClass(CardDto.class);
 

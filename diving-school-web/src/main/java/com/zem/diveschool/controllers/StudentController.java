@@ -1,6 +1,9 @@
 package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.converters.ConvertObjectToObject;
+import com.zem.diveschool.data.CardDtoService;
+import com.zem.diveschool.data.SlotDtoService;
+import com.zem.diveschool.data.StudentDtoService;
 import com.zem.diveschool.dto.CardDto;
 import com.zem.diveschool.dto.SlotDto;
 import com.zem.diveschool.dto.LocationDto;
@@ -21,9 +24,9 @@ import java.util.Set;
 @Controller
 public class StudentController {
 
-    private final StudentService studentService;
-    private final CardService cardService;
-    private final SlotService slotService;
+    private final StudentDtoService studentDtoService;
+    private final CardDtoService cardDtoService;
+    private final SlotDtoService slotDtoService;
     @Autowired
     private ConvertObjectToObject<Student, StudentDto> convertToDto;
     @Autowired
@@ -37,32 +40,34 @@ public class StudentController {
     @Autowired
     private ConvertObjectToObject<SlotDto, Slot> convertSlotToEntity;
 
-    public StudentController(StudentService studentService, CardService cardService, SlotService slotService) {
-        this.studentService = studentService;
-        this.cardService = cardService;
-        this.slotService = slotService;
+    public StudentController(StudentDtoService studentDtoService,
+                             CardDtoService cardDtoService,
+                             SlotDtoService slotDtoService) {
+        this.studentDtoService = studentDtoService;
+        this.cardDtoService = cardDtoService;
+        this.slotDtoService = slotDtoService;
     }
 
 
     @RequestMapping({"/students", "/students/index", "/students/index.html", "students.html"})
     public String listStudents(Model model){
-        model.addAttribute("students", convertToDto.convert(studentService.findAll()));
+        model.addAttribute("students", studentDtoService.findAll());
 
         return "students/index";
     }
 
     @RequestMapping({"/students/{id}/show"})
     public String showById(@PathVariable String id, Model model){
-        Student student = studentService.findById(Long.valueOf(id));
-        model.addAttribute("student", convertToDto.convert(student));
+        StudentDto studentDto = studentDtoService.findById(Long.valueOf(id));
+        model.addAttribute("student", studentDto);
 
-        model.addAttribute("location", student.getHomeAddress()); //TODO do a refactor on this
+        model.addAttribute("location", studentDto.getHomeAddress()); //TODO do a refactor on this
 
-        Set <Card> cards = cardService.findByStudentID(student.getId());
-        model.addAttribute("cards", convertCardToDto.convert(cards));
+        Set <CardDto> cardsDto = cardDtoService.findByStudentID(studentDto.getId());
+        model.addAttribute("cards", cardsDto);
 
-        Set <Slot> slots = slotService.findByStudentID(student.getId());
-        model.addAttribute("slots", convertSlotToDto.convert(slots));
+        Set <SlotDto> slotsDto = slotDtoService.findByStudentID(studentDto.getId());
+        model.addAttribute("slots", slotsDto);
 
         return "students/show";
     }
@@ -70,40 +75,40 @@ public class StudentController {
     @GetMapping("students/new")
     public String newStudent(Model model){
         model.addAttribute("student", new StudentDto());
-        model.addAttribute("location", new LocationDto());
+        model.addAttribute("location", new LocationDto());  // TODO ???
 
         return "students/studentform";
     }
 
     @GetMapping("students/{id}/update")
     public String updateStudent(@PathVariable String id, Model model){
-        model.addAttribute("student", convertToDto.convert(studentService.findById(Long.valueOf(id))));
+        model.addAttribute("student", studentDtoService.findById(Long.valueOf(id)));
         //TODO do I need to update Location ?????
         return  "students/studentform";
     }
 
     @PostMapping("students")
     public String saveOrUpdate(@ModelAttribute StudentDto studentDto, @ModelAttribute LocationDto locationDto ){
-        Student savedStudent = studentService.save(convertToEntity.convert(studentDto));
-        //Location savedLocation = locationService.save(convertToEntity.convert(locationDto));  // TODO
-        return "redirect:/students/" + savedStudent.getId() + "/show";
+        StudentDto savedStudentDto = studentDtoService.save(studentDto);
+        //LocationDto savedLocation = locationDtoService.save(locationDto));  // TODO
+        return "redirect:/students/" + savedStudentDto.getId() + "/show";
     }
 
     @GetMapping("students/{id}/delete")
     public String deleteById(@PathVariable String id){
         // Delete the link Student / Slot
-        Student student = studentService.findById(Long.valueOf(id));
-        for (Slot slot :student.getSlots()) {
-            slot.delete(student);
+        StudentDto studentDto = studentDtoService.findById(Long.valueOf(id));
+        for (SlotDto slotDto :studentDto.getSlots()) {
+            slotDtoService.delete(slotDto);
         }
         // Delete the student
-        studentService.deleteById(Long.valueOf(id));
+        studentDtoService.deleteById(Long.valueOf(id));
         return "redirect:/students";
     }
 
     @GetMapping("/api/students")
     public @ResponseBody Set<StudentDto> getStudentJson(){
-        return convertToDto.convert(studentService.findAll());
+        return studentDtoService.findAll();
     }
 
 }

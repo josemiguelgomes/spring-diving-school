@@ -1,4 +1,8 @@
-[![CircleCI](https://circleci.com/gh/josemiguelgomes/spring-diving-school/tree/main.svg?style=svg)](https://circleci.com/gh/josemiguelgomes/spring-diving-school/tree/main)
+# Dive School App
+[![Build Status](https://circleci.com/gh/josemiguelgomes/spring-diving-school/tree/main.svg?style=svg)](https://circleci.com/gh/josemiguelgomes/spring-diving-school/tree/main)
+[![Coverage Status](https://coveralls.io/repos/github/josemiguelgomes/spring-diving-school/badge.svg?branch=main)](https://coveralls.io/github/josemiguelgomes/spring-diving-school?branch=main)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/josemiguelgomes/spring-diving-school/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/josemiguelgomes/spring-diving-school)
+
 
 # spring-diving-school
 Dive School

@@ -1,11 +1,11 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.converters.ConvertObjectToObject;
+import com.zem.diveschool.data.CourseDtoService;
 import com.zem.diveschool.dto.CourseDto;
-import com.zem.diveschool.persistence.model.Course;
-import com.zem.diveschool.persistence.services.CourseService;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -26,13 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CourseControllerTest {
 
     @Mock
-    CourseService courseService;
-
-    @Mock
-    ConvertObjectToObject<Course, CourseDto> convertToDto;
-    @Mock
-    ConvertObjectToObject<CourseDto, Course> convertToEntity;
-
+    CourseDtoService courseDtoService;
 
     @Mock
     Model model;
@@ -43,7 +37,7 @@ public class CourseControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new CourseController(courseService);
+        controller = new CourseController(courseDtoService);
     }
 
     @Test
@@ -69,7 +63,7 @@ public class CourseControllerTest {
         coursesDto.add(courseDto2);
 
 
-        when(convertToDto.convert(courseService.findAll())).thenReturn(coursesDto);
+        when(courseDtoService.findAll()).thenReturn(coursesDto);
 
         ArgumentCaptor<Set<CourseDto>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
 
@@ -89,7 +83,7 @@ public class CourseControllerTest {
         CourseDto courseDto = new CourseDto();
         courseDto.setId(1L);
 
-        when(convertToDto.convert(courseService.findById(1L))).thenReturn(courseDto);
+        when(courseDtoService.findById(1L)).thenReturn(courseDto);
 
         ArgumentCaptor<CourseDto> argumentCaptor = ArgumentCaptor.forClass(CourseDto.class);
 

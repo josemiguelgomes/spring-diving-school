@@ -7,11 +7,14 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LocationDtoToLocation extends ConvertObject<LocationDto, Location> {
+public class LocationDtoToLocationImpl extends ConvertObject<LocationDto, Location> {
     @Synchronized
     @Nullable
     @Override
     public Location convert(LocationDto dto) {
+        if (dto == null) {
+            return null;
+        }
         return Location.builder()
                 .id(dto.getId())
                 .streetAddress(dto.getStreetAddress())

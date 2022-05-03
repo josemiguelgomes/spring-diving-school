@@ -1,23 +1,36 @@
 package com.zem.diveschool.converters.impl.simple;
 
+import com.zem.diveschool.converters.ConvertObjectToObject;
 import com.zem.diveschool.dto.CardDto;
+import com.zem.diveschool.dto.StudentDto;
 import com.zem.diveschool.persistence.model.Card;
+import com.zem.diveschool.persistence.model.Student;
 import lombok.Synchronized;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Set;
 import java.util.TimeZone;
 
 @Component
-public class CardDtoToCard extends ConvertObject<CardDto, Card> {
+public class CardDtoToCardImpl extends ConvertObject<CardDto, Card> {
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+    private final ConvertObjectToObject<StudentDto, Student> convertStudent;
+
+    public CardDtoToCardImpl(ConvertObjectToObject<StudentDto, Student> convertStudent) {
+        this.convertStudent = convertStudent;
+    }
 
     @Synchronized
     @Nullable
     @Override
     public Card convert(CardDto dto) {
+        if (dto == null) {
+            return null;
+        }
         return Card.builder()
                 .id(dto.getId())
                 .course(dto.getCourse())
@@ -26,6 +39,7 @@ public class CardDtoToCard extends ConvertObject<CardDto, Card> {
                 .endDate(dto.getSubmissionEndDateConverted(TimeZone.getDefault().toString()))
                 .country(dto.getCountry())
                 .instructorName(dto.getInstructorName())
+                .student(convertStudent.convert(dto.getStudent()))
                 .build();
     }
 }

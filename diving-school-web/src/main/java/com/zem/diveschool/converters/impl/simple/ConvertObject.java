@@ -14,9 +14,9 @@ public abstract class ConvertObject<F, T>
 
     // Iterate thru all objects and apply a Converter
     public Set<T> convert(Set<F> fs) {
+        if (fs == null) { return null; }
         Set<T> ts = new TreeSet<T>();
         fs.forEach( (f) -> ts.add(convert(f)) );
         return ts;
     }
-
 }

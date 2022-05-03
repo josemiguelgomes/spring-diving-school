@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
 @Component
-public class StudentToStudentDto extends ConvertObject<Student, StudentDto> {
+public class StudentToStudentDtoImpl extends ConvertObject<Student, StudentDto> {
     private final SimpleDateFormat dateFormat
             = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
@@ -18,6 +18,9 @@ public class StudentToStudentDto extends ConvertObject<Student, StudentDto> {
     @Nullable
     @Override
     public StudentDto convert(Student entity) {
+        if (entity == null) {
+            return null;
+        }
         dateFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().toString()));
         return StudentDto.builder()
                 .id(entity.getId())

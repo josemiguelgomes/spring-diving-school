@@ -1,9 +1,9 @@
 package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.converters.ConvertObjectToObject;
+import com.zem.diveschool.data.CardDtoService;
 import com.zem.diveschool.dto.CardDto;
 import com.zem.diveschool.persistence.model.Card;
-import com.zem.diveschool.persistence.services.CardService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +15,7 @@ import java.util.Set;
 @Controller
 public class CardController {
 
-    private final CardService cardService;
+    private final CardDtoService cardDtoService;
 
     @Autowired
     private ConvertObjectToObject<Card, CardDto> convertToDto;
@@ -23,21 +23,20 @@ public class CardController {
     private ConvertObjectToObject<CardDto, Card> convertToEntity;
 
 
-    public CardController(CardService cardService) {
-        this.cardService = cardService;
+    public CardController(CardDtoService cardDtoService) {
+        this.cardDtoService = cardDtoService;
     }
 
     @RequestMapping({"/cards", "/cards/index", "/cards/index.html", "cards.html"})
     public String listCards(Model model){
-        model.addAttribute("cards", convertToDto.convert(cardService.findAll()));
+        model.addAttribute("cards", cardDtoService.findAll());
 
         return "cards/index";
     }
 
     @RequestMapping({"/cards/{id}/show"})
     public String showById(@PathVariable String id, Model model){
-        Card card = cardService.findById(Long.valueOf(id));
-        model.addAttribute("card", convertToDto.convert(card));
+        model.addAttribute("card", cardDtoService.findById(Long.valueOf(id)));
 
         return "cards/show";
     }
@@ -51,25 +50,25 @@ public class CardController {
 
     @GetMapping("cards/{id}/update")
     public String updateCard(@PathVariable String id, Model model){
-        model.addAttribute("card", convertToDto.convert(cardService.findById(Long.valueOf(id))));
+        model.addAttribute("card", cardDtoService.findById(Long.valueOf(id)));
         return  "cards/cardform";
     }
 
     @PostMapping("cards")
     public String saveOrUpdate(@ModelAttribute CardDto cardDto){
-        Card savedCard = cardService.save(convertToEntity.convert(cardDto));
-        return "redirect:/cards/" + savedCard.getId() + "/show";
+        CardDto savedCardDto = cardDtoService.save(cardDto);
+        return "redirect:/cards/" + savedCardDto.getId() + "/show";
     }
 
     @GetMapping("cards/{id}/delete")
     public String deleteById(@PathVariable String id){
-        cardService.deleteById(Long.valueOf(id));
+        cardDtoService.deleteById(Long.valueOf(id));
         return "redirect:/cards";
     }
 
     @GetMapping("/api/cards")
     public @ResponseBody Set<CardDto> getCardJson(){
-        return convertToDto.convert(cardService.findAll());
+        return cardDtoService.findAll();
     }
 
 }

@@ -7,11 +7,14 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SlotLanguageDtoToSlotLanguage extends ConvertObject<SlotLanguageDto, SlotLanguage> {
+public class SlotLanguageDtoToSlotLanguageImpl extends ConvertObject<SlotLanguageDto, SlotLanguage> {
     @Synchronized
     @Nullable
     @Override
     public SlotLanguage convert(SlotLanguageDto dto) {
+        if (dto == null) {
+            return null;
+        }
         return SlotLanguage.builder()
                 .id(dto.getId())
                 .language(dto.getLanguage())

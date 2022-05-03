@@ -1,11 +1,11 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.converters.ConvertObjectToObject;
+import com.zem.diveschool.data.InstructorDtoService;
 import com.zem.diveschool.dto.InstructorDto;
-import com.zem.diveschool.persistence.model.Instructor;
-import com.zem.diveschool.persistence.services.InstructorService;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -26,13 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class InstructorControllerTest {
 
     @Mock
-    InstructorService instructorService;
-
-    @Mock
-    ConvertObjectToObject<Instructor, InstructorDto> convertToDto;
-    @Mock
-    ConvertObjectToObject<InstructorDto, Instructor> convertToEntity;
-
+    InstructorDtoService instructorDtoService;
 
     @Mock
     Model model;
@@ -43,7 +37,7 @@ public class InstructorControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new InstructorController(instructorService);
+        controller = new InstructorController(instructorDtoService);
     }
 
     @Test
@@ -69,7 +63,7 @@ public class InstructorControllerTest {
         instructorsDto.add(instructorDto2);
 
 
-        when(convertToDto.convert(instructorService.findAll())).thenReturn(instructorsDto);
+        when(instructorDtoService.findAll()).thenReturn(instructorsDto);
 
         ArgumentCaptor<Set<InstructorDto>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
 
@@ -89,7 +83,7 @@ public class InstructorControllerTest {
         InstructorDto instructorDto = new InstructorDto();
         instructorDto.setId(1L);
 
-        when(convertToDto.convert(instructorService.findById(1L))).thenReturn(instructorDto);
+        when(instructorDtoService.findById(1L)).thenReturn(instructorDto);
 
         ArgumentCaptor<InstructorDto> argumentCaptor = ArgumentCaptor.forClass(InstructorDto.class);
 

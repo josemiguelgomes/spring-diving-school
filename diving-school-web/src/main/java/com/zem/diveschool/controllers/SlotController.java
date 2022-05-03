@@ -1,13 +1,12 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.converters.ConvertObjectToObject;
+import com.zem.diveschool.data.CourseDtoService;
+import com.zem.diveschool.data.SlotDtoService;
 import com.zem.diveschool.dto.CourseDto;
 import com.zem.diveschool.dto.LocationDto;
 import com.zem.diveschool.dto.SlotDto;
 import com.zem.diveschool.persistence.model.*;
-import com.zem.diveschool.persistence.services.CourseService;
-import com.zem.diveschool.persistence.services.SlotService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,38 +17,29 @@ import java.util.Set;
 @Controller
 public class SlotController {
 
-    private final SlotService slotService;
-    private final CourseService courseService;
-    @Autowired
-    private ConvertObjectToObject<Slot, SlotDto> convertToDto;
-    @Autowired
-    private ConvertObjectToObject<SlotDto, Slot> convertToEntity;
-    @Autowired
-    private ConvertObjectToObject<Course, CourseDto> convertCourseToDto;
-    @Autowired
-    private ConvertObjectToObject<CourseDto, Course> convertCourseToEntity;
+    private final SlotDtoService slotDtoService;
+    private final CourseDtoService courseDtoService;
 
-
-    public SlotController(SlotService slotService,
-                          CourseService courseService) {
-        this.slotService = slotService;
-        this.courseService = courseService;
+    public SlotController(SlotDtoService slotDtoService,
+                          CourseDtoService courseDtoService) {
+        this.slotDtoService = slotDtoService;
+        this.courseDtoService = courseDtoService;
     }
 
     @RequestMapping({"/slots", "/slots/index", "/slots/index.html", "slots.html"})
     public String listSlots(Model model){
-        model.addAttribute("slots", slotService.findAll());
+        model.addAttribute("slots", slotDtoService.findAll());
 
         return "slots/index";
     }
 
     @RequestMapping({"/slots/{id}/show"})
     public String showById(@PathVariable String id, Model model){
-        Slot slot = slotService.findById(Long.valueOf(id));
-        model.addAttribute("slot", convertToDto.convert(slot));
+        SlotDto slotDto = slotDtoService.findById(Long.valueOf(id));
+        model.addAttribute("slot", slotDto);
 
-        Course course = courseService.findById(slot.getCourse().getId());
-        model.addAttribute("course", convertCourseToDto.convert(course));
+        CourseDto courseDto = courseDtoService.findById(slotDto.getCourse().getId());
+        model.addAttribute("course", courseDto);
 
 //        List<SlotLanguage> languages = slotLanguageServices.findAll();  ???? // TODO
 
@@ -74,29 +64,28 @@ public class SlotController {
 
     @GetMapping("slots/{id}/update")
     public String updateSlot(@PathVariable String id, Model model){
-        model.addAttribute("slot", convertToDto.convert(slotService.findById(Long.valueOf(id))));
+        model.addAttribute("slot", slotDtoService.findById(Long.valueOf(id)));
 //        model. ..... // TODO
         return  "slots/slotform";
     }
 
     @PostMapping("slots")
     public String saveOrUpdate(@ModelAttribute SlotDto slotDto){
-        Slot savedSlot = slotService.save(convertToEntity.convert(slotDto));
+        SlotDto savedSlotDto = slotDtoService.save(slotDto);
         //TODO ???
-        return "redirect:/slots/" + savedSlot.getId() + "/show";
+        return "redirect:/slots/" + savedSlotDto.getId() + "/show";
     }
 
     @GetMapping("slots/{id}/delete")
     public String deleteById(@PathVariable String id){
         // TODO ???????
 //        location.delete ..  // TODO.
-        slotService.deleteById(Long.valueOf(id));
+        slotDtoService.deleteById(Long.valueOf(id));
         return "redirect:/slots";
     }
 
     @GetMapping("/api/slots")
     public @ResponseBody Set<SlotDto> getSlotJson(){
-        return convertToDto.convert(slotService.findAll());
+        return slotDtoService.findAll();
     }
-
 }

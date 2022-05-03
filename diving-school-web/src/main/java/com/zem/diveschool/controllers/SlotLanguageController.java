@@ -1,6 +1,7 @@
 package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.converters.ConvertObjectToObject;
+import com.zem.diveschool.data.SlotLanguageDtoService;
 import com.zem.diveschool.dto.SlotLanguageDto;
 import com.zem.diveschool.persistence.model.SlotLanguage;
 import com.zem.diveschool.persistence.services.SlotLanguageService;
@@ -14,27 +15,22 @@ import java.util.Set;
 @Controller
 public class SlotLanguageController {
 
-    private final SlotLanguageService slotLanguageService;
-    @Autowired
-    private ConvertObjectToObject<SlotLanguage, SlotLanguageDto> convertToDto;
-    @Autowired
-    private ConvertObjectToObject<SlotLanguageDto, SlotLanguage> convertToEntity;
+    private final SlotLanguageDtoService slotLanguageDtoService;
 
-    public SlotLanguageController(SlotLanguageService slotLanguageService) {
-        this.slotLanguageService = slotLanguageService;
+    public SlotLanguageController(SlotLanguageDtoService slotLanguageDtoService) {
+        this.slotLanguageDtoService = slotLanguageDtoService;
     }
 
     @RequestMapping({"/slotLanguages", "/slotLanguages/index", "/slotLanguages/index.html", "slotLanguages.html"})
     public String listSlotLanguages(Model model){
-        model.addAttribute("slotLanguages", convertToDto.convert(slotLanguageService.findAll()));
+        model.addAttribute("slotLanguages", slotLanguageDtoService.findAll());
 
         return "slotLanguages/index";
     }
 
     @RequestMapping({"/slotLanguages/{id}/show"})
     public String showById(@PathVariable String id, Model model){
-        SlotLanguage slotLanguage = slotLanguageService.findById(Long.valueOf(id));
-        model.addAttribute("slotLanguage", convertToDto.convert(slotLanguage));
+        model.addAttribute("slotLanguage", slotLanguageDtoService.findById(Long.valueOf(id)));
 
         return "slotLanguages/show";
     }
@@ -48,24 +44,24 @@ public class SlotLanguageController {
 
     @GetMapping("slotLanguages/{id}/update")
     public String updateSlotLanguage(@PathVariable String id, Model model){
-        model.addAttribute("slotLanguage", convertToDto.convert(slotLanguageService.findById(Long.valueOf(id))));
+        model.addAttribute("slotLanguage", slotLanguageDtoService.findById(Long.valueOf(id)));
         return  "slotLanguages/slotLanguageform";
     }
 
     @PostMapping("slotLanguages")
     public String saveOrUpdate(@ModelAttribute SlotLanguageDto slotLanguageDto){
-        SlotLanguage savedSlotLanguage = slotLanguageService.save(convertToEntity.convert(slotLanguageDto));
-        return "redirect:/slotLanguages/" + savedSlotLanguage.getId() + "/show";
+        SlotLanguageDto savedSlotLanguageDto = slotLanguageDtoService.save(slotLanguageDto);
+        return "redirect:/slotLanguages/" + savedSlotLanguageDto.getId() + "/show";
     }
 
     @GetMapping("slotLanguages/{id}/delete")
     public String deleteById(@PathVariable String id){
-        slotLanguageService.deleteById(Long.valueOf(id));
+        slotLanguageDtoService.deleteById(Long.valueOf(id));
         return "redirect:/slotLanguages";
     }
 
     @GetMapping("/api/slotLanguages")
     public @ResponseBody Set<SlotLanguageDto> getCardJson(){
-        return convertToDto.convert(slotLanguageService.findAll());
+        return slotLanguageDtoService.findAll();
     }
 }

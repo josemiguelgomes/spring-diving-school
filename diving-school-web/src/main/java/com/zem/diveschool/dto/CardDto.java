@@ -26,11 +26,11 @@ public class CardDto extends GenericDto<CardDto> {
     private Country country;
     private String instructorName;
 
-    private Student student;
+    private StudentDto student;
 
     @Builder
     public CardDto(Long id, String course, String studentName, String startDate, String endDate, Country country,
-                   String instructorName, Student student) {
+                   String instructorName, StudentDto student) {
         super(id);
         this.course = course;
         this.studentName = studentName;

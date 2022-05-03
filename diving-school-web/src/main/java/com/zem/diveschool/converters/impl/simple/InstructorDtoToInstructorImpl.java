@@ -10,13 +10,16 @@ import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
 @Component
-public class InstructorDtoToInstructor extends ConvertObject<InstructorDto, Instructor> {
+public class InstructorDtoToInstructorImpl extends ConvertObject<InstructorDto, Instructor> {
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     @Synchronized
     @Nullable
     @Override
     public Instructor convert(InstructorDto dto) {
+        if (dto == null) {
+            return null;
+        }
         return Instructor.builder()
                 .id(dto.getId())
                 .firstName(dto.getFirstName())

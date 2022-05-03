@@ -13,7 +13,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 @Table(name = "locations")
-public class Location extends BaseEntity {
+public class Location extends BaseEntity<Location> {
     @Column(name = "street_address")
     private String streetAddress;
     @Column(name = "postal_code")

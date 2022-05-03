@@ -5,6 +5,7 @@ import com.zem.diveschool.persistence.services.CrudService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.repository.CrudRepository;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 public abstract class AbstractServiceSDJpaImpl<T extends BaseEntity, I extends Long, R extends CrudRepository<T, I>>
@@ -25,10 +26,12 @@ public abstract class AbstractServiceSDJpaImpl<T extends BaseEntity, I extends L
         return objectRepository.findById(id).orElse(null);
     }
 
+    @Transactional
     public T save(T object) {
         return objectRepository.save(object);
     }
 
+    @Transactional
     public void delete(T object) {
         objectRepository.delete(object);
     }
@@ -37,6 +40,7 @@ public abstract class AbstractServiceSDJpaImpl<T extends BaseEntity, I extends L
         objectRepository.deleteById(id);
     }
 
+    @Transactional
     public <S extends T> List<S> saveAll(@NotNull Iterable<S> objects) {
 
         List<S> result = new ArrayList<>();

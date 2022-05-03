@@ -17,10 +17,10 @@ public class CourseDto extends GenericDto<CourseDto> {
     private String name;
     private Level level;
 
-    private Set<Slot> slots = new HashSet<>();
+    private Set<SlotDto> slots = new HashSet<>();
 
     @Builder
-    public CourseDto(Long id, String name, Level level, Set<Slot> slots) {
+    public CourseDto(Long id, String name, Level level, Set<SlotDto> slots) {
         super(id);
         this.name = name;
         this.level = level;

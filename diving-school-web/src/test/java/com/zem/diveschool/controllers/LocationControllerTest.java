@@ -1,11 +1,11 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.converters.ConvertObjectToObject;
+import com.zem.diveschool.data.LocationDtoService;
 import com.zem.diveschool.dto.LocationDto;
-import com.zem.diveschool.persistence.model.Location;
-import com.zem.diveschool.persistence.services.LocationService;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -26,13 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class LocationControllerTest {
 
     @Mock
-    LocationService locationService;
-
-    @Mock
-    ConvertObjectToObject<Location, LocationDto> convertToDto;
-    @Mock
-    ConvertObjectToObject<LocationDto, Location> convertToEntity;
-
+    LocationDtoService locationDtoService;
 
     @Mock
     Model model;
@@ -43,7 +37,7 @@ public class LocationControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new LocationController(locationService);
+        controller = new LocationController(locationDtoService);
     }
 
     @Test
@@ -69,7 +63,7 @@ public class LocationControllerTest {
         locationsDto.add(locationDto2);
 
 
-        when(convertToDto.convert(locationService.findAll())).thenReturn(locationsDto);
+        when(locationDtoService.findAll()).thenReturn(locationsDto);
 
         ArgumentCaptor<Set<LocationDto>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
 
@@ -89,7 +83,7 @@ public class LocationControllerTest {
         LocationDto locationDto = new LocationDto();
         locationDto.setId(1L);
 
-        when(convertToDto.convert(locationService.findById(1L))).thenReturn(locationDto);
+        when(locationDtoService.findById(1L)).thenReturn(locationDto);
 
         ArgumentCaptor<LocationDto> argumentCaptor = ArgumentCaptor.forClass(LocationDto.class);
 

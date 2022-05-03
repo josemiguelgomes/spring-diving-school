@@ -1,11 +1,9 @@
 package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.converters.ConvertObjectToObject;
-import com.zem.diveschool.converters.impl.simple.CourseDtoToCourse;
-import com.zem.diveschool.converters.impl.simple.CourseToCourseDto;
+import com.zem.diveschool.data.CourseDtoService;
 import com.zem.diveschool.dto.CourseDto;
 import com.zem.diveschool.persistence.model.Course;
-import com.zem.diveschool.persistence.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,27 +14,27 @@ import java.util.Set;
 @Controller
 public class CourseController {
 
-    private final CourseService courseService;
+    private final CourseDtoService courseDtoService;
+
     @Autowired
     private ConvertObjectToObject<Course, CourseDto> convertToDto;
     @Autowired
     private ConvertObjectToObject<CourseDto, Course> convertToEntity;
 
 
-    public CourseController(CourseService courseService) {
-        this.courseService = courseService;
+    public CourseController(CourseDtoService courseDtoService) {
+        this.courseDtoService = courseDtoService;
     }
 
     @RequestMapping({"/courses", "/courses/index", "/courses/index.html", "courses.html"})
     public String listCourses(Model model){
-        model.addAttribute("courses", convertToDto.convert(courseService.findAll()));
+        model.addAttribute("courses", courseDtoService.findAll());
         return "courses/index";
     }
 
     @RequestMapping({"/courses/{id}/show"})
     public String showById(@PathVariable String id, Model model){
-        Course course = courseService.findById(Long.valueOf(id));
-        model.addAttribute("course", convertToDto.convert(course));
+        model.addAttribute("course", courseDtoService.findById(Long.valueOf(id)));
 
         return "courses/show";
     }
@@ -50,28 +48,25 @@ public class CourseController {
 
     @GetMapping("courses/{id}/update")
     public String updateCourse(@PathVariable String id, Model model){
-//        model.addAttribute("course", courseService.findCommandById(Long.valueOf(id)));// TODO: create this on services
-        model.addAttribute("course", new CourseToCourseDto().convert(courseService.findById(Long.valueOf(id))));
-        return  "courses/courseform";
+        model.addAttribute("course", courseDtoService.findById(Long.valueOf(id)));
+        return  "coursess/courseform";
     }
 
     @PostMapping("courses")
     public String saveOrUpdate(@ModelAttribute CourseDto courseDto){
-        Course savedCourse = courseService.save(new CourseDtoToCourse().convert(courseDto));
+        CourseDto savedCourseDto = courseDtoService.save(courseDto);
 
-        return "redirect:/courses/" + savedCourse.getId() + "/show";
+        return "redirect:/courses/" + savedCourseDto.getId() + "/show";
     }
 
     @GetMapping("courses/{id}/delete")
-    public String deleteById(@PathVariable String id){
-         // Delete the course
-        courseService.deleteById(Long.valueOf(id));
+    public String deleteById(@PathVariable String id) {
+        courseDtoService.deleteById(Long.valueOf(id));
         return "redirect:/courses";
     }
 
     @GetMapping("/api/courses")
-    public @ResponseBody Set<Course> getCourseJson(){
-        return courseService.findAll();
+    public @ResponseBody Set<CourseDto> getCourseJson(){
+        return courseDtoService.findAll();
     }
-
 }

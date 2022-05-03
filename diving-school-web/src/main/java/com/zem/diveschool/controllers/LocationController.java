@@ -1,9 +1,9 @@
 package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.converters.ConvertObjectToObject;
+import com.zem.diveschool.data.LocationDtoService;
 import com.zem.diveschool.dto.LocationDto;
 import com.zem.diveschool.persistence.model.Location;
-import com.zem.diveschool.persistence.services.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,27 +14,27 @@ import java.util.Set;
 @Controller
 public class LocationController {
 
-    private final LocationService locationService;
+    private final LocationDtoService locationDtoService;
+
     @Autowired
     private ConvertObjectToObject<Location, LocationDto> convertToDto;
     @Autowired
     private ConvertObjectToObject<LocationDto, Location> convertToEntity;
 
-    public LocationController(LocationService locationService) {
-        this.locationService = locationService;
+    public LocationController(LocationDtoService locationDtoService) {
+        this.locationDtoService = locationDtoService;
     }
 
     @RequestMapping({"/locations", "/locations/index", "/locations/index.html", "locations.html"})
     public String listLocations(Model model){
-        model.addAttribute("locations", convertToDto.convert(locationService.findAll()));
+        model.addAttribute("locations", locationDtoService.findAll());
 
         return "locations/index";
     }
 
     @RequestMapping({"/locations/{id}/show"})
     public String showById(@PathVariable String id, Model model){
-        Location location = locationService.findById(Long.valueOf(id));
-        model.addAttribute("location", convertToDto.convert(location));
+        model.addAttribute("location",  locationDtoService.findById(Long.valueOf(id)));
 
         return "locations/show";
     }
@@ -48,25 +48,25 @@ public class LocationController {
 
     @GetMapping("locations/{id}/update")
     public String updateLocation(@PathVariable String id, Model model){
-        model.addAttribute("location", convertToDto.convert(locationService.findById(Long.valueOf(id))));
+        model.addAttribute("location", locationDtoService.findById(Long.valueOf(id)));
         return  "locations/locationform";
     }
 
     @PostMapping("locations")
     public String saveOrUpdate(@ModelAttribute LocationDto locationDto){
-        Location savedLocation = locationService.save(convertToEntity.convert(locationDto));
-        return "redirect:/cards/" + savedLocation.getId() + "/show";
+        LocationDto savedLocationDto = locationDtoService.save(locationDto);
+        return "redirect:/cards/" + savedLocationDto.getId() + "/show";
     }
 
     @GetMapping("locations/{id}/delete")
     public String deleteById(@PathVariable String id){
-        locationService.deleteById(Long.valueOf(id));
+        locationDtoService.deleteById(Long.valueOf(id));
         return "redirect:/locations";
     }
 
     @GetMapping("/api/locations")
     public @ResponseBody Set<LocationDto> getLocationJson(){
-        return convertToDto.convert(locationService.findAll());
+        return locationDtoService.findAll();
     }
 
 }

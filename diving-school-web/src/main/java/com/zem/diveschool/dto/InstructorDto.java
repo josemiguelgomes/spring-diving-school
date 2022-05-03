@@ -28,13 +28,13 @@ public class InstructorDto extends GenericDto<InstructorDto> {
     private Byte[] photo;
     private StatusTeaching statusTeaching;
 
-    private Location homeAddress;
-    private Set<Slot> slots = new HashSet<>();
+    private LocationDto homeAddress;
+    private Set<SlotDto> slots = new HashSet<>();
 
     @Builder
     public InstructorDto(Long id, String firstName, String middleName, String lastName, String birthDate,
                          Gender gender, String email, String phoneNumber, Language language, Byte[] photo,
-                         StatusTeaching statusTeaching, Location homeAddress, Set<Slot> slots) {
+                         StatusTeaching statusTeaching, LocationDto homeAddress, Set<SlotDto> slots) {
         super(id);
         this.firstName = firstName;
         this.middleName = middleName;

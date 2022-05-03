@@ -1,8 +1,17 @@
 package com.zem.diveschool.converters;
 
+import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 
 public interface ConvertObjectToObject <F, T>{
-    public T convert(F f);
-    public Set<T> convert(Set <F> fs);
+    T convert(F f);
+    Set<T> convert(Set <F> fs);
+
+    default Optional<T> convert(Optional<F> f) {
+        if(f.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(convert(f.get()));
+    }
 }

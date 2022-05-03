@@ -1,5 +1,7 @@
 package com.zem.diveschool.persistence.model;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -7,7 +9,10 @@ import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 @MappedSuperclass
-public class BaseEntity implements Serializable {
+public abstract class BaseEntity<T extends BaseEntity>
+                                 implements Serializable,
+                                 Comparable<T> {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,5 +34,10 @@ public class BaseEntity implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public int compareTo(T o) {
+        return id.compareTo(o.getId());
     }
 }

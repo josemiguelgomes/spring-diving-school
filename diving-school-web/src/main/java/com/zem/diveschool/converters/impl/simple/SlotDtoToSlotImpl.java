@@ -10,13 +10,16 @@ import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
 @Component
-public class SlotDtoToSlot extends ConvertObject<SlotDto, Slot> {
+public class SlotDtoToSlotImpl extends ConvertObject<SlotDto, Slot> {
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     @Synchronized
     @Nullable
     @Override
     public Slot convert(SlotDto dto) {
+        if (dto == null) {
+            return null;
+        }
         return Slot.builder()
                 .id(dto.getId())
                 .title(dto.getTitle())

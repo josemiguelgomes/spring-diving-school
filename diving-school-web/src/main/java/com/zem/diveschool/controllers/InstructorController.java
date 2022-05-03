@@ -1,10 +1,10 @@
 package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.converters.ConvertObjectToObject;
+import com.zem.diveschool.data.InstructorDtoService;
 import com.zem.diveschool.dto.InstructorDto;
 import com.zem.diveschool.dto.LocationDto;
 import com.zem.diveschool.persistence.model.Instructor;
-import com.zem.diveschool.persistence.services.InstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,28 +15,29 @@ import java.util.Set;
 @Controller
 public class InstructorController {
 
-    private final InstructorService instructorService;
+    private final InstructorDtoService instructorDtoService;
+
     @Autowired
     private ConvertObjectToObject<Instructor, InstructorDto> convertToDto;
     @Autowired
     private ConvertObjectToObject<InstructorDto, Instructor> convertToEntity;
 
-    public InstructorController(InstructorService instructorService) {
-        this.instructorService = instructorService;
+    public InstructorController(InstructorDtoService instructorDtoService) {
+        this.instructorDtoService = instructorDtoService;
     }
 
     @RequestMapping({"/instructors", "/instructors/index", "/instructors/index.html", "instructors.html"})
     public String listInstructors(Model model) {
-        model.addAttribute("instructors", convertToDto.convert(instructorService.findAll()));
+        model.addAttribute("instructors", instructorDtoService.findAll());
 
         return "instructors/index";
     }
 
     @RequestMapping({"/instructors/{id}/show"})
     public String showById(@PathVariable String id, Model model) {
-        Instructor instructor = instructorService.findById(Long.valueOf(id));
-        model.addAttribute("instructor", convertToDto.convert(instructor));
-        model.addAttribute("location", instructor.getHomeAddress()); //TODO do a refactor on this
+        InstructorDto instructorDto = instructorDtoService.findById(Long.valueOf(id));
+        model.addAttribute("instructor", instructorDto);
+        model.addAttribute("location", instructorDto.getHomeAddress()); //TODO do a refactor on this
 
         return "instructors/show";
     }
@@ -51,27 +52,28 @@ public class InstructorController {
 
     @GetMapping("instructors/{id}/update")
     public String updateInstructor(@PathVariable String id, Model model) {
-        model.addAttribute("instructor", convertToDto.convert(instructorService.findById(Long.valueOf(id))));
+        model.addAttribute("instructor", instructorDtoService.findById(Long.valueOf(id)));
 
         return  "instructors/instructorform";
     }
 
     @PostMapping("instructors")
     public String saveOrUpdate(@ModelAttribute InstructorDto instructorDto) {
-        Instructor savedInstructor = instructorService.save(convertToEntity.convert(instructorDto));
-        return "redirect:/cards/" + savedInstructor.getId() + "/show";
+        InstructorDto savedInstructorDto = instructorDtoService.save(instructorDto);
+
+        return "redirect:/cards/" + savedInstructorDto.getId() + "/show";
     }
 
     @GetMapping("instructors/{id}/delete")
     public String deleteById(@PathVariable String id){
-        instructorService.deleteById(Long.valueOf(id));
+        instructorDtoService.deleteById(Long.valueOf(id));
         return "redirect:/instructors";
     }
 
 
     @GetMapping("/api/instructors")
-    public @ResponseBody Set<Instructor> getInstructorJson(){
-        return instructorService.findAll();
+    public @ResponseBody Set<InstructorDto> getInstructorJson(){
+        return instructorDtoService.findAll();
     }
 
 }

@@ -7,16 +7,19 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CourseToCourseDto extends ConvertObject<Course, CourseDto> {
+public class CourseDtoToCourseImpl extends ConvertObject<CourseDto, Course> {
     @Synchronized
     @Nullable
     @Override
-    public CourseDto convert(Course entity) {
-        return CourseDto.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .level(entity.getLevel())
+    public Course convert(CourseDto dto) {
+        if (dto == null) {
+            return null;
+        }
+        return Course.builder()
+                .id(dto.getId())
+                .name(dto.getName())
+                .level(dto.getLevel())
                 .build();
-
     }
+
 }
