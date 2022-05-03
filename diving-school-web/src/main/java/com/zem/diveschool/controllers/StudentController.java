@@ -2,6 +2,7 @@ package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.converters.ConvertObjectToObject;
 import com.zem.diveschool.data.CardDtoService;
+import com.zem.diveschool.data.LocationDtoService;
 import com.zem.diveschool.data.SlotDtoService;
 import com.zem.diveschool.data.StudentDtoService;
 import com.zem.diveschool.dto.CardDto;
@@ -25,25 +26,16 @@ import java.util.Set;
 public class StudentController {
 
     private final StudentDtoService studentDtoService;
+    private final LocationDtoService locationDtoService;
     private final CardDtoService cardDtoService;
     private final SlotDtoService slotDtoService;
-    @Autowired
-    private ConvertObjectToObject<Student, StudentDto> convertToDto;
-    @Autowired
-    private ConvertObjectToObject<StudentDto, Student> convertToEntity;
-    @Autowired
-    private ConvertObjectToObject<Card, CardDto> convertCardToDto;
-    @Autowired
-    private ConvertObjectToObject<CardDto, Card> convertCardToEntity;
-    @Autowired
-    private ConvertObjectToObject<Slot, SlotDto> convertSlotToDto;
-    @Autowired
-    private ConvertObjectToObject<SlotDto, Slot> convertSlotToEntity;
 
     public StudentController(StudentDtoService studentDtoService,
+                             LocationDtoService locationDtoService,
                              CardDtoService cardDtoService,
                              SlotDtoService slotDtoService) {
         this.studentDtoService = studentDtoService;
+        this.locationDtoService = locationDtoService;
         this.cardDtoService = cardDtoService;
         this.slotDtoService = slotDtoService;
     }
@@ -61,7 +53,12 @@ public class StudentController {
         StudentDto studentDto = studentDtoService.findById(Long.valueOf(id));
         model.addAttribute("student", studentDto);
 
-        model.addAttribute("location", studentDto.getHomeAddress()); //TODO do a refactor on this
+        //TODO do a refactor on this
+//        LocationDto locationDto = locationDtoService.findByStudent(studentDto);
+//        model.addAttribute("location", locationDto);
+//        model.addAttribute("location", studentDto.getHomeAddress());
+        model.addAttribute("location", new LocationDto());
+
 
         Set <CardDto> cardsDto = cardDtoService.findByStudentID(studentDto.getId());
         model.addAttribute("cards", cardsDto);
@@ -82,8 +79,17 @@ public class StudentController {
 
     @GetMapping("students/{id}/update")
     public String updateStudent(@PathVariable String id, Model model){
-        model.addAttribute("student", studentDtoService.findById(Long.valueOf(id)));
+        StudentDto studentDto = studentDtoService.findById(Long.valueOf(id));
+        model.addAttribute("student", studentDto);
         //TODO do I need to update Location ?????
+        model.addAttribute("location", new LocationDto());
+
+        Set <CardDto> cardsDto = cardDtoService.findByStudentID(studentDto.getId());
+        model.addAttribute("cards", cardsDto);
+
+        Set <SlotDto> slotsDto = slotDtoService.findByStudentID(studentDto.getId());
+        model.addAttribute("slots", slotsDto);
+
         return  "students/studentform";
     }
 

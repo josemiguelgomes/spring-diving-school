@@ -7,6 +7,7 @@ import com.zem.diveschool.persistence.services.SlotService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
 
@@ -46,6 +47,7 @@ public class SlotDtoServiceImpl extends AbstractDtoServiceImpl<SlotDto, Long, Sl
     }
 
     @Override
+    @Transactional
     public Set<SlotDto> findByStudentID(Long id) {
         return entityToDto.convert(service.findByStudentID(id));
     }

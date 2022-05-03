@@ -17,12 +17,6 @@ public class CardController {
 
     private final CardDtoService cardDtoService;
 
-    @Autowired
-    private ConvertObjectToObject<Card, CardDto> convertToDto;
-    @Autowired
-    private ConvertObjectToObject<CardDto, Card> convertToEntity;
-
-
     public CardController(CardDtoService cardDtoService) {
         this.cardDtoService = cardDtoService;
     }

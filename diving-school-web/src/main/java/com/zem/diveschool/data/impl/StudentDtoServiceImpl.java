@@ -11,6 +11,7 @@ import com.zem.diveschool.persistence.services.StudentService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -50,6 +51,7 @@ public class StudentDtoServiceImpl extends AbstractDtoServiceImpl<StudentDto, Lo
     }
 
     @Override
+    @Transactional
     public Optional<StudentDto> findByFirstName(String firstName) {
         return entityToDto.convert(service.findByFirstName(firstName));
     }

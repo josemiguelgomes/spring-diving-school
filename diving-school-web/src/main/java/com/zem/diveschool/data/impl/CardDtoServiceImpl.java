@@ -7,6 +7,7 @@ import com.zem.diveschool.persistence.services.CardService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -44,6 +45,7 @@ public class CardDtoServiceImpl extends AbstractDtoServiceImpl<CardDto, Long, Ca
     }
 
     @Override
+    @Transactional
     public Set<CardDto> findByStudentID(Long id) {
         return entityToDto.convert(service.findByStudentID(id));
     }

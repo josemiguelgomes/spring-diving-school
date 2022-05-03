@@ -16,11 +16,6 @@ public class LocationController {
 
     private final LocationDtoService locationDtoService;
 
-    @Autowired
-    private ConvertObjectToObject<Location, LocationDto> convertToDto;
-    @Autowired
-    private ConvertObjectToObject<LocationDto, Location> convertToEntity;
-
     public LocationController(LocationDtoService locationDtoService) {
         this.locationDtoService = locationDtoService;
     }

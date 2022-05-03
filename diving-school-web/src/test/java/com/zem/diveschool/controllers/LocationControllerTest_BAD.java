@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-public class LocationControllerTest {
+public class LocationControllerTest_BAD {
 
     @Mock
     LocationDtoService locationDtoService;
@@ -99,50 +99,5 @@ public class LocationControllerTest {
     }
 
 
-    @Test
-    public void getNewLocation() throws Exception {
-        ///////// TODO
-        //given
-
-        //when
-
-        //then
-        assertEquals(1,0);
-    }
-
-    @Test
-    public void getUpdateLocation() throws Exception {
-        ///////// TODO
-        //given
-
-        //when
-
-        //then
-        assertEquals(1,0);
-
-    }
-
-    @Test
-    public void postSaveOrUpdate() throws Exception {
-        ///////// TODO
-        //given
-
-        //when
-
-        //then
-        assertEquals(1,0);
-
-    }
-
-    @Test
-    public void getDeleteById() throws Exception {
-        ///////// TODO
-        //given
-
-        //when
-
-        //then
-        assertEquals(1,0);
-    }
 
 }

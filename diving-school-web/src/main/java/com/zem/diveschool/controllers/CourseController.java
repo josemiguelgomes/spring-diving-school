@@ -16,12 +16,6 @@ public class CourseController {
 
     private final CourseDtoService courseDtoService;
 
-    @Autowired
-    private ConvertObjectToObject<Course, CourseDto> convertToDto;
-    @Autowired
-    private ConvertObjectToObject<CourseDto, Course> convertToEntity;
-
-
     public CourseController(CourseDtoService courseDtoService) {
         this.courseDtoService = courseDtoService;
     }
