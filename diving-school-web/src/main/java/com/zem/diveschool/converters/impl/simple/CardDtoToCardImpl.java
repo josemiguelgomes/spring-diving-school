@@ -18,12 +18,6 @@ import java.util.TimeZone;
 public class CardDtoToCardImpl extends ConvertObject<CardDto, Card> {
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    private final ConvertObjectToObject<StudentDto, Student> convertStudent;
-
-    public CardDtoToCardImpl(ConvertObjectToObject<StudentDto, Student> convertStudent) {
-        this.convertStudent = convertStudent;
-    }
-
     @Synchronized
     @Nullable
     @Override
@@ -39,7 +33,6 @@ public class CardDtoToCardImpl extends ConvertObject<CardDto, Card> {
                 .endDate(dto.getSubmissionEndDateConverted(TimeZone.getDefault().toString()))
                 .country(dto.getCountry())
                 .instructorName(dto.getInstructorName())
-                .student(convertStudent.convert(dto.getStudent()))
                 .build();
     }
 }

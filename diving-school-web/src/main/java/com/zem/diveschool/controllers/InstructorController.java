@@ -2,7 +2,6 @@ package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.data.InstructorDtoService;
 import com.zem.diveschool.dto.InstructorDto;
-import com.zem.diveschool.dto.LocationDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,14 +27,12 @@ public class InstructorController {
     public String showById(@PathVariable String id, Model model) {
         InstructorDto instructorDto = instructorDtoService.findById(Long.valueOf(id));
         model.addAttribute("instructor", instructorDto);
-        model.addAttribute("location", instructorDto.getHomeAddress()); //TODO do a refactor on this
         return "instructors/show";
     }
 
     @GetMapping("instructors/new")
     public String newInstructor(Model model) {
         model.addAttribute("instructor", new InstructorDto());
-        model.addAttribute("location", new LocationDto()); // TODO ??????
         return "instructors/instructorform";
     }
 

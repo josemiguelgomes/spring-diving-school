@@ -1,11 +1,15 @@
 com/zem/diveschool/controllers/CardControllerTest.class
 com/zem/diveschool/config/MyTestConfiguration.class
+com/zem/diveschool/controllers/StudentControllerTest.class
 com/zem/diveschool/converters/simple/CourseToCourseDtoTest.class
 com/zem/diveschool/converters/simple/CardDtoToCardTest.class
 com/zem/diveschool/services/springdatajpa/CardServiceIT.class
 com/zem/diveschool/ZemDivingSchoolApplicationTests.class
 com/zem/diveschool/controllers/CourseControllerTest.class
 com/zem/diveschool/services/CourseServiceSDJparseImplTestCase.class
+com/zem/diveschool/controllers/SlotControllerTest.class
+com/zem/diveschool/controllers/SlotLanguageControllerTest.class
+com/zem/diveschool/controllers/LocationControllerTest_BAD.class
 com/zem/diveschool/controllers/LocationControllerTest.class
 com/zem/diveschool/controllers/InstructorControllerTest.class
 com/zem/diveschool/controllers/IndexControllerTest.class

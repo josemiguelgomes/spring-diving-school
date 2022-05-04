@@ -9,6 +9,7 @@ import com.zem.diveschool.dto.StudentDto;
 import com.zem.diveschool.persistence.model.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,14 +33,15 @@ public class CardDtoToCardTest {
     public static final String END_DATE2 = "2012-01-05";
     public static final String INSTRUCTOR2 = "INSTRUCTOR2";
 
-
+    @Autowired
     ConvertObjectToObject<CardDto, Card> converter;
+    @Autowired
     ConvertObjectToObject<StudentDto, Student> convertStudent;
 
     @Before
     public void setUp() throws Exception {
-        convertStudent = new StudentDtoToStudentImpl();
-        converter = new CardDtoToCardImpl(convertStudent);
+//        convertStudent = new StudentDtoToStudentImpl();
+//        converter = new CardDtoToCardImpl(convertStudent);
     }
 
     @Test

@@ -2,7 +2,6 @@ package com.zem.diveschool.converters.simple;
 
 
 import com.zem.diveschool.converters.ConvertObjectToObject;
-import com.zem.diveschool.converters.impl.simple.CourseDtoToCourseImpl;
 import com.zem.diveschool.converters.impl.simple.CourseToCourseDtoImpl;
 import com.zem.diveschool.dto.CourseDto;
 import com.zem.diveschool.persistence.model.Course;
@@ -31,7 +30,7 @@ public class CourseToCourseDtoTest {
 
     @Before
     public void setUp() throws Exception {
-        converter = new CourseToCourseDtoImpl();
+//        converter = new CourseToCourseDtoImpl(slotConverterToDto);
     }
 
     @Test

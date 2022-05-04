@@ -1,6 +1,8 @@
 package com.zem.diveschool.converters.impl.simple;
 
+import com.zem.diveschool.converters.ConvertObjectToObject;
 import com.zem.diveschool.dto.InstructorDto;
+import com.zem.diveschool.dto.SlotDto;
 import com.zem.diveschool.persistence.model.*;
 import lombok.Synchronized;
 import org.springframework.lang.Nullable;
@@ -13,6 +15,12 @@ import java.util.TimeZone;
 public class InstructorToInstructorDtoImpl extends ConvertObject<Instructor, InstructorDto> {
     private final SimpleDateFormat dateFormat
             = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+    private final ConvertObjectToObject<Slot, SlotDto> slotConverterToDto;
+
+    public InstructorToInstructorDtoImpl(ConvertObjectToObject<Slot, SlotDto> slotConverterToDto) {
+        this.slotConverterToDto = slotConverterToDto;
+    }
 
     @Synchronized
     @Nullable
@@ -34,6 +42,7 @@ public class InstructorToInstructorDtoImpl extends ConvertObject<Instructor, Ins
                 .language(entity.getLanguage())
                 .photo(entity.getPhoto())
                 .statusTeaching(entity.getStatusTeaching())
+                .slots(slotConverterToDto.convert(entity.getSlots()))
                 .build();
     }
 }

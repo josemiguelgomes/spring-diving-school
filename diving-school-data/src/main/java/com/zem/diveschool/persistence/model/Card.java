@@ -28,7 +28,7 @@ public class Card extends BaseEntity<Card> {
     @Column(name = "instructor_name")
     private String instructorName;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = true)
+    @ManyToOne//(fetch = FetchType.LAZY, optional = true)
     private Student student;
 
     @Builder

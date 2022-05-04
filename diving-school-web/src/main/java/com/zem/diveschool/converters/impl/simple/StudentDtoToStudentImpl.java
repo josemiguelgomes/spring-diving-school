@@ -1,5 +1,8 @@
 package com.zem.diveschool.converters.impl.simple;
 
+import com.zem.diveschool.converters.ConvertObjectToObject;
+import com.zem.diveschool.dto.CardDto;
+import com.zem.diveschool.dto.SlotDto;
 import com.zem.diveschool.dto.StudentDto;
 import com.zem.diveschool.persistence.model.*;
 import lombok.Synchronized;
@@ -12,6 +15,15 @@ import java.util.TimeZone;
 @Component
 public class StudentDtoToStudentImpl extends ConvertObject<StudentDto, Student> {
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+    private final ConvertObjectToObject<CardDto, Card> cardConverterToEntity;
+    private final ConvertObjectToObject<SlotDto, Slot> slotConverterToEntity;
+
+    public StudentDtoToStudentImpl(ConvertObjectToObject<CardDto, Card> cardConverterToEntity,
+                                   ConvertObjectToObject<SlotDto, Slot> slotConverterToEntity) {
+        this.cardConverterToEntity = cardConverterToEntity;
+        this.slotConverterToEntity = slotConverterToEntity;
+    }
 
     @Synchronized
     @Nullable
@@ -30,7 +42,9 @@ public class StudentDtoToStudentImpl extends ConvertObject<StudentDto, Student> 
                 .email(dto.getEmail())
                 .phoneNumber(dto.getPhoneNumber())
                 .language(dto.getLanguage())
-                .phoneNumber(dto.getPhoneNumber())
+                .photo(dto.getPhoto())
+                .cards(cardConverterToEntity.convert(dto.getCards()))
+                .slots(slotConverterToEntity.convert(dto.getSlots()))
                 .build();
     }
 }

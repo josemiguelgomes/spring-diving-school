@@ -11,6 +11,7 @@ import com.zem.diveschool.persistence.model.Country;
 import com.zem.diveschool.persistence.model.Student;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,14 +38,16 @@ public class CardToCardDtoTest {
     public static       Date END_DATE2 = new Date();
     public static final String INSTRUCTOR2 = "INSTRUCTOR2";
 
+    @Autowired
     ConvertObjectToObject<Card, CardDto> converter;
+    @Autowired
     ConvertObjectToObject<Student, StudentDto> convertStudent;
 
 
     @Before
     public void setUp() throws Exception {
-        convertStudent = new StudentToStudentDtoImpl();
-        converter = new CardToCardDtoImpl(convertStudent);
+//        convertStudent = new StudentToStudentDtoImpl();
+//        converter = new CardToCardDtoImpl(convertStudent);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 

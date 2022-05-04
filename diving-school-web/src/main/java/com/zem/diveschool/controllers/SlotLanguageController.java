@@ -1,11 +1,7 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.converters.ConvertObjectToObject;
 import com.zem.diveschool.data.SlotLanguageDtoService;
 import com.zem.diveschool.dto.SlotLanguageDto;
-import com.zem.diveschool.persistence.model.SlotLanguage;
-import com.zem.diveschool.persistence.services.SlotLanguageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

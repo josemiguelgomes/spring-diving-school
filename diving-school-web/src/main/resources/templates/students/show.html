@@ -50,6 +50,8 @@
                   <th>Country</th>
                   <th>Instructor Name</th>
                </tr>
+               <a class="btn btn-default" href="#" th:href="@{'/students/' + ${student.id} + '/cards'}"
+                  role="button">View</a>
                </thead>
                <tbody>
                <tr th:each="card : ${cards}">

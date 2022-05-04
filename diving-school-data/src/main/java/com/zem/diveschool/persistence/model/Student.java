@@ -30,6 +30,7 @@ public class Student extends BaseEntity<Student> {
     private String phoneNumber;
     @Enumerated(EnumType.STRING)
     private Language language;
+    @Lob
     @Column(name = "photo")
     private Byte[] photo;
 

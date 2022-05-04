@@ -43,7 +43,7 @@ public class CourseController {
     @GetMapping("courses/{id}/update")
     public String updateCourse(@PathVariable String id, Model model){
         model.addAttribute("course", courseDtoService.findById(Long.valueOf(id)));
-        return  "coursess/courseform";
+        return  "courses/courseform";
     }
 
     @PostMapping("courses")

@@ -30,7 +30,7 @@ public class CourseDtoToCourseTest {
 
     @Before
     public void setUp() throws Exception {
-        converter = new CourseDtoToCourseImpl();
+//        converter = new CourseDtoToCourseImpl(courseConverterToEntity);
     }
 
     @Test

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'cards')}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List Cards</title>
+</head>
+<body>
+<body>
+<!--/*@thymesVar id="student" type="com.zem.diveschool.dto.StudentDto"*/-->
+<!--/*@thymesVar id="cards" type="java.util.Set<com.zem.diveschool.dto.CardDto>"*/-->
+<h2>List of Student Cards</h2>
+<table id="cards" class="table table-striped">
+   <div class="table-responsive" th:if="${not #lists.isEmpty(student.cards)}">
+       <table class="table table-hover ">
+           <thead>
+           <tr>
+              <th>ID</th>
+              <th>Course</th>
+              <th>Student Name</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Country</th>
+              <th>Instructor Name</th>
+              <th>View</th>
+              <th>Update</th>
+              <th>Delete</th>
+           </tr>
+           </thead>
+           <tr th:each="card : ${student.cards}">
+              <td th:text="${card.id}"></td>
+              <td th:text="${card.course}"></td>
+              <td th:text="${card.studentName}"></td>
+              <td th:text="${card.startDate}"></td>
+              <td th:text="${card.endDate}"></td>
+              <td th:text="${card.country}"></td>
+              <td th:text="${card.instructorName}"></td>
+              <td><a href="#" th:href="@{'/students/' + ${student.id} + '/cards/' + ${card.id} + '/show'}">View</a></td>
+              <td><a href="#" th:href="@{'/students/' + ${student.id} + '/cards/' + ${card.id} + '/update'}">Update</a></td>
+              <td><a href="#" th:href="@{'/students/' + ${student.id} + '/cards/' + ${card.id} + '/delete'}">Delete</a></td>
+           </tr>
+       </table>
+   </div>
+</table>
+
+<hr>
+<a th:href="@{'/students/' + ${student.id} + '/show'}"> Back to Student</a>
+<hr>
+<a th:href="@{/students}"> Back to Students List</a>
+
+</body>
+</html>

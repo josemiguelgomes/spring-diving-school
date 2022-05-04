@@ -23,21 +23,18 @@ public class LocationController {
     @RequestMapping({"/locations", "/locations/index", "/locations/index.html", "locations.html"})
     public String listLocations(Model model){
         model.addAttribute("locations", locationDtoService.findAll());
-
         return "locations/index";
     }
 
     @RequestMapping({"/locations/{id}/show"})
     public String showById(@PathVariable String id, Model model){
         model.addAttribute("location",  locationDtoService.findById(Long.valueOf(id)));
-
         return "locations/show";
     }
 
     @GetMapping("locations/new")
     public String newLocation(Model model){
         model.addAttribute("location", new LocationDto());
-
         return "locations/locationform";
     }
 
@@ -50,7 +47,7 @@ public class LocationController {
     @PostMapping("locations")
     public String saveOrUpdate(@ModelAttribute LocationDto locationDto){
         LocationDto savedLocationDto = locationDtoService.save(locationDto);
-        return "redirect:/cards/" + savedLocationDto.getId() + "/show";
+        return "redirect:/locations/" + savedLocationDto.getId() + "/show";
     }
 
     @GetMapping("locations/{id}/delete")

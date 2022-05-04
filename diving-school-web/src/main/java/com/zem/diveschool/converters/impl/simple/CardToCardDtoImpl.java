@@ -17,12 +17,6 @@ public class CardToCardDtoImpl extends ConvertObject<Card, CardDto> {
     private final SimpleDateFormat dateFormat
             = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-    private final ConvertObjectToObject<Student, StudentDto> convertStudent;
-
-    public CardToCardDtoImpl(ConvertObjectToObject<Student, StudentDto> convertStudent) {
-        this.convertStudent = convertStudent;
-    }
-
     @Synchronized
     @Nullable
     @Override
@@ -40,7 +34,6 @@ public class CardToCardDtoImpl extends ConvertObject<Card, CardDto> {
                 .endDate(dateFormat.format(entity.getEndDate()))
                 .country(entity.getCountry())
                 .instructorName(entity.getInstructorName())
-                .student(convertStudent.convert(entity.getStudent()))
                 .build();
     }
 
