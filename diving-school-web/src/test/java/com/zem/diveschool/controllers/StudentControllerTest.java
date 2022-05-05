@@ -1,8 +1,5 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.data.CardDtoService;
-import com.zem.diveschool.data.LocationDtoService;
-import com.zem.diveschool.data.SlotDtoService;
 import com.zem.diveschool.data.StudentDtoService;
 import com.zem.diveschool.dto.StudentDto;
 import org.junit.Before;
@@ -16,6 +13,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,15 +24,6 @@ public class StudentControllerTest {
     @Mock
     StudentDtoService studentDtoService;
 
-    @Mock
-    LocationDtoService locationDtoService;
-
-    @Mock
-    CardDtoService cardDtoService;
-
-    @Mock
-    SlotDtoService slotDtoService;
-
     StudentController controller;
 
     MockMvc mockMvc;
@@ -43,7 +32,7 @@ public class StudentControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new StudentController(studentDtoService, locationDtoService, cardDtoService, slotDtoService);
+        controller = new StudentController(studentDtoService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -57,7 +46,7 @@ public class StudentControllerTest {
     }
 
     @Test
-    public void testAllStudents() throws Exception {
+    public void test_listStudents() throws Exception {
         //given
         Set<StudentDto> studentsDto = new HashSet<>();
 
@@ -72,7 +61,7 @@ public class StudentControllerTest {
     }
 
     @Test
-    public void testGetStudent() throws Exception {
+    public void test_showById() throws Exception {
         //given
         StudentDto studentDto = new StudentDto();
         studentDto.setId(1L);
@@ -89,7 +78,7 @@ public class StudentControllerTest {
 
 
     @Test
-    public void testGetNewStudentForm() throws Exception {
+    public void test_newStudent() throws Exception {
         StudentDto instructorDto = new StudentDto();
 
         mockMvc.perform(get("/students/new"))
@@ -99,7 +88,7 @@ public class StudentControllerTest {
     }
 
     @Test
-    public void testPostNewStudentForm() throws Exception {
+    public void test_updateStudent() throws Exception {
         //given
         StudentDto studentDto = new StudentDto();
         studentDto.setId(2L);
@@ -118,7 +107,7 @@ public class StudentControllerTest {
     }
 
     @Test
-    public void testGetUpdateView() throws Exception {
+    public void test_saveOrUpdate() throws Exception {
         //given
         StudentDto studentDto = new StudentDto();
         studentDto.setId(2L);
@@ -134,7 +123,7 @@ public class StudentControllerTest {
     }
 
     @Test
-    public void testDeleteAction() throws Exception {
+    public void test_deleteById() throws Exception {
         mockMvc.perform(get("/students/1/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/students"));
@@ -142,4 +131,40 @@ public class StudentControllerTest {
         verify(studentDtoService, times(1)).deleteById(anyLong());
     }
 
+
+    @Test
+    public void test_listCardsStudent() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+
+    @Test
+    public void test_showCardStudent() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+
+    @Test
+    public void test_listLocationsStudent() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+
+    @Test
+    public void test_showLocationStudent() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+
+    @Test
+    public void test_listSlotsStudent() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+
+    @Test
+    public void test_showSlotStudent() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
 }

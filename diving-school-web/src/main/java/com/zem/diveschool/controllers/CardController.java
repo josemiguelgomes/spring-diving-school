@@ -1,7 +1,6 @@
 package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.data.CardDtoService;
-import com.zem.diveschool.data.StudentDtoService;
 import com.zem.diveschool.dto.CardDto;
 
 import lombok.extern.slf4j.Slf4j;
@@ -10,18 +9,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
 
 @Slf4j
 @Controller
 public class CardController {
 
     private final CardDtoService cardDtoService;
-    private final StudentDtoService studentDtoService;
 
-    public CardController(CardDtoService cardDtoService, StudentDtoService studentDtoService) {
+    public CardController(CardDtoService cardDtoService) {
         this.cardDtoService = cardDtoService;
-        this.studentDtoService = studentDtoService;
     }
 
     @RequestMapping({"/cards", "/cards/index", "/cards/index.html", "cards.html"})
@@ -58,25 +54,5 @@ public class CardController {
     public String deleteById(@PathVariable String id){
         cardDtoService.deleteById(Long.valueOf(id));
         return "redirect:/cards";
-    }
-
-    /* --- */
-
-    @GetMapping("/students/{studentId}/cards")
-    public String listStudentCards(@PathVariable String studentId, Model model){
-        log.debug("Getting cards list for student id: " + studentId);
-
-        // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("student", studentDtoService.findById(Long.valueOf(studentId)));
-        return "students/cards/list";
-    }
-
-    @GetMapping("/students/{studentId}/cards/{cardId}/show")
-    public String showStudentCard(@PathVariable String studentId, @PathVariable String cardId, Model model){
-        log.debug("Getting card id " + cardId + " for student id: " + studentId);
-
-        // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("student", studentDtoService.findById(Long.valueOf(studentId)));
-        return "students/cards/show";
     }
 }

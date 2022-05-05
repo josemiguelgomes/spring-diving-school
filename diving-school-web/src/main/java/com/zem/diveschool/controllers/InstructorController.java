@@ -2,12 +2,12 @@ package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.data.InstructorDtoService;
 import com.zem.diveschool.dto.InstructorDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
-
+@Slf4j
 @Controller
 public class InstructorController {
 
@@ -54,10 +54,42 @@ public class InstructorController {
         return "redirect:/instructors";
     }
 
+    /* --- */
 
-    @GetMapping("/api/instructors")
-    public @ResponseBody Set<InstructorDto> getInstructorJson(){
-        return instructorDtoService.findAll();
+    @GetMapping("/instructors/{instructorId}/slots")
+    public String listSlotInstructors(@PathVariable String instructorId, Model model){
+        log.debug("Getting slots list for instructor id: " + instructorId);
+
+        // use dto to avoid lazy load errors in Thymeleaf.
+        model.addAttribute("instructor", instructorDtoService.findById(Long.valueOf(instructorId)));
+        return "instructors/slots/list";
     }
 
+    @GetMapping("/instructors/{instructorId}/slots/{slotId} ")
+    public String listSlotInstructors(@PathVariable String instructorId, @PathVariable String slotId, Model model){
+        log.debug("Getting slot id " + slotId + " for instructor id: " + instructorId);
+
+        // use dto to avoid lazy load errors in Thymeleaf.
+        model.addAttribute("instructor", instructorDtoService.findById(Long.valueOf(instructorId)));
+        return "instructors/slots/show";
+    }
+
+    @GetMapping("/instructors/{instructorId}/locations")
+    public String listLocationInstructors(@PathVariable String instructorId, Model model){
+        log.debug("Getting locations list for instructor id: " + instructorId);
+
+        // use dto to avoid lazy load errors in Thymeleaf.
+        model.addAttribute("instructor", instructorDtoService.findById(Long.valueOf(instructorId)));
+        return "instructors/locations/list";
+    }
+
+    @GetMapping("/instructors/{instructorId}/locations/{locationId} ")
+    public String listLocationInstructors(@PathVariable String instructorId, @PathVariable String locationId,
+                                          Model model){
+        log.debug("Getting location id " + locationId + " for instructor id: " + instructorId);
+
+        // use dto to avoid lazy load errors in Thymeleaf.
+        model.addAttribute("instructor", instructorDtoService.findById(Long.valueOf(instructorId)));
+        return "instructors/locations/show";
+    }
 }

@@ -46,7 +46,7 @@ public class SlotLanguageControllerTest {
     }
 
     @Test
-    public void testAllSlotLanguages() throws Exception {
+    public void test_listSlotLanguages() throws Exception {
         //given
         Set<SlotLanguageDto> slotLanguagesDto = new HashSet<>();
 
@@ -61,7 +61,7 @@ public class SlotLanguageControllerTest {
     }
 
     @Test
-    public void testGetSlotLanguage() throws Exception {
+    public void test_showById() throws Exception {
         //given
         SlotLanguageDto slotLanguageDto = new SlotLanguageDto();
         slotLanguageDto.setId(1L);
@@ -78,7 +78,7 @@ public class SlotLanguageControllerTest {
 
 
     @Test
-    public void testGetNewSlotLanguageForm() throws Exception {
+    public void test_newSlot() throws Exception {
         SlotLanguageDto instructorDto = new SlotLanguageDto();
 
         mockMvc.perform(get("/slotLanguages/new"))
@@ -88,7 +88,7 @@ public class SlotLanguageControllerTest {
     }
 
     @Test
-    public void testPostNewSlotLanguageForm() throws Exception {
+    public void test_updateSlotLanguage() throws Exception {
         //given
         SlotLanguageDto slotLanguageDto = new SlotLanguageDto();
         slotLanguageDto.setId(2L);
@@ -107,7 +107,7 @@ public class SlotLanguageControllerTest {
     }
 
     @Test
-    public void testGetUpdateView() throws Exception {
+    public void test_saveOrUpdate() throws Exception {
         //given
         SlotLanguageDto slotLanguageDto = new SlotLanguageDto();
         slotLanguageDto.setId(2L);
@@ -123,7 +123,7 @@ public class SlotLanguageControllerTest {
     }
 
     @Test
-    public void testDeleteAction() throws Exception {
+    public void test_deleteById() throws Exception {
         mockMvc.perform(get("/slotLanguages/1/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/slotLanguages"));

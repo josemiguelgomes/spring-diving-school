@@ -20,21 +20,18 @@ public class SlotLanguageController {
     @RequestMapping({"/slotLanguages", "/slotLanguages/index", "/slotLanguages/index.html", "slotLanguages.html"})
     public String listSlotLanguages(Model model){
         model.addAttribute("slotLanguages", slotLanguageDtoService.findAll());
-
         return "slotLanguages/index";
     }
 
     @RequestMapping({"/slotLanguages/{id}/show"})
     public String showById(@PathVariable String id, Model model){
         model.addAttribute("slotLanguage", slotLanguageDtoService.findById(Long.valueOf(id)));
-
         return "slotLanguages/show";
     }
 
     @GetMapping("slotLanguages/new")
     public String newSlotLanguage(Model model){
         model.addAttribute("slotLanguage", new SlotLanguageDto());
-
         return "slotLanguages/slotLanguageform";
     }
 
@@ -56,8 +53,5 @@ public class SlotLanguageController {
         return "redirect:/slotLanguages";
     }
 
-    @GetMapping("/api/slotLanguages")
-    public @ResponseBody Set<SlotLanguageDto> getCardJson(){
-        return slotLanguageDtoService.findAll();
-    }
+
 }

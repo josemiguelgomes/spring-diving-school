@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -45,7 +46,7 @@ public class LocationControllerTest {
     }
 
     @Test
-    public void testAllLocations() throws Exception {
+    public void test_listLocations() throws Exception {
         //given
         Set<LocationDto> locationsDto = new HashSet<>();
 
@@ -60,7 +61,7 @@ public class LocationControllerTest {
     }
 
     @Test
-    public void testGetLocation() throws Exception {
+    public void test_showById() throws Exception {
         //given
         LocationDto locationDto = new LocationDto();
         locationDto.setId(1L);
@@ -77,7 +78,7 @@ public class LocationControllerTest {
 
 
     @Test
-    public void testGetNewLocationForm() throws Exception {
+    public void test_newLocation() throws Exception {
         LocationDto instructorDto = new LocationDto();
 
         mockMvc.perform(get("/locations/new"))
@@ -87,7 +88,7 @@ public class LocationControllerTest {
     }
 
     @Test
-    public void testPostNewLocationForm() throws Exception {
+    public void test_updateLocation() throws Exception {
         //given
         LocationDto locationDto = new LocationDto();
         locationDto.setId(2L);
@@ -106,7 +107,7 @@ public class LocationControllerTest {
     }
 
     @Test
-    public void testGetUpdateView() throws Exception {
+    public void test_saveOrUpdate() throws Exception {
         //given
         LocationDto locationDto = new LocationDto();
         locationDto.setId(2L);
@@ -122,7 +123,7 @@ public class LocationControllerTest {
     }
 
     @Test
-    public void testDeleteAction() throws Exception {
+    public void test_deleteById() throws Exception {
         mockMvc.perform(get("/locations/1/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/locations"));
@@ -130,4 +131,27 @@ public class LocationControllerTest {
         verify(locationDtoService, times(1)).deleteById(anyLong());
     }
 
-}
+    @Test
+    public void test_listSlotsInstructor() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+
+    @Test
+    public void test_showSlotInstructor() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+
+    @Test
+    public void test_listLocationsIntructor() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+
+    @Test
+    public void test_showLocationInstructor() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+ }

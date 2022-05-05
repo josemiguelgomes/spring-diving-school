@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -47,7 +48,7 @@ public class InstructorControllerTest {
     }
 
     @Test
-    public void testAllInstructors() throws Exception {
+    public void test_listInstructors() throws Exception {
         //given
         Set<InstructorDto> instructorsDto = new HashSet<>();
 
@@ -62,7 +63,7 @@ public class InstructorControllerTest {
     }
 
     @Test
-    public void testGetInstructor() throws Exception {
+    public void test_showById() throws Exception {
         //given
         InstructorDto instructorDto = new InstructorDto();
         instructorDto.setId(1L);
@@ -79,7 +80,7 @@ public class InstructorControllerTest {
 
 
     @Test
-    public void testGetNewInstructorForm() throws Exception {
+    public void test_newInstructor() throws Exception {
         InstructorDto instructorDto = new InstructorDto();
 
         mockMvc.perform(get("/instructors/new"))
@@ -89,7 +90,7 @@ public class InstructorControllerTest {
     }
 
     @Test
-    public void testPostNewInstructorForm() throws Exception {
+    public void test_updateInstructor() throws Exception {
         //given
         InstructorDto instructorDto = new InstructorDto();
         instructorDto.setId(2L);
@@ -108,7 +109,7 @@ public class InstructorControllerTest {
     }
 
     @Test
-    public void testGetUpdateView() throws Exception {
+    public void test_saveOrUpdate() throws Exception {
         //given
         InstructorDto instructorDto = new InstructorDto();
         instructorDto.setId(2L);
@@ -124,7 +125,7 @@ public class InstructorControllerTest {
     }
 
     @Test
-    public void testDeleteAction() throws Exception {
+    public void test_deleteById() throws Exception {
         mockMvc.perform(get("/instructors/1/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/instructors"));
@@ -132,4 +133,27 @@ public class InstructorControllerTest {
         verify(instructorDtoService, times(1)).deleteById(anyLong());
     }
 
+    @Test
+    public void test_listSlotsInstructor() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+
+    @Test
+    public void test_showSlotInstructor() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+
+    @Test
+    public void test_listLocationsIntructor() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+
+    @Test
+    public void test_showLocationInstructor() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
 }

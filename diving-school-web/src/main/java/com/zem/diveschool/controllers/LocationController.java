@@ -1,15 +1,10 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.converters.ConvertObjectToObject;
 import com.zem.diveschool.data.LocationDtoService;
 import com.zem.diveschool.dto.LocationDto;
-import com.zem.diveschool.persistence.model.Location;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Set;
 
 @Controller
 public class LocationController {
@@ -55,10 +50,4 @@ public class LocationController {
         locationDtoService.deleteById(Long.valueOf(id));
         return "redirect:/locations";
     }
-
-    @GetMapping("/api/locations")
-    public @ResponseBody Set<LocationDto> getLocationJson(){
-        return locationDtoService.findAll();
-    }
-
 }

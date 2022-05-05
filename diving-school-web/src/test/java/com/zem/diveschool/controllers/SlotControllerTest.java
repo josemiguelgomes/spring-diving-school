@@ -24,9 +24,6 @@ public class SlotControllerTest {
     @Mock
     SlotDtoService slotDtoService;
 
-    @Mock
-    CourseDtoService courseDtoService;
-
     SlotController controller;
 
     MockMvc mockMvc;
@@ -35,7 +32,7 @@ public class SlotControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new SlotController(slotDtoService, courseDtoService);
+        controller = new SlotController(slotDtoService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -49,7 +46,7 @@ public class SlotControllerTest {
     }
 
     @Test
-    public void testAllSlots() throws Exception {
+    public void test_listLocations() throws Exception {
         //given
         Set<SlotDto> slotsDto = new HashSet<>();
 
@@ -64,7 +61,7 @@ public class SlotControllerTest {
     }
 
     @Test
-    public void testGetSlot() throws Exception {
+    public void test_showById() throws Exception {
         //given
         SlotDto slotDto = new SlotDto();
         slotDto.setId(1L);
@@ -81,7 +78,7 @@ public class SlotControllerTest {
 
 
     @Test
-    public void testGetNewSlotForm() throws Exception {
+    public void test_newLocation() throws Exception {
         SlotDto instructorDto = new SlotDto();
 
         mockMvc.perform(get("/slots/new"))
@@ -91,7 +88,7 @@ public class SlotControllerTest {
     }
 
     @Test
-    public void testPostNewSlotForm() throws Exception {
+    public void test_updateLocation() throws Exception {
         //given
         SlotDto slotDto = new SlotDto();
         slotDto.setId(2L);
@@ -110,7 +107,7 @@ public class SlotControllerTest {
     }
 
     @Test
-    public void testGetUpdateView() throws Exception {
+    public void test_saveOrUpdate() throws Exception {
         //given
         SlotDto slotDto = new SlotDto();
         slotDto.setId(2L);
@@ -126,7 +123,7 @@ public class SlotControllerTest {
     }
 
     @Test
-    public void testDeleteAction() throws Exception {
+    public void test_deleteById() throws Exception {
         mockMvc.perform(get("/slots/1/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/slots"));

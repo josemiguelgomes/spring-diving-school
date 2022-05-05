@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -45,7 +46,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void testAllCourses() throws Exception {
+    public void test_listCourses() throws Exception {
         //given
         Set<CourseDto> coursesDto = new HashSet<>();
 
@@ -60,7 +61,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void testGetCourse() throws Exception {
+    public void test_showById() throws Exception {
         //given
         CourseDto courseDto = new CourseDto();
         courseDto.setId(1L);
@@ -77,7 +78,7 @@ public class CourseControllerTest {
 
 
     @Test
-    public void testGetNewCourseForm() throws Exception {
+    public void test_newCourse() throws Exception {
         CourseDto courseDto = new CourseDto();
 
         mockMvc.perform(get("/courses/new"))
@@ -87,7 +88,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void testPostNewCourseForm() throws Exception {
+    public void test_UpdateCourse() throws Exception {
         //given
         CourseDto courseDto = new CourseDto();
         courseDto.setId(2L);
@@ -106,7 +107,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void testGetUpdateView() throws Exception {
+    public void test_saveOrUpdate() throws Exception {
         //given
         CourseDto courseDto = new CourseDto();
         courseDto.setId(2L);
@@ -122,12 +123,24 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void testDeleteAction() throws Exception {
+    public void test_deleteById() throws Exception {
         mockMvc.perform(get("/courses/1/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/courses"));
 
         verify(courseDtoService, times(1)).deleteById(anyLong());
+    }
+
+    @Test
+    public void test_listSlotsCourse() throws Exception {
+       // TODO
+        assertEquals(1, 0);
+    }
+
+    @Test
+    public void test_showSlotCourse() throws Exception {
+        // TODO
+        assertEquals(1, 0);
     }
 
 }

@@ -1,9 +1,7 @@
 package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.data.CardDtoService;
-import com.zem.diveschool.data.StudentDtoService;
 import com.zem.diveschool.dto.CardDto;
-import com.zem.diveschool.dto.StudentDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -25,9 +23,6 @@ public class CardControllerTest {
     @Mock
     CardDtoService cardDtoService;
 
-    @Mock
-    StudentDtoService studentDtoService;
-
     CardController controller;
 
     MockMvc mockMvc;
@@ -36,7 +31,7 @@ public class CardControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new CardController(cardDtoService, studentDtoService);
+        controller = new CardController(cardDtoService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -50,7 +45,7 @@ public class CardControllerTest {
     }
 
     @Test
-    public void testAllCards() throws Exception {
+    public void test_listCards() throws Exception {
         //given
         Set<CardDto> cardsDto = new HashSet<>();
 
@@ -65,24 +60,7 @@ public class CardControllerTest {
     }
 
     @Test
-    public void testListCardsOfStudent() throws Exception {
-        //given
-        StudentDto studentDto = new StudentDto();
-        when(studentDtoService.findById(anyLong())).thenReturn(studentDto);
-
-        //when
-        mockMvc.perform(get("/students/1/cards"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("students/cards/list"))
-                .andExpect(model().attributeExists("student"));
-
-        //then
-        verify(studentDtoService, times(1)).findById(anyLong());
-    }
-
-
-    @Test
-    public void testGetCard() throws Exception {
+    public void test_showById() throws Exception {
         //given
         CardDto cardDto = new CardDto();
         cardDto.setId(1L);
@@ -99,7 +77,7 @@ public class CardControllerTest {
 
 
     @Test
-    public void testGetNewCardForm() throws Exception {
+    public void test_newCard() throws Exception {
         CardDto instructorDto = new CardDto();
 
         mockMvc.perform(get("/cards/new"))
@@ -109,7 +87,7 @@ public class CardControllerTest {
     }
 
     @Test
-    public void testPostNewCardForm() throws Exception {
+    public void test_updateCard() throws Exception {
         //given
         CardDto cardDto = new CardDto();
         cardDto.setId(2L);
@@ -128,7 +106,7 @@ public class CardControllerTest {
     }
 
     @Test
-    public void testGetUpdateView() throws Exception {
+    public void test_saveOrUpdate() throws Exception {
         //given
         CardDto cardDto = new CardDto();
         cardDto.setId(2L);
@@ -144,7 +122,7 @@ public class CardControllerTest {
     }
 
     @Test
-    public void testDeleteAction() throws Exception {
+    public void test_deleteById() throws Exception {
         mockMvc.perform(get("/cards/1/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/cards"));

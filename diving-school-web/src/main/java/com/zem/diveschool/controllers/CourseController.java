@@ -1,16 +1,13 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.converters.ConvertObjectToObject;
 import com.zem.diveschool.data.CourseDtoService;
 import com.zem.diveschool.dto.CourseDto;
-import com.zem.diveschool.persistence.model.Course;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
-
+@Slf4j
 @Controller
 public class CourseController {
 
@@ -29,14 +26,12 @@ public class CourseController {
     @RequestMapping({"/courses/{id}/show"})
     public String showById(@PathVariable String id, Model model){
         model.addAttribute("course", courseDtoService.findById(Long.valueOf(id)));
-
         return "courses/show";
     }
 
     @GetMapping("courses/new")
     public String newCourse(Model model){
         model.addAttribute("course", new CourseDto());
-
         return "courses/courseform";
     }
 
@@ -59,8 +54,23 @@ public class CourseController {
         return "redirect:/courses";
     }
 
-    @GetMapping("/api/courses")
-    public @ResponseBody Set<CourseDto> getCourseJson(){
-        return courseDtoService.findAll();
+    /* --- */
+
+    @GetMapping("/courses/{courseId}/slots")
+    public String listSlotsCourse(@PathVariable String courseId, Model model){
+        log.debug("Getting slots list for course id: " + courseId);
+
+        // use dto to avoid lazy load errors in Thymeleaf.
+        model.addAttribute("course", courseDtoService.findById(Long.valueOf(courseId)));
+        return "courses/slots/list";
+    }
+
+    @GetMapping("/courses/{courseId}/slots/{slotId}/show")
+    public String showSlotCourse(@PathVariable String courseId, @PathVariable String slotId, Model model){
+        log.debug("Getting slot id " + slotId + " for course id: " + courseId);
+
+        // use dto to avoid lazy load errors in Thymeleaf.
+        model.addAttribute("course", courseDtoService.findById(Long.valueOf(slotId)));
+        return "courses/slots/show";
     }
 }
