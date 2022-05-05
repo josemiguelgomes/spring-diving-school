@@ -55,5 +55,19 @@ public class StudentDtoServiceImpl extends AbstractDtoServiceImpl<StudentDto, Lo
     public Optional<StudentDto> findByFirstName(String firstName) {
         return entityToDto.convert(service.findByFirstName(firstName));
     }
+
+    @Override
+    @Transactional
+    public Set<StudentDto> findBySlotId(Long slotID) {
+        // TODO
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public Optional<StudentDto> findBySlotIdAndStudentId(Long slotId, Long studentID) {
+        // TODO
+        return Optional.empty();
+    }
 }
 

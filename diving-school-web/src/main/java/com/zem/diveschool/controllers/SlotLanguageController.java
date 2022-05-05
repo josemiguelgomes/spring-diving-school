@@ -2,12 +2,12 @@ package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.data.SlotLanguageDtoService;
 import com.zem.diveschool.dto.SlotLanguageDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
-
+@Slf4j
 @Controller
 public class SlotLanguageController {
 
@@ -53,5 +53,24 @@ public class SlotLanguageController {
         return "redirect:/slotLanguages";
     }
 
+    /* --- */
 
+    @GetMapping("/slots/{slotId}/slotlanguages")
+    public String listSlotsSlotLanguage(@PathVariable String slotId, Model model){
+        log.debug("Getting slot languages list for slot id: " + slotId);
+
+        // use dto to avoid lazy load errors in Thymeleaf.
+        model.addAttribute("slotlanguages", slotLanguageDtoService.findBySlotId(Long.valueOf(slotId)));
+        return "slots/slotlanguages/list";
+    }
+
+    @GetMapping("/slots/{slotIdId}/slotLanguages/{slotLanguageId}/show")
+    public String showSlotSlotLanguage(@PathVariable String slotId, @PathVariable String slotLanguageId, Model model){
+        log.debug("Getting slot language id " + slotLanguageId + " for slot id: " + slotId);
+
+        // use dto to avoid lazy load errors in Thymeleaf.
+        model.addAttribute("slotlanguage", slotLanguageDtoService.findBySlotIdAndSlotLanguageId(Long.valueOf(slotId),
+                Long.valueOf(slotLanguageId)));
+        return "slots/slotLanguages/show";
+    }
 }

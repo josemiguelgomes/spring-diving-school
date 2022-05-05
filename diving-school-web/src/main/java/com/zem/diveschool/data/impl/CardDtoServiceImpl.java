@@ -49,5 +49,13 @@ public class CardDtoServiceImpl extends AbstractDtoServiceImpl<CardDto, Long, Ca
     public Set<CardDto> findByStudentID(Long id) {
         return entityToDto.convert(service.findByStudentID(id));
     }
+
+    @Override
+    @Transactional
+    public Optional<CardDto> findByStudentIdAndCardId(Long studentId, Long cardId) {
+        return Optional.empty();
+        //TODO
+        // return entityToDto.convert(service.findByStudentIdAndCardId(studentId, cardId));
+    }
 }
 

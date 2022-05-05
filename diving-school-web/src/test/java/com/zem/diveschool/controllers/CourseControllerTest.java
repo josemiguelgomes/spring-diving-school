@@ -132,8 +132,8 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void test_listSlotsCourse() throws Exception {
-       // TODO
+    public void test_listSlotCourses() throws Exception {
+        // TODO
         assertEquals(1, 0);
     }
 

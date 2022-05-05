@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -129,6 +130,18 @@ public class SlotLanguageControllerTest {
                 .andExpect(view().name("redirect:/slotLanguages"));
 
         verify(slotLanguageDtoService, times(1)).deleteById(anyLong());
+    }
+
+    @Test
+    public void test_listSlotSlotLanguages() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+
+    @Test
+    public void test_showSlotSlotLanguage() throws Exception {
+        // TODO
+        assertEquals(1, 0);
     }
 
 }

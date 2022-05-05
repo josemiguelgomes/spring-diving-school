@@ -7,6 +7,7 @@ import com.zem.diveschool.persistence.services.CourseService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -48,6 +49,20 @@ public class CourseDtoServiceImpl extends AbstractDtoServiceImpl<CourseDto, Long
     @Override
     public Optional<CourseDto> findByName(String name) {
         return entityToDto.convert(service.findByName(name));
+    }
+
+    @Override
+    @Transactional
+    public Set<CourseDto> findBySlotId(Long slotId) {
+        // TODO
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public Optional<CourseDto> findBySlotIdAndCourseId(Long slotId, Long courseId) {
+        // TODO
+        return Optional.empty();
     }
 }
 

@@ -134,26 +134,15 @@ public class InstructorControllerTest {
     }
 
     @Test
-    public void test_listSlotsInstructor() throws Exception {
+    public void test_listSlotInstructors() throws Exception {
         // TODO
         assertEquals(1, 0);
     }
 
     @Test
-    public void test_showSlotInstructor() throws Exception {
+    public void show_SlotInstructor() throws Exception {
         // TODO
         assertEquals(1, 0);
     }
 
-    @Test
-    public void test_listLocationsIntructor() throws Exception {
-        // TODO
-        assertEquals(1, 0);
-    }
-
-    @Test
-    public void test_showLocationInstructor() throws Exception {
-        // TODO
-        assertEquals(1, 0);
-    }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -46,10 +47,53 @@ public class SlotDtoServiceImpl extends AbstractDtoServiceImpl<SlotDto, Long, Sl
         return super.saveAll(dtos);
     }
 
+/*
     @Override
     @Transactional
     public Set<SlotDto> findByStudentID(Long id) {
         return entityToDto.convert(service.findByStudentID(id));
+    }
+*/
+    @Override
+    @Transactional
+    public Set<SlotDto> findByCourseId(Long courseId) {
+        // TODO
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public Optional<SlotDto> findByCourseIdAndSlotId(Long courseId, Long slotId) {
+        // TODO
+        return Optional.empty();
+    }
+
+    @Override
+    @Transactional
+    public Set<SlotDto> findByInstructorId(Long instructorId) {
+        // TODO
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public Optional<SlotDto> findByInstructorIdAndSlotId(Long instructorID, Long slotId) {
+        // TODO
+        return Optional.empty();
+    }
+
+    @Override
+    @Transactional
+    public Set<SlotDto> findByStudentId(Long studentId) {
+        // TODO
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public Optional<SlotDto> findByStudentIdAndSlotId(Long studentId, Long slotId) {
+        // TODO
+        return Optional.empty();
     }
 }
 

@@ -56,21 +56,22 @@ public class CourseController {
 
     /* --- */
 
-    @GetMapping("/courses/{courseId}/slots")
-    public String listSlotsCourse(@PathVariable String courseId, Model model){
-        log.debug("Getting slots list for course id: " + courseId);
+    @GetMapping("/slots/{slotId}/courses")
+    public String listSlotCourses(@PathVariable String slotId, Model model){
+        log.debug("Getting courses list for slot id: " + slotId);
 
         // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("course", courseDtoService.findById(Long.valueOf(courseId)));
-        return "courses/slots/list";
+        model.addAttribute("courses", courseDtoService.findBySlotId(Long.valueOf(slotId)));
+        return "slots/courses/list";
     }
 
-    @GetMapping("/courses/{courseId}/slots/{slotId}/show")
-    public String showSlotCourse(@PathVariable String courseId, @PathVariable String slotId, Model model){
-        log.debug("Getting slot id " + slotId + " for course id: " + courseId);
+    @GetMapping("/slots/{slotIdId}/courses/{courseId}/show")
+    public String showSlotCourse(@PathVariable String slotId, @PathVariable String courseId, Model model){
+        log.debug("Getting course id " + courseId + " for slot id: " + slotId);
 
         // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("course", courseDtoService.findById(Long.valueOf(slotId)));
-        return "courses/slots/show";
+        model.addAttribute("course", courseDtoService.findBySlotIdAndCourseId(Long.valueOf(slotId),
+                 Long.valueOf(courseId)));
+        return "slots/courses/show";
     }
 }

@@ -132,26 +132,39 @@ public class LocationControllerTest {
     }
 
     @Test
-    public void test_listSlotsInstructor() throws Exception {
+    public void test_listInstructorLocations() throws Exception {
         // TODO
         assertEquals(1, 0);
     }
 
     @Test
-    public void test_showSlotInstructor() throws Exception {
+    public void test_howInstructorLocation() throws Exception {
         // TODO
         assertEquals(1, 0);
     }
 
     @Test
-    public void test_listLocationsIntructor() throws Exception {
+    public void test_listSlotLocations() throws Exception {
         // TODO
         assertEquals(1, 0);
     }
 
     @Test
-    public void test_showLocationInstructor() throws Exception {
+    public void test_showSlotLocation() throws Exception {
         // TODO
         assertEquals(1, 0);
     }
+
+    @Test
+    public void test_listStudentLocations() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+
+    @Test
+    public void test_showStudentLocation() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+
  }

@@ -131,33 +131,8 @@ public class StudentControllerTest {
         verify(studentDtoService, times(1)).deleteById(anyLong());
     }
 
-
     @Test
-    public void test_listCardsStudent() throws Exception {
-        // TODO
-        assertEquals(1, 0);
-    }
-
-    @Test
-    public void test_showCardStudent() throws Exception {
-        // TODO
-        assertEquals(1, 0);
-    }
-
-    @Test
-    public void test_listLocationsStudent() throws Exception {
-        // TODO
-        assertEquals(1, 0);
-    }
-
-    @Test
-    public void test_showLocationStudent() throws Exception {
-        // TODO
-        assertEquals(1, 0);
-    }
-
-    @Test
-    public void test_listSlotsStudent() throws Exception {
+    public void test_listSlotStudents() throws Exception {
         // TODO
         assertEquals(1, 0);
     }
@@ -167,4 +142,5 @@ public class StudentControllerTest {
         // TODO
         assertEquals(1, 0);
     }
+
 }

@@ -33,7 +33,7 @@ public class IndexControllerTest {
     }
 
     @Test
-    public void getIndexPage() throws Exception {
+    public void test_getIndexPage() throws Exception {
         //given
 
         //when
@@ -44,7 +44,7 @@ public class IndexControllerTest {
     }
 
     @Test
-    public void oupsHandler() throws Exception {
+    public void test_oupsHandler() throws Exception {
         //given
 
         //when
