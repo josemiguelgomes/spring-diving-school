@@ -210,7 +210,7 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
     private Set<Slot> getSlots() throws ParseException {
         Set<Slot> slots = new HashSet<>(2);
 
-        slots.add(Slot.builder()
+        Slot slot1 =  Slot.builder()
                 .title("GUE Rec1")
                 .startDate(sdf.parse("2023-05-01"))
                 .endDate(sdf.parse("2023-05-07"))
@@ -223,23 +223,24 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
                         .country(Country.UNITED_KINGDOM)
                         .build())
                 .course(coursePointer.findByName("GUE Rec1").orElse(null))
-                .languages(new HashSet<>(Arrays.asList(
-                        (SlotLanguage.builder()
-                                .language(Language.ENGLISH)
-                                .build()),
-                        (SlotLanguage.builder()
-                                .language(Language.UKRANIAN)
-                                .build())
-                )))
+                .languages(new HashSet<>())
                 .instructors(new HashSet<>(Arrays.asList(
                         instructorPointer.findByFirstName("Jose").orElse(null),
-                        instructorPointer.findByFirstName("Antonio").orElse(null),
-                        instructorPointer.findByFirstName("Grody").orElse(null)
+                        instructorPointer.findByFirstName("Cruzeta").orElse(null),
+                        instructorPointer.findByFirstName("Pinhada").orElse(null)
                 )))
-                .build()
-        );
+                .build();
+        slot1.getLanguages().add(SlotLanguage.builder()
+                               .language(Language.ENGLISH)
+                               .slot(slot1)
+                               .build());
+        slot1.getLanguages().add(SlotLanguage.builder()
+                               .language(Language.UKRANIAN)
+                               .slot(slot1)
+                               .build());
+        slots.add(slot1);
 
-        slots.add(Slot.builder()
+        Slot slot2 = Slot.builder()
                 .title("GUE Fundamentals")
                 .startDate(sdf.parse("2024-02-05"))
                 .endDate(sdf.parse("2024-03-07"))
@@ -252,20 +253,21 @@ public class DataLoaderByService implements ApplicationListener<ContextRefreshed
                         .country(Country.PORTUGAL)
                         .build())
                 .course(coursePointer.findByName("GUE Fundamentals").orElse(null))
-                .languages(new HashSet<>(Arrays.asList(
-                        (SlotLanguage.builder()
-                                .language(Language.ENGLISH)
-                                .build()),
-                        (SlotLanguage.builder()
-                                .language(Language.PORTUGUESE)
-                                .build())
-                )))
+                .languages(new HashSet<>())
                 .instructors(new HashSet<>(Arrays.asList(
-                        instructorPointer.findByFirstName("Cruzeta").orElse(null),
+                        instructorPointer.findByFirstName("Jose").orElse(null),
                         instructorPointer.findByFirstName("").orElse(null)
                 )))
-                .build()
-        );
+                .build();
+        slot2.getLanguages().add(SlotLanguage.builder()
+                .language(Language.ENGLISH)
+                .slot(slot2)
+                .build());
+        slot2.getLanguages().add(SlotLanguage.builder()
+                .language(Language.PORTUGUESE)
+                .slot(slot2)
+                .build());
+        slots.add(slot2);
 
         //
         return slots;

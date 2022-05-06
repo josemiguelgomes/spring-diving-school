@@ -6,7 +6,7 @@
 </head>
 <body>
 <!--/*@thymesVar id="slot" type="com.zem.diveschool.dto.SlotDto"*/-->
-<h2>List of Course Slots</h2>
+<h2>Course/Slots</h2>
 <table id="slots" class="table table-striped">
    <div class="table-responsive" th:if="${not #lists.isEmpty(course.slots)}">
        <table class="table table-hover ">
@@ -29,7 +29,7 @@
               <td th:text="${slot.endDate}"></td>
               <td><a href="#" th:href="@{'/courses/' + ${course.id} + '/slots/' + ${slot.id} + '/show'}">View</a></td>
               <td><a href="#" th:href="@{'/courses/' + ${course.id} + '/slots/' + ${slot.id} + '/show'}">Update</a></td>
-              <td><a href="#" th:href="@{'/courses/' + ${course.id} + '/slots/' + ${slot.id} + '/show'}}">Delete</a></td>
+              <td><a href="#" th:href="@{'/courses/' + ${course.id} + '/slots/' + ${slot.id} + '/show'}">Delete</a></td>
            </tr>
        </table>
    </div>

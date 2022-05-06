@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'slots')}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of Slots</title>
+</head>
+<body>
+<!--/*@thymesVar id="slot" type="com.zem.diveschool.persistence.model.Slot"*/-->
+<h2>Slots</h2>
+<h3><a href="#" th:href="@{'/slots/new'}">New</a></h3>
+
+<table id="slots" class="table table-striped">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Status</th>
+        <th>Show</th>
+        <th>Update</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="slot : ${slots}">
+        <td th:text="${slot.title}"></td>
+        <td th:text="${slot.startDate}"></td>
+        <td th:text="${slot.endDate}"></td>
+        <td th:text="${slot.status}"></td>
+        <td><a href="#" th:href="@{'/slots/' + ${slot.id} + '/show'}">Show</a></td>
+        <td><a href="#" th:href="@{'/slots/' + ${slot.id} + '/update'}">Update</a></td>
+        <td><a href="#" th:href="@{'/slots/' + ${slot.id} + '/delete'}">Delete</a></td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<a th:href="@{/}"> Back Homepage</a>
+</body>
+</html>
