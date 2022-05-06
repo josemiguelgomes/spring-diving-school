@@ -2,10 +2,15 @@ package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.data.InstructorDtoService;
 import com.zem.diveschool.dto.InstructorDto;
+import com.zem.diveschool.dto.LocationDto;
+import com.zem.diveschool.dto.SlotDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Controller
@@ -56,23 +61,64 @@ public class InstructorController {
 
     /* --- */
 
-    @GetMapping("/slots/{slotId}/instructors")
-    public String listSlotInstructors(@PathVariable String slotId, Model model){
-        log.debug("Getting instructors list for slot id: " + slotId);
-
-        // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("instructors", instructorDtoService.findBySlotId(Long.valueOf(slotId)));
-        return "slots/instructors/list";
+    @RequestMapping("/instructors/find")
+    public String findInstructors(Model model) {
+        model.addAttribute("instructors", instructorDtoService.findAll());
+        return "instructors/find";
     }
 
-    @GetMapping("/slots/{slotIdId}/instructors/{instructorId}/show")
-    public String showSlotInstructor(@PathVariable String slotId, @PathVariable String instructorId, Model model){
-        log.debug("Getting instructor id " + instructorId + " for slot id: " + slotId);
+    /* --- */
+
+    @GetMapping("/instructors/{instructorId}/locations")
+    public String listInstructorLocations(@PathVariable String instructorId, Model model){
+        log.debug("Getting locations list for instructor id: " + instructorId);
+
+        InstructorDto instructorDto = instructorDtoService.findById(Long.valueOf(instructorId));
+        Set<LocationDto> locationsDto = instructorDtoService.findLocationsByInstructorId(Long.valueOf(instructorId));
 
         // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("instructor", instructorDtoService.findBySlotIdAndInstructorId(Long.valueOf(slotId),
-                Long.valueOf(instructorId)));
-        return "slots/instructors/show";
+        model.addAttribute("locations", locationsDto);
+        model.addAttribute("instructor", instructorDto);
+        return "instructors/locations/list";
     }
 
+    @GetMapping("/instructors/{instructorId}/locations/{locationId}/show")
+    public String showInstructorLocation(@PathVariable String instructorId, @PathVariable String locationId,
+                                         Model model){
+        log.debug("Getting location id " + locationId + " for instructor id: " + instructorId);
+
+        InstructorDto instructorDto = instructorDtoService.findById(Long.valueOf(instructorId));
+        Optional<LocationDto> locationDto =
+                instructorDtoService.findByInstructorIdAndLocationId(Long.valueOf(instructorId),
+                        Long.valueOf(locationId));
+
+        model.addAttribute("card", locationDto.get());
+        model.addAttribute("instructor", instructorDto);
+        return "instructors/locations/show";
+    }
+
+    @GetMapping("/instructors/{instructorId}/slots")
+    public String listInstructorSlots(@PathVariable String instructorId, Model model){
+        log.debug("Getting slots list for instructor id: " + instructorId);
+
+        InstructorDto instructorDto = instructorDtoService.findById(Long.valueOf(instructorId));
+        Set<SlotDto> slotsDto = instructorDtoService.findSlotsByInstructorId(Long.valueOf(instructorId));
+
+        // use dto to avoid lazy load errors in Thymeleaf.
+        model.addAttribute("slots", slotsDto);
+        model.addAttribute("instructor", instructorDto);
+        return "instructors/slots/list";
+    }
+
+    @GetMapping("/instructors/{instructorId}/slots/{slotId}/show")
+    public String showInstructorSlot(@PathVariable String instructorId, @PathVariable String slotId, Model model){
+        log.debug("Getting slot id " + slotId + " for instructor id: " + instructorId);
+
+        InstructorDto instructorDto = instructorDtoService.findById(Long.valueOf(instructorId));
+        Optional<SlotDto> slotDto = instructorDtoService.findByInstructorIdAndSlotId(Long.valueOf(instructorId),
+                Long.valueOf(slotId));
+        model.addAttribute("slot", slotDto.get());
+        model.addAttribute("instructor", instructorDto);
+        return "instructors/slots/show";
+    }
 }

@@ -1,6 +1,5 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.data.CourseDtoService;
 import com.zem.diveschool.data.SlotDtoService;
 import com.zem.diveschool.dto.SlotDto;
 import org.junit.Before;
@@ -133,39 +132,50 @@ public class SlotControllerTest {
     }
 
     @Test
-    public void test_listCourseSlots() throws Exception {
+    public void test_listSlotCourses() throws Exception {
         // TODO
         assertEquals(1, 0);
     }
 
     @Test
-    public void test_showCourseSlot() throws Exception {
+    public void test_showSlotCourse() throws Exception {
         // TODO
         assertEquals(1, 0);
     }
 
     @Test
-    public void test_listInstructorSlots() throws Exception {
+    public void test_listSlotInstructors() throws Exception {
         // TODO
         assertEquals(1, 0);
     }
 
     @Test
-    public void test_showInstructorSlot() throws Exception {
+    public void test_showSlotInstructor() throws Exception {
         // TODO
         assertEquals(1, 0);
     }
 
     @Test
-    public void test_listStudentSlots() throws Exception {
+    public void list_listSlotSlotLanguages() throws Exception {
         // TODO
         assertEquals(1, 0);
     }
 
     @Test
-    public void test_showStudentSlot() throws Exception {
+    public void test_showSlotSlotLanguage() throws Exception {
         // TODO
         assertEquals(1, 0);
     }
 
+    @Test
+    public void test_listSlotStudents() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+
+    @Test
+    public void test_showSlotStudent() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
 }

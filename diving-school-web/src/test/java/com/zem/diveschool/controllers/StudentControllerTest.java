@@ -132,15 +132,38 @@ public class StudentControllerTest {
     }
 
     @Test
-    public void test_listSlotStudents() throws Exception {
+    public void test_listStudentCards() throws Exception {
         // TODO
         assertEquals(1, 0);
     }
 
     @Test
-    public void test_showSlotStudent() throws Exception {
+    public void test_showStudentCard() throws Exception {
         // TODO
         assertEquals(1, 0);
     }
 
+    @Test
+    public void test_listStudentLocations() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+
+    @Test
+    public void test_showStudentLocation() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+
+    @Test
+    public void test_listStudentSlots() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
+
+    @Test
+    public void test_showStudentSlot() throws Exception {
+        // TODO
+        assertEquals(1, 0);
+    }
 }

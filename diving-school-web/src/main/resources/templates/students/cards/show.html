@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'cards')}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Cards Detail</title>
+</head>
+<body>
+<div class="container">
+    <!--/*@thymesVar id="cards" type="java.util.Set<com.zem.diveschool.dto.CardDto>"*/-->
+    <h2>Card</h2>
+    <form action="#" th:action="@{/show}" th:object="${course}"  method="POST">
+        <div class="card-body">
+            <p class="mb-0"><strong class="pr-1">Course </strong><th th:text="${card.course}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Student Name </strong><th th:text="${card.studentName}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Start Date </strong><th th:text="${card.startDate}"></th></p>
+            <p class="mb-0"><strong class="pr-1">End Date </strong><th th:text="${card.endDate}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Country </strong><th th:text="${card.country}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Instructor Name </strong><th th:text="${card.instructorName}"></th></p>
+        </div>
+
+    </form>
+
+    <hr>
+    <a th:href="@{'/students/' + ${student.id} + '/show'}"> Back to Student</a>
+    <hr>
+    <a th:href="@{/students}"> Back to Students List</a>
+</div>
+
+</body>
+</html>

@@ -55,22 +55,7 @@ public class SlotLanguageController {
 
     /* --- */
 
-    @GetMapping("/slots/{slotId}/slotlanguages")
-    public String listSlotsSlotLanguage(@PathVariable String slotId, Model model){
-        log.debug("Getting slot languages list for slot id: " + slotId);
 
-        // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("slotlanguages", slotLanguageDtoService.findBySlotId(Long.valueOf(slotId)));
-        return "slots/slotlanguages/list";
-    }
+    /* --- */
 
-    @GetMapping("/slots/{slotIdId}/slotLanguages/{slotLanguageId}/show")
-    public String showSlotSlotLanguage(@PathVariable String slotId, @PathVariable String slotLanguageId, Model model){
-        log.debug("Getting slot language id " + slotLanguageId + " for slot id: " + slotId);
-
-        // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("slotlanguage", slotLanguageDtoService.findBySlotIdAndSlotLanguageId(Long.valueOf(slotId),
-                Long.valueOf(slotLanguageId)));
-        return "slots/slotLanguages/show";
-    }
 }

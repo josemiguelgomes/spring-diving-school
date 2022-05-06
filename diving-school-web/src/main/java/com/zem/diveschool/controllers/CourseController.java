@@ -2,10 +2,14 @@ package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.data.CourseDtoService;
 import com.zem.diveschool.dto.CourseDto;
+import com.zem.diveschool.dto.SlotDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Controller
@@ -56,22 +60,37 @@ public class CourseController {
 
     /* --- */
 
-    @GetMapping("/slots/{slotId}/courses")
-    public String listSlotCourses(@PathVariable String slotId, Model model){
-        log.debug("Getting courses list for slot id: " + slotId);
-
-        // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("courses", courseDtoService.findBySlotId(Long.valueOf(slotId)));
-        return "slots/courses/list";
+    @RequestMapping("/courses/find")
+    public String findCourses(Model model) {
+        model.addAttribute("courses", courseDtoService.findAll());
+        return "courses/find";
     }
 
-    @GetMapping("/slots/{slotIdId}/courses/{courseId}/show")
-    public String showSlotCourse(@PathVariable String slotId, @PathVariable String courseId, Model model){
-        log.debug("Getting course id " + courseId + " for slot id: " + slotId);
+    /* --- */
+
+    @GetMapping("/courses/{courseId}/slots")
+    public String listCourseSlots(@PathVariable String courseId, Model model){
+        log.debug("Getting slots list for course id: " + courseId);
+
+        CourseDto courseDto = courseDtoService.findById(Long.valueOf(courseId));
+        Set<SlotDto> slotsDto = courseDtoService.findSlotsByCourseId(Long.valueOf(courseId));
 
         // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("course", courseDtoService.findBySlotIdAndCourseId(Long.valueOf(slotId),
-                 Long.valueOf(courseId)));
-        return "slots/courses/show";
+        model.addAttribute("slots", slotsDto);
+        model.addAttribute("course", courseDto);
+        return "courses/slots/list";
+    }
+
+    @GetMapping("/courses/{courseId}/slots/{slotId}/show")
+    public String showCourseSlot(@PathVariable String courseId, @PathVariable String slotId, Model model){
+        log.debug("Getting slot id " + slotId + " for course id: " + courseId);
+
+        CourseDto courseDto = courseDtoService.findById(Long.valueOf(courseId));
+        Optional<SlotDto> slotDto = courseDtoService.findByCourseIdAndSlotId(Long.valueOf(courseId),
+                Long.valueOf(slotId));
+
+        model.addAttribute("slot", slotDto.get());
+        model.addAttribute("course", courseDto);
+        return "courses/slots/show";
     }
 }

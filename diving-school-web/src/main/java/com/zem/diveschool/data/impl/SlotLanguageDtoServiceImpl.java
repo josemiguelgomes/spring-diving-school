@@ -1,17 +1,13 @@
 package com.zem.diveschool.data.impl;
 
-import com.zem.diveschool.data.SlotDtoService;
 import com.zem.diveschool.data.SlotLanguageDtoService;
-import com.zem.diveschool.dto.SlotDto;
 import com.zem.diveschool.dto.SlotLanguageDto;
 import com.zem.diveschool.persistence.model.SlotLanguage;
 import com.zem.diveschool.persistence.services.SlotLanguageService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -46,20 +42,6 @@ public class SlotLanguageDtoServiceImpl extends AbstractDtoServiceImpl<SlotLangu
     @Override
     public <S extends SlotLanguageDto> List<S> saveAll(@NotNull Iterable<S> dtos) {
         return super.saveAll(dtos);
-    }
-
-    @Override
-    @Transactional
-    public Set<SlotLanguageDto> findBySlotId(Long slotId) {
-        // TODO
-        return null;
-    }
-
-    @Override
-    @Transactional
-    public Optional<SlotLanguageDto> findBySlotIdAndSlotLanguageId(Long slotId, Long languageId) {
-        // TODO
-        return Optional.empty();
     }
 }
 

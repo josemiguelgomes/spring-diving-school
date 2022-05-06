@@ -7,7 +7,6 @@ import com.zem.diveschool.persistence.services.CardService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -42,20 +41,6 @@ public class CardDtoServiceImpl extends AbstractDtoServiceImpl<CardDto, Long, Ca
     @Override
     public <S extends CardDto> List<S> saveAll(@NotNull Iterable<S> dtos) {
         return super.saveAll(dtos);
-    }
-
-    @Override
-    @Transactional
-    public Set<CardDto> findByStudentID(Long id) {
-        return entityToDto.convert(service.findByStudentID(id));
-    }
-
-    @Override
-    @Transactional
-    public Optional<CardDto> findByStudentIdAndCardId(Long studentId, Long cardId) {
-        return Optional.empty();
-        //TODO
-        // return entityToDto.convert(service.findByStudentIdAndCardId(studentId, cardId));
     }
 }
 

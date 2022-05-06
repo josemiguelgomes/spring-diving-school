@@ -2,15 +2,14 @@ package com.zem.diveschool.data.impl;
 
 import com.zem.diveschool.data.InstructorDtoService;
 import com.zem.diveschool.dto.InstructorDto;
+import com.zem.diveschool.dto.LocationDto;
+import com.zem.diveschool.dto.SlotDto;
 import com.zem.diveschool.persistence.model.Instructor;
-import com.zem.diveschool.persistence.model.Slot;
 import com.zem.diveschool.persistence.services.InstructorService;
-import com.zem.diveschool.persistence.services.SlotService;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -18,10 +17,6 @@ import java.util.Set;
 @Service
 public class InstructorDtoServiceImpl extends AbstractDtoServiceImpl<InstructorDto, Long, Instructor, InstructorService>
                                 implements InstructorDtoService {
-
-    @Autowired // TODO : this will not work !!!!!! create a constructor ????
-    SlotService slotService;
-
 
     @Override
     public Set<InstructorDto> findAll() {
@@ -54,27 +49,38 @@ public class InstructorDtoServiceImpl extends AbstractDtoServiceImpl<InstructorD
     }
 
     @Override
-    @Transactional
-    public Optional<InstructorDto> findByFirstName(String firstName) {
-        return entityToDto.convert(service.findByFirstName(firstName));
+    public Set<SlotDto> findSlotsByInstructorId(Long instructorId) {
+        InstructorDto instructorDto = entityToDto.convert(service.findById(instructorId));
+        return instructorDto.getSlots();
     }
 
     @Override
-    @Transactional
-    public Set<InstructorDto> findBySlotId(Long slotId) {
-        // TODO replace by a Optional<Slot>
-        Slot slot = slotService.findById(slotId);
-        if(slot == null) {
-            return null;
-        }
-        return entityToDto.convert(slot.getInstructors());
+    public Optional<SlotDto> findByInstructorIdAndSlotId(Long instructorId, Long slotId) {
+        InstructorDto instructorDto = entityToDto.convert(service.findById(instructorId));
+        return instructorDto.getSlots()
+                .stream()
+                .filter(p -> p.getId().equals(slotId))
+                .findFirst();
     }
 
     @Override
-    @Transactional
-    public Optional<InstructorDto> findBySlotIdAndInstructorId(Long slotId, Long instructorId) {
-        // TODO replace by an Optional
-        return Optional.of(entityToDto.convert(service.findById(instructorId)));
+    public Set<LocationDto> findLocationsByInstructorId(Long instructorId) {
+        InstructorDto instructorDto = entityToDto.convert(service.findById(instructorId));
+        // TODO #93
+        LocationDto locationDto = instructorDto.getHomeAddress();
+        Set<LocationDto> locationsDto = new HashSet<>();
+        locationsDto.add(locationDto);
+        return locationsDto;
+    }
+
+    @Override
+    public Optional<LocationDto> findByInstructorIdAndLocationId(Long instructorId, Long locationId) {
+        InstructorDto instructorDto = entityToDto.convert(service.findById(instructorId));
+        // TODO #93
+        return Optional.of(instructorDto.getHomeAddress())
+                .stream()
+                .filter(p -> p.getId().equals(locationId))
+                .findFirst();
     }
 }
 

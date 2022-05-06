@@ -13,7 +13,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -130,17 +129,4 @@ public class CardControllerTest {
 
         verify(cardDtoService, times(1)).deleteById(anyLong());
     }
-
-    @Test
-    public void test_listStudentCards() throws Exception {
-        // TODO
-        assertEquals(1, 0);
-    }
-
-    @Test
-    public void test_showStudentCard() throws Exception {
-        // TODO
-        assertEquals(1, 0);
-    }
-
 }

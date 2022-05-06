@@ -56,23 +56,9 @@ public class CardController {
         return "redirect:/cards";
     }
 
-    @GetMapping("/students/{studentId}/cards")
-    public String listStudentCards(@PathVariable String studentId, Model model){
-        log.debug("Getting cards list for student id: " + studentId);
+    /* ---- */
 
-        // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("cards", cardDtoService.findByStudentID(Long.valueOf(studentId)));
-        return "students/cards/list";
-    }
 
-    @GetMapping("/students/{studentId}/cards/{cardId}/show")
-    public String showStudentCard(@PathVariable String studentId, @PathVariable String cardId, Model model){
-        log.debug("Getting card id " + cardId + " for student id: " + studentId);
-
-        // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("card", cardDtoService.findByStudentIdAndCardId(Long.valueOf(studentId),
-                Long.valueOf(studentId)));
-        return "students/cards/show";
-    }
+    /* ---- */
 
 }

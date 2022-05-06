@@ -130,41 +130,4 @@ public class LocationControllerTest {
 
         verify(locationDtoService, times(1)).deleteById(anyLong());
     }
-
-    @Test
-    public void test_listInstructorLocations() throws Exception {
-        // TODO
-        assertEquals(1, 0);
-    }
-
-    @Test
-    public void test_howInstructorLocation() throws Exception {
-        // TODO
-        assertEquals(1, 0);
-    }
-
-    @Test
-    public void test_listSlotLocations() throws Exception {
-        // TODO
-        assertEquals(1, 0);
-    }
-
-    @Test
-    public void test_showSlotLocation() throws Exception {
-        // TODO
-        assertEquals(1, 0);
-    }
-
-    @Test
-    public void test_listStudentLocations() throws Exception {
-        // TODO
-        assertEquals(1, 0);
-    }
-
-    @Test
-    public void test_showStudentLocation() throws Exception {
-        // TODO
-        assertEquals(1, 0);
-    }
-
  }

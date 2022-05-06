@@ -1,22 +1,22 @@
 package com.zem.diveschool.data;
 
-import com.zem.diveschool.dto.SlotDto;
+import com.zem.diveschool.dto.*;
 import com.zem.diveschool.persistence.services.CrudService;
 
 import java.util.Optional;
 import java.util.Set;
 
 public interface SlotDtoService extends CrudService<SlotDto, Long> {
+    Set<CourseDto> findCoursesBySlotId(Long slotId);
+    Optional<CourseDto> findBySlotIdAndCourseId(Long slotId, Long courseId);
 
-    Set<SlotDto> findByCourseId(Long courseId);
+    Set<InstructorDto> findInstructorsBySlotId(Long slotId);
 
-    Optional<SlotDto> findByCourseIdAndSlotId(Long courseId, Long slotId);
+    Optional<InstructorDto> findBySlotIdAndInstructorId(Long slotId, Long instructorId);
 
-    Set<SlotDto> findByInstructorId(Long instructorId);
+    Set<SlotLanguageDto> findLanguagesBySlotId(Long slotId);
+    Optional<SlotLanguageDto> findBySlotIdAndSlotLanguageId(Long slotId, Long slotLanguageId);
 
-    Optional<SlotDto> findByInstructorIdAndSlotId(Long instructorID, Long slotId);
-
-    Set<SlotDto> findByStudentId(Long studentId);
-
-    Optional<SlotDto> findByStudentIdAndSlotId(Long studentId, Long slotId);
+    Set<StudentDto> findStudentsBySlotId(Long slotId);
+    Optional<StudentDto> findBySlotIdAndStudentId(Long slotId, Long studentId);
 }

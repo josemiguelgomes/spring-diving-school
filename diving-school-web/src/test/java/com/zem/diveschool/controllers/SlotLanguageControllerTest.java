@@ -131,17 +131,4 @@ public class SlotLanguageControllerTest {
 
         verify(slotLanguageDtoService, times(1)).deleteById(anyLong());
     }
-
-    @Test
-    public void test_listSlotSlotLanguages() throws Exception {
-        // TODO
-        assertEquals(1, 0);
-    }
-
-    @Test
-    public void test_showSlotSlotLanguage() throws Exception {
-        // TODO
-        assertEquals(1, 0);
-    }
-
 }

@@ -132,13 +132,13 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void test_listSlotCourses() throws Exception {
+    public void test_listCourseSlots() throws Exception {
         // TODO
         assertEquals(1, 0);
     }
 
     @Test
-    public void test_showSlotCourse() throws Exception {
+    public void test_showCourseSlot() throws Exception {
         // TODO
         assertEquals(1, 0);
     }

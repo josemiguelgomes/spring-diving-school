@@ -8,7 +8,4 @@ import java.util.Set;
 
 public interface SlotLanguageDtoService extends CrudService<SlotLanguageDto, Long> {
 
-    Set<SlotLanguageDto> findBySlotId(Long slotId);
-
-    Optional<SlotLanguageDto> findBySlotIdAndSlotLanguageId(Long slotId, Long languageId);
 }

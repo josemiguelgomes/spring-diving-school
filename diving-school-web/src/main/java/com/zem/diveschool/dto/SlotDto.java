@@ -21,13 +21,13 @@ public class SlotDto extends GenericDto<SlotDto> {
     private String endDate;
     private SlotStatus status;
 
-    private Course course;
+    private CourseDto course;
     private Set<SlotLanguageDto> languages = new HashSet<>();
     private Set<StudentDto> students = new HashSet<>();
     private Set<InstructorDto> instructors = new HashSet<>();
 
     @Builder
-    public SlotDto(Long id, String title, String startDate, String endDate, SlotStatus status, Course course,
+    public SlotDto(Long id, String title, String startDate, String endDate, SlotStatus status, CourseDto course,
                    Set<SlotLanguageDto> languages, Set<StudentDto> students, Set<InstructorDto> instructors) {
         super(id);
         this.title = title;

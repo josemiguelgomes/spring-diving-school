@@ -1,6 +1,5 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.data.CardDtoService;
 import com.zem.diveschool.data.StudentDtoService;
 import com.zem.diveschool.dto.CardDto;
 import com.zem.diveschool.dto.SlotDto;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
@@ -60,25 +60,92 @@ public class StudentController {
         return "redirect:/students";
     }
 
+    /* --- */
+
+    @RequestMapping("/students/find")
+    public String findStudents(Model model) {
+        model.addAttribute("students", studentDtoService.findAll());
+        return "students/find";
+    }
 
     /* --- */
 
-    @GetMapping("/slots/{slotId}/students")
-    public String listSlotStudent(@PathVariable String slotId, Model model){
-        log.debug("Getting students list for slot id: " + slotId);
+    @GetMapping("/students/{studentId}/cards")
+    public String listStudentCards(@PathVariable String studentId, Model model){
+        log.debug("Getting cards list for student id: " + studentId);
+
+        StudentDto studentDto = studentDtoService.findById(Long.valueOf(studentId));
+        Set<CardDto> cardsDto = studentDtoService.findCardsByStudentId(Long.valueOf(studentId));
 
         // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("students", studentDtoService.findBySlotId(Long.valueOf(slotId)));
-        return "slots/students/list";
+        model.addAttribute("cards", cardsDto);
+        model.addAttribute("student", studentDto);
+
+        return "students/cards/list";
     }
 
-    @GetMapping("/slots/{slotIdId}/students/{studentId}/show")
-    public String showSlotStudent(@PathVariable String slotId, @PathVariable String studentId, Model model){
-        log.debug("Getting student id " + studentId + " for slot id: " + slotId);
+    @GetMapping("/students/{studentId}/cards/{cardId}/show")
+    public String showStudentCard(@PathVariable String studentId, @PathVariable String cardId, Model model){
+        log.debug("Getting card id " + cardId + " for student id: " + studentId);
+
+        StudentDto studentDto = studentDtoService.findById(Long.valueOf(studentId));
+        Optional<CardDto> cardDto = studentDtoService.findByStudentIdAndCardId(Long.valueOf(studentId),
+                Long.valueOf(cardId));
+
+        model.addAttribute("card", cardDto.get());
+        model.addAttribute("student", studentDto);
+        return "students/cards/show";
+    }
+
+    @GetMapping("/students/{studentId}/locations")
+    public String listStudentLocations(@PathVariable String studentId, Model model){
+        log.debug("Getting location list for student id: " + studentId);
+
+        StudentDto studentDto = studentDtoService.findById(Long.valueOf(studentId));
+        Set<LocationDto> locationsDto = studentDtoService.findLocationsByStudentId(Long.valueOf(studentId));
 
         // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("student", studentDtoService.findBySlotIdAndStudentId(Long.valueOf(slotId),
-                Long.valueOf(studentId)));
-        return "slots/students/show";
+        model.addAttribute("locations", locationsDto);
+        model.addAttribute("student", studentDto);
+        return "students/locations/list";
+    }
+
+    @GetMapping("/students/{studentId}/locations/{locationId}/show")
+    public String showStudentLocation(@PathVariable String studentId, @PathVariable String locationId, Model model){
+        log.debug("Getting location id " + locationId + " for student id: " + studentId);
+
+        StudentDto studentDto = studentDtoService.findById(Long.valueOf(studentId));
+        Optional<LocationDto> locationDto = studentDtoService.findByStudentIdAndLocationId(Long.valueOf(studentId),
+                Long.valueOf(locationId));
+
+        model.addAttribute("location", locationDto.get());
+        model.addAttribute("student", studentDto);
+        return "students/locations/show";
+    }
+
+    @GetMapping("/students/{studentId}/slots")
+    public String listStudentSlots(@PathVariable String studentId, Model model){
+        log.debug("Getting slots list for student id: " + studentId);
+
+        StudentDto studentDto = studentDtoService.findById(Long.valueOf(studentId));
+        Set<SlotDto> slotsDto = studentDtoService.findSlotsByStudentId(Long.valueOf(studentId));
+
+        // use dto to avoid lazy load errors in Thymeleaf.
+        model.addAttribute("slots", slotsDto);
+        model.addAttribute("student", studentDto);
+        return "students/slots/list";
+    }
+
+    @GetMapping("/students/{studentId}/slots/{slotId}/show")
+    public String showStudentSlot(@PathVariable String studentId, @PathVariable String slotId, Model model){
+        log.debug("Getting slot id " + slotId + " for student id: " + studentId);
+
+        StudentDto studentDto = studentDtoService.findById(Long.valueOf(studentId));
+        Optional<SlotDto> slotDto = studentDtoService.findByStudentIdAndSlotId(Long.valueOf(studentId),
+                Long.valueOf(slotId));
+
+        model.addAttribute("slot", slotDto.get());
+        model.addAttribute("student", studentDto);
+        return "students/slots/show";
     }
 }

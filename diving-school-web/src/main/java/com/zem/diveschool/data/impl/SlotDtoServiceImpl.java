@@ -1,13 +1,13 @@
 package com.zem.diveschool.data.impl;
 
 import com.zem.diveschool.data.SlotDtoService;
-import com.zem.diveschool.dto.SlotDto;
+import com.zem.diveschool.dto.*;
 import com.zem.diveschool.persistence.model.Slot;
 import com.zem.diveschool.persistence.services.SlotService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -47,53 +47,69 @@ public class SlotDtoServiceImpl extends AbstractDtoServiceImpl<SlotDto, Long, Sl
         return super.saveAll(dtos);
     }
 
-/*
     @Override
-    @Transactional
-    public Set<SlotDto> findByStudentID(Long id) {
-        return entityToDto.convert(service.findByStudentID(id));
-    }
-*/
-    @Override
-    @Transactional
-    public Set<SlotDto> findByCourseId(Long courseId) {
-        // TODO
-        return null;
+    public Set<CourseDto> findCoursesBySlotId(Long slotId) {
+        SlotDto slotDto = entityToDto.convert(service.findById(slotId));
+        // TODO #93
+        Set<CourseDto> coursesDto = new HashSet<>();
+        coursesDto.add(slotDto.getCourse());
+        return coursesDto;
     }
 
     @Override
-    @Transactional
-    public Optional<SlotDto> findByCourseIdAndSlotId(Long courseId, Long slotId) {
-        // TODO
-        return Optional.empty();
+    public Optional<CourseDto> findBySlotIdAndCourseId(Long slotId, Long courseId) {
+        SlotDto slotDto = entityToDto.convert(service.findById(slotId));
+        // TODO #93
+        Optional<CourseDto> courseDto = Optional.of(slotDto.getCourse());
+        return courseDto
+                .stream()
+                .filter(p -> p.getId().equals(courseId))
+                .findFirst();
     }
 
     @Override
-    @Transactional
-    public Set<SlotDto> findByInstructorId(Long instructorId) {
-        // TODO
-        return null;
+    public Set<InstructorDto> findInstructorsBySlotId(Long slotId) {
+        SlotDto slotDto = entityToDto.convert(service.findById(slotId));
+        return slotDto.getInstructors();
     }
 
     @Override
-    @Transactional
-    public Optional<SlotDto> findByInstructorIdAndSlotId(Long instructorID, Long slotId) {
-        // TODO
-        return Optional.empty();
+    public Optional<InstructorDto> findBySlotIdAndInstructorId(Long slotId, Long instructorId) {
+        SlotDto slotDto = entityToDto.convert(service.findById(slotId));
+        return slotDto.getInstructors()
+                .stream()
+                .filter(p -> p.getId().equals(instructorId))
+                .findFirst();
     }
 
     @Override
-    @Transactional
-    public Set<SlotDto> findByStudentId(Long studentId) {
-        // TODO
-        return null;
+    public Set<SlotLanguageDto> findLanguagesBySlotId(Long slotId) {
+        SlotDto slotDto = entityToDto.convert(service.findById(slotId));
+        return slotDto.getLanguages();
     }
 
     @Override
-    @Transactional
-    public Optional<SlotDto> findByStudentIdAndSlotId(Long studentId, Long slotId) {
-        // TODO
-        return Optional.empty();
+    public Optional<SlotLanguageDto> findBySlotIdAndSlotLanguageId(Long slotId, Long slotLanguageId) {
+        SlotDto slotDto = entityToDto.convert(service.findById(slotId));
+        return slotDto.getLanguages()
+                .stream()
+                .filter(p -> p.getId().equals(slotLanguageId))
+                .findFirst();
+    }
+
+    @Override
+    public Set<StudentDto> findStudentsBySlotId(Long slotId) {
+        SlotDto slotDto = entityToDto.convert(service.findById(slotId));
+        return slotDto.getStudents();
+    }
+
+    @Override
+    public Optional<StudentDto> findBySlotIdAndStudentId(Long slotId, Long studentId) {
+        SlotDto slotDto = entityToDto.convert(service.findById(slotId));
+        return slotDto.getStudents()
+                .stream()
+                .filter(p -> p.getId().equals(studentId))
+                .findFirst();
     }
 }
 

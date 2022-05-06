@@ -7,9 +7,7 @@ import com.zem.diveschool.persistence.services.LocationService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -44,46 +42,6 @@ public class LocationDtoServiceImpl extends AbstractDtoServiceImpl<LocationDto, 
     @Override
     public <S extends LocationDto> List<S> saveAll(@NotNull Iterable<S> dtos) {
         return super.saveAll(dtos);
-    }
-
-    @Override
-    @Transactional
-    public Set<LocationDto> findByInstructorId(Long instructorId) {
-        // TODO
-        return null;
-    }
-
-    @Override
-    @Transactional
-    public Optional<LocationDto> findByInstructionAndLocationId(Long instructorId, Long locationId) {
-        // TODO
-        return Optional.empty();
-    }
-
-    @Override
-    @Transactional
-    public Set<LocationDto> findBySlotId(Long slotId) {
-        // TODO
-        return null;
-    }
-
-    @Override
-    @Transactional
-    public Optional<LocationDto> findBySlotIdAndLocationID(Long slotId, Long locationId) {
-        // TODO
-        return Optional.empty();
-    }
-
-    @Override
-    @Transactional
-    public Set<LocationDto> findByStudentId(Long studentId) {
-        return null;
-    }
-
-    @Override
-    @Transactional
-    public Optional<LocationDto> findByStudentIdAndLocationId(Long studentId, Long locationId) {
-        return Optional.empty();
     }
 }
 
