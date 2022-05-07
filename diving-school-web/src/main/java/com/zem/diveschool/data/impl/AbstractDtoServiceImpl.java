@@ -44,9 +44,7 @@ public abstract class AbstractDtoServiceImpl<T extends GenericDto, I extends Lon
         try {
             Method meth = service.getClass().getMethod("findById", parameterType);
             Optional<E> e = (Optional<E>) meth.invoke(service, id);
-            T t = entityToDto.convert(e.get());
-            return Optional.of(t);
-//          return Optional.of(entityToDto.convert((E) meth.invoke(service, id)));
+            return e.map(value -> entityToDto.convert(value));
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }

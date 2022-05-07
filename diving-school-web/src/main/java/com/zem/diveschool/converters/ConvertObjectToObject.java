@@ -8,11 +8,9 @@ public interface ConvertObjectToObject <F, T>{
     T convert(F f);
     Set<T> convert(Set <F> fs);
 
+    /* This code is noncompliant, we should not use Optional as parameter
     default Optional<T> convert(Optional<F> f) {
-        // TODO : clean this code
-         if(f.isEmpty()) {
-            return Optional.empty();
-        }
-        return Optional.of(convert(f.get()));
+        return f.isEmpty() ? Optional.empty() : Optional.of(convert(f.get()));
     }
+     */
 }
