@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -20,7 +21,7 @@ public class SlotLanguageDtoServiceImpl extends AbstractDtoServiceImpl<SlotLangu
     }
 
     @Override
-    public SlotLanguageDto findById(Long id) {
+    public Optional<SlotLanguageDto> findById(Long id) {
         return super.findById(id);
     }
 

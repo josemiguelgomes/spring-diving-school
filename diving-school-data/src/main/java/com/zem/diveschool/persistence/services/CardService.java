@@ -9,5 +9,4 @@ public interface CardService extends CrudService<Card, Long> {
 
     //
     Set<Card> findByStudentID(Long id);
-//    Optional<Card> findByStudentIdAndCardId(Long studentId, Long cardId);
 }

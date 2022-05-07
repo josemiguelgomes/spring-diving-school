@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -69,7 +70,7 @@ public class InstructorControllerTest {
         instructorDto.setId(1L);
 
         //when
-        when(instructorDtoService.findById(anyLong())).thenReturn(instructorDto);
+        when(instructorDtoService.findById(anyLong())).thenReturn(Optional.of(instructorDto));
 
         //then
         mockMvc.perform(get("/instructors/1/show"))
@@ -115,7 +116,7 @@ public class InstructorControllerTest {
         instructorDto.setId(2L);
 
         //when
-        when(instructorDtoService.findById(anyLong())).thenReturn(instructorDto);
+        when(instructorDtoService.findById(anyLong())).thenReturn(Optional.of(instructorDto));
 
         //then
         mockMvc.perform(get("/instructors/1/update"))

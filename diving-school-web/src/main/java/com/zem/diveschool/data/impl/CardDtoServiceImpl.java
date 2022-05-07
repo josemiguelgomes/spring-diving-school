@@ -19,7 +19,7 @@ public class CardDtoServiceImpl extends AbstractDtoServiceImpl<CardDto, Long, Ca
     }
 
     @Override
-    public CardDto findById(Long id) {
+    public Optional<CardDto> findById(Long id) {
         return super.findById(id);
     }
 

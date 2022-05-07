@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -67,7 +68,7 @@ public class SlotControllerTest {
         slotDto.setId(1L);
 
         //when
-        when(slotDtoService.findById(anyLong())).thenReturn(slotDto);
+        when(slotDtoService.findById(anyLong())).thenReturn(Optional.of(slotDto));
 
         //then
         mockMvc.perform(get("/slots/1/show"))
@@ -113,7 +114,7 @@ public class SlotControllerTest {
         slotDto.setId(2L);
 
         //when
-        when(slotDtoService.findById(anyLong())).thenReturn(slotDto);
+        when(slotDtoService.findById(anyLong())).thenReturn(Optional.of(slotDto));
 
         //then
         mockMvc.perform(get("/slots/1/update"))

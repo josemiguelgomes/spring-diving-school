@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -37,11 +38,13 @@ public class SlotServiceMapImpl extends AbstractServiceMapsImpl<Slot, Long>
     public Set<Slot> findAll() {
         return super.findAll();
     }
+
     @Override
     @Transactional
-    public Slot findById(Long id) {
+    public Optional<Slot> findById(Long id) {
         return  super.findById(id);
     }
+
     @Override
     @Transactional
     public Slot save(Slot object) {

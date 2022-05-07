@@ -9,10 +9,8 @@ import com.zem.diveschool.persistence.services.InstructorService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class InstructorDtoServiceImpl extends AbstractDtoServiceImpl<InstructorDto, Long, Instructor, InstructorService>
@@ -24,7 +22,7 @@ public class InstructorDtoServiceImpl extends AbstractDtoServiceImpl<InstructorD
     }
 
     @Override
-    public InstructorDto findById(Long id) {
+    public Optional<InstructorDto> findById(Long id) {
         return super.findById(id);
     }
 
@@ -50,14 +48,17 @@ public class InstructorDtoServiceImpl extends AbstractDtoServiceImpl<InstructorD
 
     @Override
     public Set<SlotDto> findSlotsByInstructorId(Long instructorId) {
-        InstructorDto instructorDto = entityToDto.convert(service.findById(instructorId));
-        return instructorDto.getSlots();
+        return service.findById(instructorId)
+                .stream()
+                .map(p -> entityToDto.convert(p))
+                .map(InstructorDto::getSlots)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
     }
 
     @Override
     public Optional<SlotDto> findByInstructorIdAndSlotId(Long instructorId, Long slotId) {
-        InstructorDto instructorDto = entityToDto.convert(service.findById(instructorId));
-        return instructorDto.getSlots()
+        return findSlotsByInstructorId(instructorId)
                 .stream()
                 .filter(p -> p.getId().equals(slotId))
                 .findFirst();
@@ -65,19 +66,17 @@ public class InstructorDtoServiceImpl extends AbstractDtoServiceImpl<InstructorD
 
     @Override
     public Set<LocationDto> findLocationsByInstructorId(Long instructorId) {
-        InstructorDto instructorDto = entityToDto.convert(service.findById(instructorId));
-        // TODO #93
-        LocationDto locationDto = instructorDto.getHomeAddress();
-        Set<LocationDto> locationsDto = new HashSet<>();
-        locationsDto.add(locationDto);
-        return locationsDto;
+        return service.findById(instructorId)
+                .stream()
+                .map(p -> entityToDto.convert(p))
+  //            .map(InstructorDto::getLocations) // TODO #93
+                .map(InstructorDto::getHomeAddress) // TODO #93
+                .collect(Collectors.toSet());
     }
 
     @Override
     public Optional<LocationDto> findByInstructorIdAndLocationId(Long instructorId, Long locationId) {
-        InstructorDto instructorDto = entityToDto.convert(service.findById(instructorId));
-        // TODO #93
-        return Optional.of(instructorDto.getHomeAddress())
+        return findLocationsByInstructorId(instructorId)
                 .stream()
                 .filter(p -> p.getId().equals(locationId))
                 .findFirst();

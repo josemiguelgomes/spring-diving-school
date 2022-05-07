@@ -7,6 +7,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public abstract class AbstractServiceSDJpaImpl<T extends BaseEntity, I extends Long, R extends CrudRepository<T, I>>
                                            implements CrudService<T, I>  {
@@ -22,8 +24,8 @@ public abstract class AbstractServiceSDJpaImpl<T extends BaseEntity, I extends L
         return objects;
     }
 
-    public T findById(I id) {
-        return objectRepository.findById(id).orElse(null);
+    public Optional<T> findById(I id) {
+        return objectRepository.findById(id);
     }
 
     @Transactional
@@ -48,7 +50,6 @@ public abstract class AbstractServiceSDJpaImpl<T extends BaseEntity, I extends L
         for (S object : objects) {
             result.add((S) save(object));
         }
-
         return result;
     }
 

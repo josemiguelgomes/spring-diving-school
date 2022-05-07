@@ -29,7 +29,7 @@ public class StudentServiceMapImpl extends AbstractServiceMapsImpl<Student, Long
 
     @Override
     @Transactional
-    public Student findById(Long id) {
+    public Optional<Student> findById(Long id) {
         return super.findById(id);
     }
 

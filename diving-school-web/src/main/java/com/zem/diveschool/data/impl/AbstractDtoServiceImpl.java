@@ -38,12 +38,15 @@ public abstract class AbstractDtoServiceImpl<T extends GenericDto, I extends Lon
         }
     }
 
-    T findById(I id) {
+    Optional<T> findById(I id) {
         Class[] parameterType = new Class[1];
         parameterType[0] = id.getClass();
         try {
             Method meth = service.getClass().getMethod("findById", parameterType);
-            return entityToDto.convert((E) meth.invoke(service, id));
+            Optional<E> e = (Optional<E>) meth.invoke(service, id);
+            T t = entityToDto.convert(e.get());
+            return Optional.of(t);
+//          return Optional.of(entityToDto.convert((E) meth.invoke(service, id)));
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
@@ -54,7 +57,10 @@ public abstract class AbstractDtoServiceImpl<T extends GenericDto, I extends Lon
         parameterType[0] = object.getClass();
         try {
             Method meth = service.getClass().getMethod("save", parameterType);
-            return entityToDto.convert((E) meth.invoke(service, dtoToEntity.convert((T) object)));
+            E e = dtoToEntity.convert((T) object);
+            E eSaved = (E) meth.invoke(service, e);
+            return entityToDto.convert(eSaved);
+//          return entityToDto.convert((E) meth.invoke(service, dtoToEntity.convert((T) object)));
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }

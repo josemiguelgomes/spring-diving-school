@@ -7,10 +7,9 @@ import com.zem.diveschool.persistence.services.SlotService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+
+import static java.util.stream.Collectors.toSet;
 
 @Service
 public class SlotDtoServiceImpl extends AbstractDtoServiceImpl<SlotDto, Long, Slot, SlotService>
@@ -23,7 +22,7 @@ public class SlotDtoServiceImpl extends AbstractDtoServiceImpl<SlotDto, Long, Sl
     }
 
     @Override
-    public SlotDto findById(Long id) {
+    public Optional<SlotDto> findById(Long id) {
         return super.findById(id);
     }
 
@@ -49,19 +48,17 @@ public class SlotDtoServiceImpl extends AbstractDtoServiceImpl<SlotDto, Long, Sl
 
     @Override
     public Set<CourseDto> findCoursesBySlotId(Long slotId) {
-        SlotDto slotDto = entityToDto.convert(service.findById(slotId));
-        // TODO #93
-        Set<CourseDto> coursesDto = new HashSet<>();
-        coursesDto.add(slotDto.getCourse());
-        return coursesDto;
+        return service.findById(slotId)
+                .stream()
+                .map(p -> entityToDto.convert(p))
+                //.map(SlotDto::getCourses) // TODO #93
+                .map(SlotDto::getCourse)// TODO #93
+                .collect(toSet());
     }
 
     @Override
     public Optional<CourseDto> findBySlotIdAndCourseId(Long slotId, Long courseId) {
-        SlotDto slotDto = entityToDto.convert(service.findById(slotId));
-        // TODO #93
-        Optional<CourseDto> courseDto = Optional.of(slotDto.getCourse());
-        return courseDto
+        return findCoursesBySlotId(slotId)
                 .stream()
                 .filter(p -> p.getId().equals(courseId))
                 .findFirst();
@@ -69,14 +66,17 @@ public class SlotDtoServiceImpl extends AbstractDtoServiceImpl<SlotDto, Long, Sl
 
     @Override
     public Set<InstructorDto> findInstructorsBySlotId(Long slotId) {
-        SlotDto slotDto = entityToDto.convert(service.findById(slotId));
-        return slotDto.getInstructors();
+        return service.findById(slotId)
+                .stream()
+                .map(p -> entityToDto.convert(p))
+                .map(SlotDto::getInstructors)
+                .flatMap(Collection::stream)
+                .collect(toSet());
     }
 
     @Override
     public Optional<InstructorDto> findBySlotIdAndInstructorId(Long slotId, Long instructorId) {
-        SlotDto slotDto = entityToDto.convert(service.findById(slotId));
-        return slotDto.getInstructors()
+        return findInstructorsBySlotId(slotId)
                 .stream()
                 .filter(p -> p.getId().equals(instructorId))
                 .findFirst();
@@ -84,14 +84,17 @@ public class SlotDtoServiceImpl extends AbstractDtoServiceImpl<SlotDto, Long, Sl
 
     @Override
     public Set<SlotLanguageDto> findLanguagesBySlotId(Long slotId) {
-        SlotDto slotDto = entityToDto.convert(service.findById(slotId));
-        return slotDto.getLanguages();
+        return service.findById(slotId)
+                .stream()
+                .map(p -> entityToDto.convert(p))
+                .map(SlotDto::getLanguages)
+                .flatMap(Collection::stream)
+                .collect(toSet());
     }
 
     @Override
     public Optional<SlotLanguageDto> findBySlotIdAndSlotLanguageId(Long slotId, Long slotLanguageId) {
-        SlotDto slotDto = entityToDto.convert(service.findById(slotId));
-        return slotDto.getLanguages()
+        return findLanguagesBySlotId(slotId)
                 .stream()
                 .filter(p -> p.getId().equals(slotLanguageId))
                 .findFirst();
@@ -99,14 +102,17 @@ public class SlotDtoServiceImpl extends AbstractDtoServiceImpl<SlotDto, Long, Sl
 
     @Override
     public Set<StudentDto> findStudentsBySlotId(Long slotId) {
-        SlotDto slotDto = entityToDto.convert(service.findById(slotId));
-        return slotDto.getStudents();
+        return service.findById(slotId)
+                .stream()
+                .map(p -> entityToDto.convert(p))
+                .map(p -> p.getStudents())
+                .flatMap(Collection::stream)
+                .collect(toSet());
     }
 
     @Override
     public Optional<StudentDto> findBySlotIdAndStudentId(Long slotId, Long studentId) {
-        SlotDto slotDto = entityToDto.convert(service.findById(slotId));
-        return slotDto.getStudents()
+        return findStudentsBySlotId(slotId)
                 .stream()
                 .filter(p -> p.getId().equals(studentId))
                 .findFirst();

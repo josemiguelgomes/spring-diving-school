@@ -48,7 +48,6 @@ public class CourseController {
     @PostMapping("courses")
     public String saveOrUpdate(@ModelAttribute CourseDto courseDto){
         CourseDto savedCourseDto = courseDtoService.save(courseDto);
-
         return "redirect:/courses/" + savedCourseDto.getId() + "/show";
     }
 
@@ -72,12 +71,12 @@ public class CourseController {
     public String listCourseSlots(@PathVariable String courseId, Model model){
         log.debug("Getting slots list for course id: " + courseId);
 
-        CourseDto courseDto = courseDtoService.findById(Long.valueOf(courseId));
+        Optional<CourseDto> courseDtoOptional = courseDtoService.findById(Long.valueOf(courseId));
         Set<SlotDto> slotsDto = courseDtoService.findSlotsByCourseId(Long.valueOf(courseId));
 
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("slots", slotsDto);
-        model.addAttribute("course", courseDto);
+        model.addAttribute("course", courseDtoOptional.orElse(null));
         return "courses/slots/list";
     }
 
@@ -85,12 +84,12 @@ public class CourseController {
     public String showCourseSlot(@PathVariable String courseId, @PathVariable String slotId, Model model){
         log.debug("Getting slot id " + slotId + " for course id: " + courseId);
 
-        CourseDto courseDto = courseDtoService.findById(Long.valueOf(courseId));
-        Optional<SlotDto> slotDto = courseDtoService.findByCourseIdAndSlotId(Long.valueOf(courseId),
-                Long.valueOf(slotId));
+        Optional<CourseDto> courseDtoOptional = courseDtoService.findById(Long.valueOf(courseId));
+        Optional<SlotDto> slotDtoOptional =
+                courseDtoService.findByCourseIdAndSlotId(Long.valueOf(courseId), Long.valueOf(slotId));
 
-        model.addAttribute("slot", slotDto.get());
-        model.addAttribute("course", courseDto);
+        model.addAttribute("slot", slotDtoOptional.orElse(null));
+        model.addAttribute("course", courseDtoOptional.orElse(null));
         return "courses/slots/show";
     }
 }

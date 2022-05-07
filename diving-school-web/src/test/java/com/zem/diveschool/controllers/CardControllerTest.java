@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.mockito.Mockito.*;
@@ -66,7 +67,7 @@ public class CardControllerTest {
         cardDto.setId(1L);
 
         //when
-        when(cardDtoService.findById(anyLong())).thenReturn(cardDto);
+        when(cardDtoService.findById(anyLong())).thenReturn(Optional.of(cardDto));
 
         //then
         mockMvc.perform(get("/cards/1/show"))
@@ -112,7 +113,7 @@ public class CardControllerTest {
         cardDto.setId(2L);
 
         //when
-        when(cardDtoService.findById(anyLong())).thenReturn(cardDto);
+        when(cardDtoService.findById(anyLong())).thenReturn(Optional.of(cardDto));
 
         //then
         mockMvc.perform(get("/cards/1/update"))

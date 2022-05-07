@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -68,7 +69,7 @@ public class SlotLanguageControllerTest {
         slotLanguageDto.setId(1L);
 
         //when
-        when(slotLanguageDtoService.findById(anyLong())).thenReturn(slotLanguageDto);
+        when(slotLanguageDtoService.findById(anyLong())).thenReturn(Optional.of(slotLanguageDto));
 
         //then
         mockMvc.perform(get("/slotLanguages/1/show"))
@@ -114,7 +115,7 @@ public class SlotLanguageControllerTest {
         slotLanguageDto.setId(2L);
 
         //when
-        when(slotLanguageDtoService.findById(anyLong())).thenReturn(slotLanguageDto);
+        when(slotLanguageDtoService.findById(anyLong())).thenReturn(Optional.of(slotLanguageDto));
 
         //then
         mockMvc.perform(get("/slotLanguages/1/update"))

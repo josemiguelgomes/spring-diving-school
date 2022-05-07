@@ -9,7 +9,8 @@ public interface ConvertObjectToObject <F, T>{
     Set<T> convert(Set <F> fs);
 
     default Optional<T> convert(Optional<F> f) {
-        if(f.isEmpty()) {
+        // TODO : clean this code
+         if(f.isEmpty()) {
             return Optional.empty();
         }
         return Optional.of(convert(f.get()));

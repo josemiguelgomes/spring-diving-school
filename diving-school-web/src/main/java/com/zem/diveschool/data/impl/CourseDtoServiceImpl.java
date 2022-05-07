@@ -8,9 +8,9 @@ import com.zem.diveschool.persistence.services.CourseService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+
+import static java.util.stream.Collectors.toSet;
 
 @Service
 public class CourseDtoServiceImpl extends AbstractDtoServiceImpl<CourseDto, Long, Course, CourseService>
@@ -22,7 +22,7 @@ public class CourseDtoServiceImpl extends AbstractDtoServiceImpl<CourseDto, Long
     }
 
     @Override
-    public CourseDto findById(Long id) {
+    public Optional<CourseDto> findById(Long id) {
         return super.findById(id);
     }
 
@@ -48,14 +48,17 @@ public class CourseDtoServiceImpl extends AbstractDtoServiceImpl<CourseDto, Long
 
     @Override
     public Set<SlotDto> findSlotsByCourseId(Long courseId) {
-        CourseDto courseDto = entityToDto.convert(service.findById(courseId));
-        return courseDto.getSlots();
+        return service.findById(courseId)
+                .stream()
+                .map(p -> entityToDto.convert(p))
+                .map(CourseDto::getSlots)
+                .flatMap(Collection::stream)
+                .collect(toSet());
     }
 
     @Override
     public Optional<SlotDto> findByCourseIdAndSlotId(Long courseId, Long slotId) {
-        CourseDto courseDto = entityToDto.convert(service.findById(courseId));
-        return courseDto.getSlots()
+        return findSlotsByCourseId(courseId)
                 .stream()
                 .filter(p -> p.getId().equals(slotId))
                 .findFirst();

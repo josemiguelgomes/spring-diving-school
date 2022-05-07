@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -20,7 +21,7 @@ public class LocationDtoServiceImpl extends AbstractDtoServiceImpl<LocationDto, 
     }
 
     @Override
-    public LocationDto findById(Long id) {
+    public Optional<LocationDto> findById(Long id) {
         return super.findById(id);
     }
 

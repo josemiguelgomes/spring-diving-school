@@ -26,7 +26,7 @@ public class InstructorServiceMapImpl extends AbstractServiceMapsImpl<Instructor
     }
     @Override
     @Transactional
-    public Instructor findById(Long id) {
+    public Optional<Instructor> findById(Long id) {
         return super.findById(id);
     }
 

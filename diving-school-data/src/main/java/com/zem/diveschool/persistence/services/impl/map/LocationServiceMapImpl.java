@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.Set;
 
 @Profile({"default", "map"})
@@ -18,11 +19,13 @@ public class LocationServiceMapImpl extends AbstractServiceMapsImpl<Location, Lo
     public Set<Location> findAll() {
         return super.findAll();
     }
+
     @Override
     @Transactional
-    public Location findById(Long id) {
+    public Optional<Location> findById(Long id) {
         return super.findById(id);
     }
+
     @Override
     @Transactional
     public Location save(Location object) {
@@ -37,6 +40,7 @@ public class LocationServiceMapImpl extends AbstractServiceMapsImpl<Location, Lo
     public void delete(Location object) {
         super.delete(object);
     }
+
     @Override
     @Transactional
     public void deleteById(Long id) {

@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -67,7 +68,7 @@ public class LocationControllerTest {
         locationDto.setId(1L);
 
         //when
-        when(locationDtoService.findById(anyLong())).thenReturn(locationDto);
+        when(locationDtoService.findById(anyLong())).thenReturn(Optional.of(locationDto));
 
         //then
         mockMvc.perform(get("/locations/1/show"))
@@ -113,7 +114,7 @@ public class LocationControllerTest {
         locationDto.setId(2L);
 
         //when
-        when(locationDtoService.findById(anyLong())).thenReturn(locationDto);
+        when(locationDtoService.findById(anyLong())).thenReturn(Optional.of(locationDto));
 
         //then
         mockMvc.perform(get("/locations/1/update"))

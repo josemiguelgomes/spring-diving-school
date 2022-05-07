@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -67,7 +68,7 @@ public class CourseControllerTest {
         courseDto.setId(1L);
 
         //when
-        when(courseDtoService.findById(anyLong())).thenReturn(courseDto);
+        when(courseDtoService.findById(anyLong())).thenReturn(Optional.of(courseDto));
 
         //then
         mockMvc.perform(get("/courses/1/show"))
@@ -113,7 +114,7 @@ public class CourseControllerTest {
         courseDto.setId(2L);
 
         //when
-        when(courseDtoService.findById(anyLong())).thenReturn(courseDto);
+        when(courseDtoService.findById(anyLong())).thenReturn(Optional.of(courseDto));
 
         //then
         mockMvc.perform(get("/courses/1/update"))

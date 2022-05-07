@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.Set;
 
 @Profile({"default", "map"})
@@ -20,9 +21,10 @@ public class SlotLanguageServiceMapImpl extends AbstractServiceMapsImpl<SlotLang
 
      @Override
     @Transactional
-    public SlotLanguage findById(Long id) {
+    public Optional<SlotLanguage> findById(Long id) {
         return super.findById(id);
     }
+
     @Override
     @Transactional
     public SlotLanguage save(SlotLanguage object) {

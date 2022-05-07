@@ -10,10 +10,9 @@ import com.zem.diveschool.persistence.services.StudentService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+
+import static java.util.stream.Collectors.toSet;
 
 @Service
 public class StudentDtoServiceImpl extends AbstractDtoServiceImpl<StudentDto, Long, Student, StudentService>
@@ -25,7 +24,7 @@ public class StudentDtoServiceImpl extends AbstractDtoServiceImpl<StudentDto, Lo
     }
 
     @Override
-    public StudentDto findById(Long id) {
+    public Optional<StudentDto> findById(Long id) {
         return super.findById(id);
     }
 
@@ -51,14 +50,17 @@ public class StudentDtoServiceImpl extends AbstractDtoServiceImpl<StudentDto, Lo
 
     @Override
     public Set<CardDto> findCardsByStudentId(Long studentId) {
-        StudentDto studentDto = entityToDto.convert(service.findById(studentId));
-        return studentDto.getCards();
+        return service.findById(studentId)
+                .stream()
+                .map(p -> entityToDto.convert(p))
+                .map(StudentDto::getCards)
+                .flatMap(Collection::stream)
+                .collect(toSet());
     }
 
     @Override
     public Optional<CardDto> findByStudentIdAndCardId(Long studentId, Long cardId) {
-        StudentDto studentDto = entityToDto.convert(service.findById(studentId));
-        return studentDto.getCards()
+        return findCardsByStudentId(studentId)
                 .stream()
                 .filter(p -> p.getId().equals(cardId))
                 .findFirst();
@@ -66,18 +68,18 @@ public class StudentDtoServiceImpl extends AbstractDtoServiceImpl<StudentDto, Lo
 
     @Override
     public Set<LocationDto> findLocationsByStudentId(Long studentId) {
-        StudentDto studentDto = entityToDto.convert(service.findById(studentId));
-        // TODO #93
-        Set<LocationDto> locationsDto = new HashSet<>();
-        locationsDto.add(studentDto.getHomeAddress());
-        return locationsDto;
+        return service.findById(studentId)
+                .stream()
+                .map(p -> entityToDto.convert(p))
+//              .map(p -> p.getLocations())// TODO #93
+//              .flatMap(Collection::stream)
+                .map(StudentDto::getHomeAddress)// TODO #93
+                .collect(toSet());
     }
 
     @Override
     public Optional<LocationDto> findByStudentIdAndLocationId(Long studentId, Long locationId) {
-        StudentDto studentDto = entityToDto.convert(service.findById(studentId));
-        // TODO #93
-        return Optional.of(studentDto.getHomeAddress())
+        return findLocationsByStudentId(studentId)
                 .stream()
                 .filter(p -> p.getId().equals(locationId))
                 .findFirst();
@@ -85,14 +87,17 @@ public class StudentDtoServiceImpl extends AbstractDtoServiceImpl<StudentDto, Lo
 
     @Override
     public Set<SlotDto> findSlotsByStudentId(Long studentId) {
-        StudentDto studentDto = entityToDto.convert(service.findById(studentId));
-        return studentDto.getSlots();
+        return service.findById(studentId)
+                .stream()
+                .map(p ->  entityToDto.convert(p))
+                .map(StudentDto::getSlots)
+                .flatMap(Collection::stream)
+                .collect(toSet());
     }
 
     @Override
     public Optional<SlotDto> findByStudentIdAndSlotId(Long studentId, Long slotId) {
-        StudentDto studentDto = entityToDto.convert(service.findById(studentId));
-        return studentDto.getSlots()
+        return findSlotsByStudentId(studentId)
                 .stream()
                 .filter(p -> p.getId().equals(slotId))
                 .findFirst();
