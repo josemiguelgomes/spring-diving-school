@@ -77,11 +77,24 @@ public class SlotController {
 
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("courses", coursesDto);
-        model.addAttribute("slot", slotDtoOptional.orElse(null));
+        model.addAttribute("slot", slotDtoOptional.get());
         return "slots/courses/list";
     }
 
-    @GetMapping("/slots/{slotIdId}/courses/{courseId}/show")
+    @GetMapping("/slots/{slotId}/courses/new")
+    public String newSlotCourses(@PathVariable String slotId, Model model){
+        log.debug("Getting slot id: " + slotId);
+
+        Optional<SlotDto> slotDtoOptional = slotDtoService.findById(Long.valueOf(slotId));
+        CourseDto courseDto = new CourseDto();
+        slotDtoOptional.ifPresent(slotDto -> slotDto.setCourse(courseDto));
+
+        // use dto to avoid lazy load errors in Thymeleaf.
+        model.addAttribute("course", courseDto);
+        return "slots/courses/courseform";
+    }
+
+    @GetMapping("/slots/{slotId}/courses/{courseId}/show")
     public String showSlotCourse(@PathVariable String slotId, @PathVariable String courseId, Model model){
         log.debug("Getting course id " + courseId + " for slot id: " + slotId);
 
@@ -89,8 +102,8 @@ public class SlotController {
         Optional<CourseDto> courseDtoOptional =
                 slotDtoService.findBySlotIdAndCourseId(Long.valueOf(slotId), Long.valueOf(courseId));
 
-        model.addAttribute("course", courseDtoOptional.orElse(null));
-        model.addAttribute("slot", slotDtoOptional.orElse(null));
+        model.addAttribute("course", courseDtoOptional.get());
+        model.addAttribute("slot", slotDtoOptional.get());
         return "slots/courses/show";
     }
 
@@ -103,11 +116,24 @@ public class SlotController {
 
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("instructors", instructorsDto);
-        model.addAttribute("slot", slotDtoOptional.orElse(null));
+        model.addAttribute("slot", slotDtoOptional.get());
         return "slots/instructors/list";
     }
 
-    @GetMapping("/slots/{slotIdId}/instructors/{instructorId}/show")
+    @GetMapping("/slots/{slotId}/instructors/new")
+    public String newSlotInstructor(@PathVariable String slotId, Model model){
+        log.debug("Getting slot id: " + slotId);
+
+        Optional<SlotDto> slotDtoOptional = slotDtoService.findById(Long.valueOf(slotId));
+        InstructorDto instructorDto = new InstructorDto();
+        slotDtoOptional.ifPresent(slotDto -> slotDto.getInstructors().add(instructorDto));
+
+        // use dto to avoid lazy load errors in Thymeleaf.
+        model.addAttribute("instructor", instructorDto);
+        return "slots/instructors/instructorform";
+    }
+
+    @GetMapping("/slots/{slotId}/instructors/{instructorId}/show")
     public String showSlotInstructor(@PathVariable String slotId, @PathVariable String instructorId, Model model){
         log.debug("Getting instructor id " + instructorId + " for slot id: " + slotId);
 
@@ -115,13 +141,13 @@ public class SlotController {
         Optional<InstructorDto> instructorDtoOptional =
                 slotDtoService.findBySlotIdAndInstructorId(Long.valueOf(slotId), Long.valueOf(instructorId));
 
-        model.addAttribute("instructor", instructorDtoOptional.orElse(null));
-        model.addAttribute("slot", slotDtoOptional.orElse(null));
+        model.addAttribute("instructor", instructorDtoOptional.get());
+        model.addAttribute("slot", slotDtoOptional.get());
         return "slots/instructors/show";
     }
 
     @GetMapping("/slots/{slotId}/slotlanguages")
-    public String listSlotsSlotLanguage(@PathVariable String slotId, Model model){
+    public String listSlotsSlotLanguages(@PathVariable String slotId, Model model){
         log.debug("Getting slot languages list for slot id: " + slotId);
 
         Optional<SlotDto> slotDtoOptional = slotDtoService.findById(Long.valueOf(slotId));
@@ -129,11 +155,24 @@ public class SlotController {
 
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("slotLanguages", slotLanguagesDto);
-        model.addAttribute("slot", slotDtoOptional.orElse(null));
+        model.addAttribute("slot", slotDtoOptional.get());
         return "slots/slotLanguages/list";
     }
 
-    @GetMapping("/slots/{slotIdId}/slotlanguages/{slotLanguageId}/show")
+    @GetMapping("/slots/{slotId}/slotLanguages/new")
+    public String newSlotSlotLanguage(@PathVariable String slotId, Model model){
+        log.debug("Getting slot id: " + slotId);
+
+        Optional<SlotDto> slotDtoOptional = slotDtoService.findById(Long.valueOf(slotId));
+        SlotLanguageDto slotLanguageDto = new SlotLanguageDto();
+        slotDtoOptional.ifPresent(slotDto -> slotDto.getLanguages().add(slotLanguageDto));
+
+        // use dto to avoid lazy load errors in Thymeleaf.
+        model.addAttribute("slotLanguage", slotLanguageDto);
+        return "slots/slotLanguages/slotLanguageform";
+    }
+
+    @GetMapping("/slots/{slotId}/slotlanguages/{slotLanguageId}/show")
     public String showSlotSlotLanguage(@PathVariable String slotId, @PathVariable String slotLanguageId, Model model){
         log.debug("Getting slot language id " + slotLanguageId + " for slot id: " + slotId);
 
@@ -142,12 +181,12 @@ public class SlotController {
                 slotDtoService.findBySlotIdAndSlotLanguageId(Long.valueOf(slotId), Long.valueOf(slotLanguageId));
 
         model.addAttribute("slotLanguage", slotLanguageDtoOptional.orElse(null));
-        model.addAttribute("slot", slotDtoOptional.orElse(null));
+        model.addAttribute("slot", slotDtoOptional.get());
         return "slots/slotLanguages/show";
     }
 
     @GetMapping("/slots/{slotId}/students")
-    public String listSlotStudent(@PathVariable String slotId, Model model){
+    public String listSlotStudents(@PathVariable String slotId, Model model){
         log.debug("Getting students list for slot id: " + slotId);
 
         Optional<SlotDto> slotDtoOptional = slotDtoService.findById(Long.valueOf(slotId));
@@ -155,8 +194,21 @@ public class SlotController {
 
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("students", studentsDto);
-        model.addAttribute("slot", slotDtoOptional.orElse(null));
+        model.addAttribute("slot", slotDtoOptional.get());
         return "slots/students/list";
+    }
+
+    @GetMapping("/slots/{slotId}/student/new")
+    public String newSlotStudent(@PathVariable String slotId, Model model){
+        log.debug("Getting slot id: " + slotId);
+
+        Optional<SlotDto> slotDtoOptional = slotDtoService.findById(Long.valueOf(slotId));
+        StudentDto studentDto = new StudentDto();
+        slotDtoOptional.ifPresent(slotDto -> slotDto.getStudents().add(studentDto));
+
+        // use dto to avoid lazy load errors in Thymeleaf.
+        model.addAttribute("student", studentDto);
+        return "slots/student/studentform";
     }
 
     @GetMapping("/slots/{slotId}/students/{studentId}/show")
@@ -167,8 +219,8 @@ public class SlotController {
         Optional<StudentDto> studentDtoOptional =
                 slotDtoService.findBySlotIdAndStudentId(Long.valueOf(slotId), Long.valueOf(studentId));
 
-        model.addAttribute("student", studentDtoOptional.orElse(null));
-        model.addAttribute("slot", slotDtoOptional.orElse(null));
+        model.addAttribute("student", studentDtoOptional.get());
+        model.addAttribute("slot", slotDtoOptional.get());
         return "slots/students/show";
     }
 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'cards')}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Card Form</title>
+</head>
+<body>
+   <div class="container-fluid">
+   <!--/*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Student"*/-->
+      <h2>Card Form</h2>
+      <form  th:object="${card}" th:action="@{/cards/}" method="post">
+         <input type="hidden" th:field="*{id}"/>
+         <div class="card-body">
+            <p class="mb-0"><strong class="pr-1">Course </strong>
+               <input type="text" class="form-control" th:field="*{course}"/>
+            </p>
+            <p class="mb-0"><strong class="pr-1">Student Name </strong>
+               <input type="text" class="form-control" th:field="*{studentName}"/>
+            </p>
+            <p class="mb-0"><strong class="pr-1">Start date </strong>
+               <input type="text" class="form-control" th:field="*{startDate}"/>
+            </p>
+            <p class="mb-0"><strong class="pr-1">End date </strong>
+               <input type="text" class="form-control" th:field="*{endDate}"/>
+            </p>
+            <label>Country </label>
+            <select class="form-control" th:field="*{country}">
+               <option th:each="countryValue : ${T(com.zem.diveschool.persistence.model.Country).values()}"
+                       th:value="${countryValue.name()}"
+                       th:text="${countryValue.name()}"
+               >val</option>
+            </select>
+            <p class="mb-0"><strong class="pr-1">Instructor Name </strong>
+               <input type="text" class="form-control" th:field="*{instructorName}"/>
+            </p>
+         </div>
+
+         <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+
+      <hr>
+<!--      <a th:href="@{/cards}"> Back to Cards List</a>  -->
+   </div>
+</body>
+</html>

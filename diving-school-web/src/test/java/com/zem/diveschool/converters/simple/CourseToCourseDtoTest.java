@@ -8,12 +8,17 @@ import com.zem.diveschool.persistence.model.Course;
 import com.zem.diveschool.persistence.model.Level;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CourseToCourseDtoTest {
     public static final Long ID1 = 1L;
     public static final String ID1_S = "1";
@@ -30,7 +35,6 @@ public class CourseToCourseDtoTest {
 
     @Before
     public void setUp() throws Exception {
-//        converter = new CourseToCourseDtoImpl(slotConverterToDto);
     }
 
     @Test

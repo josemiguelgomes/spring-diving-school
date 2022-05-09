@@ -84,6 +84,22 @@ public class StudentController {
         return "students/cards/list";
     }
 
+    @GetMapping("/students/{studentId}/cards/new")
+    public String newStudentCard(@PathVariable String studentId, Model model) {
+        log.debug("Getting student id " + studentId);
+
+        // TODO make sure we have a good id value, raise exception if null
+        Optional<StudentDto> studentDtoOptional = studentDtoService.findById(Long.valueOf(studentId));
+
+        // need to return back parent id for hidden form property
+        CardDto cardDto = new CardDto();
+        cardDto.setStudent(studentDtoOptional.get());
+
+        model.addAttribute("card", cardDto);
+
+        return "students/cards/cardform";
+    }
+
     @GetMapping("/students/{studentId}/cards/{cardId}/show")
     public String showStudentCard(@PathVariable String studentId, @PathVariable String cardId, Model model){
         log.debug("Getting card id " + cardId + " for student id: " + studentId);
@@ -92,8 +108,8 @@ public class StudentController {
         Optional<CardDto> cardDtoOptional = studentDtoService.findByStudentIdAndCardId(Long.valueOf(studentId),
                 Long.valueOf(cardId));
 
-        model.addAttribute("card", cardDtoOptional.orElse(null));
-        model.addAttribute("student", studentDtoOptional.orElse(null));
+        model.addAttribute("card", cardDtoOptional.get());
+        model.addAttribute("student", studentDtoOptional.get());
         return "students/cards/show";
     }
 
@@ -110,6 +126,21 @@ public class StudentController {
         return "students/locations/list";
     }
 
+    @GetMapping("/students/{studentId}/locations/new")
+    public String newStudentLocation(@PathVariable String studentId, Model model) {
+        log.debug("Getting student id " + studentId);
+
+        // TODO make sure we have a good id value, raise exception if null
+        Optional<StudentDto> studentDtoOptional = studentDtoService.findById(Long.valueOf(studentId));
+
+        // need to return back parent id for hidden form property
+        LocationDto locationDto = new LocationDto();
+//      locationDto.setStudent(studentDtoOptional.get());
+        model.addAttribute("location", locationDto);
+
+        return "students/locations/locationform";
+    }
+
     @GetMapping("/students/{studentId}/locations/{locationId}/show")
     public String showStudentLocation(@PathVariable String studentId, @PathVariable String locationId, Model model){
         log.debug("Getting location id " + locationId + " for student id: " + studentId);
@@ -118,8 +149,8 @@ public class StudentController {
         Optional<LocationDto> locationDtoOptional =
                 studentDtoService.findByStudentIdAndLocationId(Long.valueOf(studentId), Long.valueOf(locationId));
 
-        model.addAttribute("location", locationDtoOptional.orElse(null));
-        model.addAttribute("student", studentDtoOptional.orElse(null));
+        model.addAttribute("location", locationDtoOptional.get());
+        model.addAttribute("student", studentDtoOptional.get());
         return "students/locations/show";
     }
 
@@ -132,8 +163,22 @@ public class StudentController {
 
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("slots", slotsDto);
-        model.addAttribute("student", studentDtoOptional.orElse(null));
+        model.addAttribute("student", studentDtoOptional.get());
         return "students/slots/list";
+    }
+
+    @GetMapping("/students/{studentId}/slots/new")
+    public String newStudentSlot(@PathVariable String studentId, Model model) {
+        log.debug("Getting student id " + studentId);
+
+        // TODO make sure we have a good id value, raise exception if null
+        Optional<StudentDto> studentDtoOptional = studentDtoService.findById(Long.valueOf(studentId));
+
+        // need to return back parent id for hidden form property
+        SlotDto slotDto = new SlotDto();
+        slotDto.getStudents().add(studentDtoOptional.get());
+        model.addAttribute("slot", slotDto);
+        return "students/slots/slotform";
     }
 
     @GetMapping("/students/{studentId}/slots/{slotId}/show")

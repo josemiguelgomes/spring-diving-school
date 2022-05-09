@@ -57,7 +57,10 @@ public class CardControllerTest {
         mockMvc.perform(get("/cards"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("cards/index"))
-                .andExpect(model().attributeExists("cards"));
+                .andExpect(model().attributeExists("cards"))
+                .andExpect(model().size(1));
+
+        verify(cardDtoService, times(1)).findAll();
     }
 
     @Test
@@ -73,18 +76,26 @@ public class CardControllerTest {
         mockMvc.perform(get("/cards/1/show"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("cards/show"))
-                .andExpect(model().attributeExists("card"));
+                .andExpect(model().attributeExists("card"))
+                .andExpect(model().size(1));
+
+        verify(cardDtoService, times(1)).findById(anyLong());
     }
 
 
     @Test
     public void test_newCard() throws Exception {
+        //given
         CardDto instructorDto = new CardDto();
 
+        //when
+
+        //then
         mockMvc.perform(get("/cards/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("cards/cardform"))
-                .andExpect(model().attributeExists("card"));
+                .andExpect(model().attributeExists("card"))
+                .andExpect(model().size(1));
     }
 
     @Test
@@ -103,7 +114,10 @@ public class CardControllerTest {
                         .param("course", "some string")
                 )
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/cards/2/show"));
+                .andExpect(view().name("redirect:/cards/2/show"))
+                .andExpect(model().size(1)); //why ???
+
+        verify(cardDtoService, times(1)).save(any());
     }
 
     @Test
@@ -119,15 +133,29 @@ public class CardControllerTest {
         mockMvc.perform(get("/cards/1/update"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("cards/cardform"))
-                .andExpect(model().attributeExists("card"));
+                .andExpect(model().attributeExists("card"))
+                .andExpect(model().size(1)); // TODO ???
+
+        verify(cardDtoService, times(1)).findById(anyLong());
     }
 
     @Test
     public void test_deleteById() throws Exception {
+        //given
+
+        //when
+
+        //then
         mockMvc.perform(get("/cards/1/delete"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/cards"));
+                .andExpect(view().name("redirect:/cards"))
+                .andExpect(model().size(0));
 
         verify(cardDtoService, times(1)).deleteById(anyLong());
     }
+
+    /* ---- */
+
+    /* ---- */
+
 }

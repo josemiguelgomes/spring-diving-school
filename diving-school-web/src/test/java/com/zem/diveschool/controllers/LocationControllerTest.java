@@ -58,14 +58,16 @@ public class LocationControllerTest {
         mockMvc.perform(get("/locations"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("locations/index"))
-                .andExpect(model().attributeExists("locations"));
+                .andExpect(model().attributeExists("locations"))
+                .andExpect(model().size(1));
+
+        verify(locationDtoService, times(1)).findAll();
     }
 
     @Test
     public void test_showById() throws Exception {
         //given
         LocationDto locationDto = new LocationDto();
-        locationDto.setId(1L);
 
         //when
         when(locationDtoService.findById(anyLong())).thenReturn(Optional.of(locationDto));
@@ -74,22 +76,46 @@ public class LocationControllerTest {
         mockMvc.perform(get("/locations/1/show"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("locations/show"))
-                .andExpect(model().attributeExists("location"));
-    }
+                .andExpect(model().attributeExists("location"))
+                .andExpect(model().size(1));
 
+        verify(locationDtoService, times(1)).findById(anyLong());
+    }
 
     @Test
     public void test_newLocation() throws Exception {
-        LocationDto instructorDto = new LocationDto();
+        //given
 
+        //when
+
+        //then
         mockMvc.perform(get("/locations/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("locations/locationform"))
-                .andExpect(model().attributeExists("location"));
+                .andExpect(model().attributeExists("location"))
+                .andExpect(model().size(1));
     }
 
     @Test
     public void test_updateLocation() throws Exception {
+        //given
+        LocationDto locationDto = new LocationDto();
+
+        //when
+        when(locationDtoService.findById(anyLong())).thenReturn(Optional.of(locationDto));
+
+        //then
+        mockMvc.perform(get("/locations/1/update"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("locations/locationform"))
+                .andExpect(model().attributeExists("location"))
+                .andExpect(model().size(1));
+
+        verify(locationDtoService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    public void test_saveOrUpdate() throws Exception {
         //given
         LocationDto locationDto = new LocationDto();
         locationDto.setId(2L);
@@ -104,27 +130,20 @@ public class LocationControllerTest {
                         .param("streetAddress", "some string")
                 )
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/locations/2/show"));
+                .andExpect(view().name("redirect:/locations/2/show"))
+                .andExpect(model().size(1));
+
+        verify(locationDtoService, times(1)).save(any());
     }
 
-    @Test
-    public void test_saveOrUpdate() throws Exception {
-        //given
-        LocationDto locationDto = new LocationDto();
-        locationDto.setId(2L);
-
-        //when
-        when(locationDtoService.findById(anyLong())).thenReturn(Optional.of(locationDto));
-
-        //then
-        mockMvc.perform(get("/locations/1/update"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("locations/locationform"))
-                .andExpect(model().attributeExists("location"));
-    }
 
     @Test
     public void test_deleteById() throws Exception {
+        //given
+
+        //when
+
+        //then
         mockMvc.perform(get("/locations/1/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/locations"));

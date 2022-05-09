@@ -2,6 +2,7 @@ package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.data.CourseDtoService;
 import com.zem.diveschool.dto.CourseDto;
+import com.zem.diveschool.dto.SlotDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -14,7 +15,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -58,7 +58,10 @@ public class CourseControllerTest {
         mockMvc.perform(get("/courses"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("courses/index"))
-                .andExpect(model().attributeExists("courses"));
+                .andExpect(model().attributeExists("courses"))
+                .andExpect(model().size(1));
+
+        verify(courseDtoService, times(1)).findAll();
     }
 
     @Test
@@ -74,22 +77,49 @@ public class CourseControllerTest {
         mockMvc.perform(get("/courses/1/show"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("courses/show"))
-                .andExpect(model().attributeExists("course"));
+                .andExpect(model().attributeExists("course"))
+                .andExpect(model().size(1));
+
+        verify(courseDtoService, times(1)).findById(anyLong());
     }
 
 
     @Test
     public void test_newCourse() throws Exception {
+        //given
         CourseDto courseDto = new CourseDto();
 
+        //when
+
+        //then
         mockMvc.perform(get("/courses/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("courses/courseform"))
-                .andExpect(model().attributeExists("course"));
+                .andExpect(model().attributeExists("course"))
+                .andExpect(model().size(1));
     }
 
     @Test
-    public void test_UpdateCourse() throws Exception {
+    public void test_updateCourse() throws Exception {
+        //given
+        CourseDto courseDto = new CourseDto();
+        courseDto.setId(2L);
+
+        //when
+        when(courseDtoService.findById(anyLong())).thenReturn(Optional.of(courseDto));
+
+        //then
+        mockMvc.perform(get("/courses/1/update"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("courses/courseform"))
+                .andExpect(model().attributeExists("course"))
+                .andExpect(model().size(1));
+
+        verify(courseDtoService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    public void test_saveOrUpdate() throws Exception {
         //given
         CourseDto courseDto = new CourseDto();
         courseDto.setId(2L);
@@ -104,44 +134,109 @@ public class CourseControllerTest {
                         .param("name", "some string")
                 )
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/courses/2/show"));
-    }
+                .andExpect(view().name("redirect:/courses/2/show"))
+                .andExpect(model().size(1));
 
-    @Test
-    public void test_saveOrUpdate() throws Exception {
-        //given
-        CourseDto courseDto = new CourseDto();
-        courseDto.setId(2L);
-
-        //when
-        when(courseDtoService.findById(anyLong())).thenReturn(Optional.of(courseDto));
-
-        //then
-        mockMvc.perform(get("/courses/1/update"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("courses/courseform"))
-                .andExpect(model().attributeExists("course"));
+        verify(courseDtoService, times(1)).save(any());
     }
 
     @Test
     public void test_deleteById() throws Exception {
+        //given
+
+        //when
+
+        //then
         mockMvc.perform(get("/courses/1/delete"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/courses"));
+                .andExpect(view().name("redirect:/courses"))
+                .andExpect(model().size(0));
 
         verify(courseDtoService, times(1)).deleteById(anyLong());
     }
 
+    /* ---- */
+
+    @Test
+    public void test_findCourses() throws Exception {
+        //given
+        Set<CourseDto> coursesDto = new HashSet<>();
+
+        //when
+        when(courseDtoService.findAll()).thenReturn(coursesDto);
+
+        //then
+        mockMvc.perform(get("/courses/find"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("courses/find"))
+                .andExpect(model().attributeExists("courses"))
+                .andExpect(model().size(1));
+
+        verify(courseDtoService, times(1)).findAll();
+    }
+
+    /* ---- */
+
     @Test
     public void test_listCourseSlots() throws Exception {
-        // TODO
-        assertEquals(1, 0);
+        //given
+        Optional<CourseDto> courseDtoOptional = Optional.of(new CourseDto());
+        Set<SlotDto> slotsDto = new HashSet<SlotDto>();
+
+        //when
+        when(courseDtoService.findById(anyLong())).thenReturn(courseDtoOptional);
+        when(courseDtoService.findSlotsByCourseId(anyLong())).thenReturn(slotsDto);
+
+        //then
+        mockMvc.perform(get("/courses/1/slots"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("courses/slots/list"))
+                .andExpect(model().attributeExists("slots"))
+                .andExpect(model().attributeExists("course"))
+                .andExpect(model().size(2));
+
+        verify(courseDtoService, times(1)).findById(anyLong());
+        verify(courseDtoService, times(1)).findSlotsByCourseId(anyLong());
+    }
+
+    @Test
+    public void test_newCourseSlot() throws Exception {
+        //given
+        Optional<CourseDto> courseDtoOptional = Optional.of(new CourseDto());
+
+        //when
+        when(courseDtoService.findById(anyLong())).thenReturn(courseDtoOptional);
+
+        //then
+        mockMvc.perform(get("/courses/1/slots/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("students/locations/locationform"))
+                .andExpect(model().attributeExists("slot"))
+                .andExpect(model().size(1));
+
+        verify(courseDtoService, times(1)).findById(anyLong());
     }
 
     @Test
     public void test_showCourseSlot() throws Exception {
-        // TODO
-        assertEquals(1, 0);
+        //given
+        Optional<CourseDto> courseDtoOptional = Optional.of(new CourseDto());
+        Optional<SlotDto> slotDtoOptional = Optional.of(new SlotDto());
+
+        //when
+        when(courseDtoService.findById(anyLong())).thenReturn(courseDtoOptional);
+        when(courseDtoService.findByCourseIdAndSlotId(anyLong(), anyLong())).thenReturn(slotDtoOptional);
+
+        //then
+        mockMvc.perform(get("/courses/1/slots/2/show"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("courses/slots/show"))
+                .andExpect(model().attributeExists("slot"))
+                .andExpect(model().attributeExists("course"))
+                .andExpect(model().size(2));
+
+        verify(courseDtoService, times(1)).findById(anyLong());
+        verify(courseDtoService, times(1)).findByCourseIdAndSlotId(anyLong(), anyLong());
     }
 
 }

@@ -2,7 +2,9 @@ package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.data.CourseDtoService;
 import com.zem.diveschool.dto.CourseDto;
+import com.zem.diveschool.dto.LocationDto;
 import com.zem.diveschool.dto.SlotDto;
+import com.zem.diveschool.dto.StudentDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -78,6 +80,21 @@ public class CourseController {
         model.addAttribute("slots", slotsDto);
         model.addAttribute("course", courseDtoOptional.orElse(null));
         return "courses/slots/list";
+    }
+
+    @GetMapping("/courses/{courseId}/slots/new")
+    public String newCourseSlot(@PathVariable String courseId, Model model) {
+        log.debug("Getting course id " + courseId);
+
+        // TODO make sure we have a good id value, raise exception if null
+        Optional<CourseDto> courseDtoOptional = courseDtoService.findById(Long.valueOf(courseId));
+
+        // need to return back parent id for hidden form property
+        SlotDto slotDto = new SlotDto();
+        slotDto.setCourse(courseDtoOptional.get());
+
+        model.addAttribute("slot", slotDto);
+        return "students/locations/locationform";
     }
 
     @GetMapping("/courses/{courseId}/slots/{slotId}/show")

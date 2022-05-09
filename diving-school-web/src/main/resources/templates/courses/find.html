@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'courses')}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of Courses</title>
+</head>
+<body>
+<!--/*@thymesVar id="course" type="com.zem.diveschool.persistence.model.Course"*/-->
+<h2>Courses</h2>
+<h3><a href="#" th:href="@{'/courses/new'}">New</a></h3>
+
+<table id="courses" class="table table-striped">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Level</th>
+        <th>Show</th>
+        <th>Update</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="course : ${courses}">
+        <td th:text="${course.name}"></td>
+        <td th:text="${course.level}"></td>
+        <td><a href="#" th:href="@{'/courses/' + ${course.id} + '/show'}">Show</a></td>
+        <td><a href="#" th:href="@{'/courses/' + ${course.id} + '/update'}">Update</a></td>
+        <td><a href="#" th:href="@{'/courses/' + ${course.id} + '/delete'}">Delete</a></td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<a th:href="@{/}"> Back Homepage</a>
+</body>
+</html>

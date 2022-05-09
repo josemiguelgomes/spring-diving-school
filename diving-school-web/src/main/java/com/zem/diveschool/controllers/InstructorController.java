@@ -1,6 +1,7 @@
 package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.data.InstructorDtoService;
+import com.zem.diveschool.dto.CourseDto;
 import com.zem.diveschool.dto.InstructorDto;
 import com.zem.diveschool.dto.LocationDto;
 import com.zem.diveschool.dto.SlotDto;
@@ -82,6 +83,20 @@ public class InstructorController {
         return "instructors/locations/list";
     }
 
+    @GetMapping("/instructors/{instructorId}/locations/new")
+    public String newInstructorLocation(@PathVariable String instructorId, Model model){
+        log.debug("Getting instructor id " + instructorId);
+
+        // TODO make sure we have a good id value, raise exception if null
+        Optional<InstructorDto> instructorDtoOptional = instructorDtoService.findById(Long.valueOf(instructorId));
+
+        LocationDto locationDto = new LocationDto();
+        instructorDtoOptional.get().setHomeAddress(locationDto);
+
+        model.addAttribute("location", locationDto);
+        return "instructors/locations/new";
+    }
+
     @GetMapping("/instructors/{instructorId}/locations/{locationId}/show")
     public String showInstructorLocation(@PathVariable String instructorId, @PathVariable String locationId,
                                          Model model){
@@ -91,8 +106,8 @@ public class InstructorController {
         Optional<LocationDto> locationDtoOptional =
              instructorDtoService.findByInstructorIdAndLocationId(Long.valueOf(instructorId), Long.valueOf(locationId));
 
-        model.addAttribute("card", locationDtoOptional.orElse(null));
-        model.addAttribute("instructor", instructorDtoOptional.orElse(null));
+        model.addAttribute("card", locationDtoOptional.get());
+        model.addAttribute("instructor", instructorDtoOptional.get());
         return "instructors/locations/show";
     }
 
@@ -105,8 +120,22 @@ public class InstructorController {
 
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("slots", slotsDto);
-        model.addAttribute("instructor", instructorDtoOptional.orElse(null));
+        model.addAttribute("instructor", instructorDtoOptional.get());
         return "instructors/slots/list";
+    }
+
+    @GetMapping("/instructors/{instructorId}/slots/new")
+    public String newInstructorSlot(@PathVariable String instructorId, Model model){
+        log.debug("Getting instructor id " + instructorId);
+
+        // TODO make sure we have a good id value, raise exception if null
+        Optional<InstructorDto> instructorDtoOptional = instructorDtoService.findById(Long.valueOf(instructorId));
+
+        SlotDto slotDto = new SlotDto();
+        instructorDtoOptional.get().getSlots().add(slotDto);
+
+        model.addAttribute("slot", slotDto);
+        return "instructors/slots/new";
     }
 
     @GetMapping("/instructors/{instructorId}/slots/{slotId}/show")
@@ -120,4 +149,5 @@ public class InstructorController {
         model.addAttribute("instructor", instructorDtoOptional.orElse(null));
         return "instructors/slots/show";
     }
+
 }

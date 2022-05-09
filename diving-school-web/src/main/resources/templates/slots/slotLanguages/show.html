@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'slotLanguages')}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Slot Languages</title>
+</head>
+<body>
+<!--/*@thymesVar id="slotLanguages" type="com.zem.diveschool.persistence.model.SlotLanguages"*/-->
+<h2>Slot Languages</h2>
+
+<table id="slotLanguages" class="table table-striped">
+    <thead>
+    <tr>
+        <th>Language</th>
+    </tr>
+    </thead>
+    <tbody>
+        <td th:text="${slotLanguage.language}"></td>
+    </tbody>
+</table>
+</body>
+</html>
