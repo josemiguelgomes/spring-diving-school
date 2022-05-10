@@ -94,6 +94,18 @@ public class SlotController {
         return "slots/courses/courseform";
     }
 
+    @GetMapping("/slots/{slotId}/courses/{courseId}/delete")
+    public String deleteSlotCourse(@PathVariable String slotId, @PathVariable String courseId, Model model){
+        log.debug("Getting slot id: " + slotId + " and Course Id: " + courseId);
+
+        Optional<SlotDto> slotDtoOptional = slotDtoService.findById(Long.valueOf(slotId));
+        slotDtoService.deleteBySlotIdAndCourseId(Long.valueOf(slotId), Long.valueOf(courseId));
+
+        // use dto to avoid lazy load errors in Thymeleaf.
+        model.addAttribute("course", slotDtoOptional.get());
+        return "redirect:/slots/courses";
+    }
+
     @GetMapping("/slots/{slotId}/courses/{courseId}/show")
     public String showSlotCourse(@PathVariable String slotId, @PathVariable String courseId, Model model){
         log.debug("Getting course id " + courseId + " for slot id: " + slotId);
@@ -131,6 +143,18 @@ public class SlotController {
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("instructor", instructorDto);
         return "slots/instructors/instructorform";
+    }
+
+    @GetMapping("/slots/{slotId}/instructors/{instructorId}/delete")
+    public String deleteSlotInstructor(@PathVariable String slotId, @PathVariable String instructorId, Model model){
+        log.debug("Getting slot id: " + slotId + " and instructor Id: " + instructorId);
+
+        Optional<SlotDto> slotDtoOptional = slotDtoService.findById(Long.valueOf(slotId));
+        slotDtoService.deleteBySlotIdAndInstructorId(Long.valueOf(slotId), Long.valueOf(instructorId));
+
+        // use dto to avoid lazy load errors in Thymeleaf.
+        model.addAttribute("instructor", slotDtoOptional.get());
+        return "redirect:/slots/instructors";
     }
 
     @GetMapping("/slots/{slotId}/instructors/{instructorId}/show")
@@ -172,6 +196,18 @@ public class SlotController {
         return "slots/slotLanguages/slotLanguageform";
     }
 
+    @GetMapping("/slots/{slotId}/slotlanguages/{slotLanguageId}/delete")
+    public String deleteSlotSlotLanguage(@PathVariable String slotId, @PathVariable String slotLanguageId, Model model){
+        log.debug("Getting slot id: " + slotId + " and Language Id: " + slotLanguageId);
+
+        Optional<SlotDto> slotDtoOptional = slotDtoService.findById(Long.valueOf(slotId));
+        slotDtoService.deleteBySlotIdAndSlotLanguageId(Long.valueOf(slotId), Long.valueOf(slotLanguageId));
+
+        // use dto to avoid lazy load errors in Thymeleaf.
+        model.addAttribute("slotLanguage", slotDtoOptional.get());
+        return "redirect:/slots/slotLanguages";
+    }
+
     @GetMapping("/slots/{slotId}/slotlanguages/{slotLanguageId}/show")
     public String showSlotSlotLanguage(@PathVariable String slotId, @PathVariable String slotLanguageId, Model model){
         log.debug("Getting slot language id " + slotLanguageId + " for slot id: " + slotId);
@@ -209,6 +245,18 @@ public class SlotController {
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("student", studentDto);
         return "slots/student/studentform";
+    }
+
+    @GetMapping("/slots/{slotId}/student/{studentId}/delete")
+    public String deleteSlotStudent(@PathVariable String slotId, @PathVariable String studentId, Model model){
+        log.debug("Getting slot id: " + slotId + " and student Id: " + studentId);
+
+        Optional<SlotDto> slotDtoOptional = slotDtoService.findById(Long.valueOf(slotId));
+        slotDtoService.deleteBySlotIdAndStudentId(Long.valueOf(slotId), Long.valueOf(studentId));
+
+        // use dto to avoid lazy load errors in Thymeleaf.
+        model.addAttribute("student", slotDtoOptional.get());
+        return "redirect:/slots/students";
     }
 
     @GetMapping("/slots/{slotId}/students/{studentId}/show")

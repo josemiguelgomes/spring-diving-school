@@ -85,7 +85,6 @@ public class InstructorControllerTest {
         verify(instructorDtoService, times(1)).findById(anyLong());
     }
 
-
     @Test
     public void test_newInstructor() throws Exception {
         //given
@@ -218,6 +217,26 @@ public class InstructorControllerTest {
     }
 
     @Test
+    public void test_deleteInstructorLocation() throws Exception {
+        //given
+        Optional<InstructorDto> instructorDtoOptional = Optional.of(new InstructorDto());
+
+        //when
+        when(instructorDtoService.findById(anyLong())).thenReturn(instructorDtoOptional);
+
+        //then
+        mockMvc.perform(get("/instructors/1/locations/2/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/instructors/locations"))
+                .andExpect(model().attributeExists("instructor"))
+                .andExpect(model().size(1));
+
+        verify(instructorDtoService, times(1)).findById(anyLong());
+        verify(instructorDtoService, times(1)).deleteByInstructorIdAndLocationId(anyLong(),
+                anyLong());
+    }
+
+    @Test
     public void test_showInstructorLocation() throws Exception {
         //given
         Optional<InstructorDto> instructorDtoOptional = Optional.of(new InstructorDto());
@@ -278,6 +297,26 @@ public class InstructorControllerTest {
                 .andExpect(model().size(1));
 
         verify(instructorDtoService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    public void test_deleteInstructorSlot() throws Exception {
+        //given
+        Optional<InstructorDto> instructorDtoOptional = Optional.of(new InstructorDto());
+
+        //when
+        when(instructorDtoService.findById(anyLong())).thenReturn(instructorDtoOptional);
+
+        //then
+        mockMvc.perform(get("/instructors/1/slots/2/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/instructors/slots"))
+                .andExpect(model().attributeExists("instructor"))
+                .andExpect(model().size(1));
+
+        verify(instructorDtoService, times(1)).findById(anyLong());
+        verify(instructorDtoService, times(1)).deleteByInstructorIdAndSlotId(anyLong(),
+                anyLong());
     }
 
     @Test

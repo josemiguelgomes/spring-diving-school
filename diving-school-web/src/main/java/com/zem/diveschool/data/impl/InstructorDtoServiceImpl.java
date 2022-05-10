@@ -1,6 +1,7 @@
 package com.zem.diveschool.data.impl;
 
 import com.zem.diveschool.data.InstructorDtoService;
+import com.zem.diveschool.dto.CourseDto;
 import com.zem.diveschool.dto.InstructorDto;
 import com.zem.diveschool.dto.LocationDto;
 import com.zem.diveschool.dto.SlotDto;
@@ -81,5 +82,47 @@ public class InstructorDtoServiceImpl extends AbstractDtoServiceImpl<InstructorD
                 .filter(p -> p.getId().equals(locationId))
                 .findFirst();
     }
+
+    @Override
+    public void deleteByInstructorIdAndLocationId(Long instructorId, Long locationID) {
+        // Step 1 - Get Instructor and Location
+        InstructorDto instructorDto =  entityToDto.convert(service.findById(instructorId).get());
+        LocationDto locationDtoToBeRemoved = instructorDto
+                .getHomeAddress();   // TODO #93
+  //              .getLocations()
+ //             .stream()
+ //             .filter(p -> p.getId().equals(locationID))
+//                .findFirst();
+
+        // Step 2 - remove link Instructor -> Location
+        instructorDto.getSlots().remove(locationDtoToBeRemoved);
+
+        // Step 3 - remove link Location -> Instructor
+        // n/a
+
+        // Step 4 - persist on database
+        service.save(dtoToEntity.convert(instructorDto));
+    }
+
+    @Override
+    public void deleteByInstructorIdAndSlotId(Long instructorId, Long slotId) {
+        // Step 1 - Get Instructor and Slot
+        InstructorDto instructorDto =  entityToDto.convert(service.findById(instructorId).get());
+        Optional<SlotDto> slotDtoOptionalToBeRemoved = instructorDto
+                .getSlots()
+                .stream()
+                .filter(p -> p.getId().equals(slotId))
+                .findFirst();
+
+        // Step 2 - remove link Instructor -> Location
+        instructorDto.getSlots().remove(slotDtoOptionalToBeRemoved.get());
+
+        // Step 3 - remove link Slot -> Instructor
+        slotDtoOptionalToBeRemoved.get().getInstructors().remove(instructorDto);
+
+        // Step 4 - persist on database
+        service.save(dtoToEntity.convert(instructorDto));
+    }
+
 }
 

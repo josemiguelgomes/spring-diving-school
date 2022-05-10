@@ -97,6 +97,17 @@ public class CourseController {
         return "students/locations/locationform";
     }
 
+    @GetMapping("/courses/{courseId}/slots/{slotId}/delete")
+    public String deleteCourseSlot(@PathVariable String courseId, @PathVariable String slotId, Model model) {
+        log.debug("Getting course id " + courseId);
+
+        Optional<CourseDto> courseDtoOptional = courseDtoService.findById(Long.valueOf(courseId));
+        courseDtoService.deleteByCourseIdAndSlotId(Long.valueOf(courseId), Long.valueOf(slotId));
+
+        model.addAttribute("course", courseDtoOptional.get());
+        return "redirect:/courses/slots";
+    }
+
     @GetMapping("/courses/{courseId}/slots/{slotId}/show")
     public String showCourseSlot(@PathVariable String courseId, @PathVariable String slotId, Model model){
         log.debug("Getting slot id " + slotId + " for course id: " + courseId);

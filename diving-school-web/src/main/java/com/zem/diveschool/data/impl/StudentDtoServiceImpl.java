@@ -102,5 +102,65 @@ public class StudentDtoServiceImpl extends AbstractDtoServiceImpl<StudentDto, Lo
                 .filter(p -> p.getId().equals(slotId))
                 .findFirst();
     }
+
+    @Override
+    public void deleteByStudentIdAndCardId(long studentId, long cardId) {
+        // Step 1 - Get Slot and Student
+        StudentDto studentDto =  entityToDto.convert(service.findById(studentId).get());
+        Optional<CardDto> cardDtoOptionalToBeRemoved = studentDto
+                .getCards()
+                .stream()
+                .filter(p -> p.getId().equals(cardId))
+                .findFirst();
+
+        // Step 2 - remove link student -> card
+        studentDto.getCards().remove(cardDtoOptionalToBeRemoved.get());
+
+        // Step 3 - remove link course -> slot
+        cardDtoOptionalToBeRemoved.get().setStudent(null);;
+
+        // Step 4 - persist on database
+        service.save(dtoToEntity.convert(studentDto));
+    }
+
+    @Override
+    public void deleteByStudentIdAndLocationId(long studentId, long locationId) {
+        // Step 1 - Get Student and Location
+        StudentDto studentDto =  entityToDto.convert(service.findById(studentId).get());
+        LocationDto locationDtoToBeRemoved = studentDto
+                .getHomeAddress();
+//                .stream()
+ //               .filter(p -> p.getId().equals(locationId))
+ //               .findFirst();
+
+        // Step 2 - remove link student -> location
+        studentDto.getCards().remove(locationDtoToBeRemoved);
+
+        // Step 3 - remove link location -> student
+        //n/a
+
+        // Step 4 - persist on database
+        service.save(dtoToEntity.convert(studentDto));
+    }
+
+    @Override
+    public void deleteByStudentIdAndSlotId(long studentId, long slotId) {
+        // Step 1 - Get Student and Slot
+        StudentDto studentDto =  entityToDto.convert(service.findById(studentId).get());
+        Optional<SlotDto> slotDtoOptionalToBeRemoved = studentDto
+                .getSlots()
+                .stream()
+                .filter(p -> p.getId().equals(slotId))
+                .findFirst();
+
+        // Step 2 - remove link student -> slot
+        studentDto.getCards().remove(slotDtoOptionalToBeRemoved.get());
+
+        // Step 3 - remove link slot -> student
+        slotDtoOptionalToBeRemoved.get().getStudents().remove(studentDto);;
+
+        // Step 4 - persist on database
+        service.save(dtoToEntity.convert(studentDto));
+    }
 }
 

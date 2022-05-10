@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -211,6 +210,25 @@ public class SlotControllerTest {
     }
 
     @Test
+    public void test_deleteSlotCourse() throws Exception {
+        //given
+        Optional<SlotDto> slotDtoOptional = Optional.of(new SlotDto());
+
+        //when
+        when(slotDtoService.findById(anyLong())).thenReturn(slotDtoOptional);
+
+        //then
+        mockMvc.perform(get("/slots/1/courses/2/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/slots/courses"))
+                .andExpect(model().attributeExists("course"))
+                .andExpect(model().size(1));
+
+        verify(slotDtoService, times(1)).findById(anyLong());
+        verify(slotDtoService, times(1)).deleteBySlotIdAndCourseId(anyLong(), anyLong());
+    }
+
+    @Test
     public void test_showSlotCourse() throws Exception {
         //given
         Optional<SlotDto> slotDtoOptional = Optional.of(new SlotDto());
@@ -270,6 +288,25 @@ public class SlotControllerTest {
                 .andExpect(model().size(1));
 
         verify(slotDtoService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    public void test_deleteSlotInstructor() throws Exception {
+        //given
+        Optional<SlotDto> slotDtoOptional = Optional.of(new SlotDto());
+
+        //when
+        when(slotDtoService.findById(anyLong())).thenReturn(slotDtoOptional);
+
+        //then
+        mockMvc.perform(get("/slots/1/instructors/2/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/slots/instructors"))
+                .andExpect(model().attributeExists("instructor"))
+                .andExpect(model().size(1));
+
+        verify(slotDtoService, times(1)).findById(anyLong());
+        verify(slotDtoService, times(1)).deleteBySlotIdAndInstructorId(anyLong(), anyLong());
     }
 
     @Test
@@ -335,6 +372,25 @@ public class SlotControllerTest {
     }
 
     @Test
+    public void test_deleteSlotSlotLanguage() throws Exception {
+        //given
+        Optional<SlotDto> slotDtoOptional = Optional.of(new SlotDto());
+
+        //when
+        when(slotDtoService.findById(anyLong())).thenReturn(slotDtoOptional);
+
+        //then
+        mockMvc.perform(get("/slots/1/slotlanguages/2/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/slots/slotLanguages"))
+                .andExpect(model().attributeExists("slotLanguage"))
+                .andExpect(model().size(1));
+
+        verify(slotDtoService, times(1)).findById(anyLong());
+        verify(slotDtoService, times(1)).deleteBySlotIdAndSlotLanguageId(anyLong(), anyLong());
+    }
+
+    @Test
     public void test_showSlotSlotLanguage() throws Exception {
         //given
         Optional<SlotDto> slotDtoOptional = Optional.of(new SlotDto());
@@ -396,6 +452,24 @@ public class SlotControllerTest {
         verify(slotDtoService, times(1)).findById(anyLong());
     }
 
+    @Test
+    public void test_deleteSlotStudent() throws Exception {
+        //given
+        Optional<SlotDto> slotDtoOptional = Optional.of(new SlotDto());
+
+        //when
+        when(slotDtoService.findById(anyLong())).thenReturn(slotDtoOptional);
+
+        //then
+        mockMvc.perform(get("/slots/1/student/2/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/slots/students"))
+                .andExpect(model().attributeExists("student"))
+                .andExpect(model().size(1));
+
+        verify(slotDtoService, times(1)).findById(anyLong());
+        verify(slotDtoService, times(1)).deleteBySlotIdAndStudentId(anyLong(), anyLong());
+    }
 
     @Test
     public void test_showSlotStudent() throws Exception {

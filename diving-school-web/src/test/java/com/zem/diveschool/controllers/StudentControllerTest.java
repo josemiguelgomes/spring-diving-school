@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -221,6 +222,25 @@ public class StudentControllerTest {
     }
 
     @Test
+    public void test_deleteStudentCard() throws Exception {
+        //given
+        Optional<StudentDto> studentDtoOptional = Optional.of(new StudentDto());
+
+        //when
+        when(studentDtoService.findById(anyLong())).thenReturn(studentDtoOptional);
+
+        //then
+        mockMvc.perform(get("/students/1/cards/2/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/students/cards"))
+                .andExpect(model().attributeExists("student"))
+                .andExpect(model().size(1));
+
+        verify(studentDtoService, times(1)).findById(anyLong());
+        verify(studentDtoService, times(1)).deleteByStudentIdAndCardId(anyLong(), anyLong());
+    }
+
+    @Test
     public void test_showStudentCard() throws Exception {
         //given
         StudentDto studentDto = new StudentDto();
@@ -287,6 +307,25 @@ public class StudentControllerTest {
     }
 
     @Test
+    public void test_deleteStudentLocation() throws Exception {
+        //given
+        Optional<StudentDto> studentDtoOptional = Optional.of(new StudentDto());
+
+        //when
+        when(studentDtoService.findById(anyLong())).thenReturn(studentDtoOptional);
+
+        //then
+        mockMvc.perform(get("/students/1/locations/2/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/students/locations"))
+                .andExpect(model().attributeExists("student"))
+                .andExpect(model().size(1));
+
+        verify(studentDtoService, times(1)).findById(anyLong());
+        verify(studentDtoService, times(1)).deleteByStudentIdAndLocationId(anyLong(), anyLong());
+    }
+
+    @Test
     public void test_showStudentLocation() throws Exception {
         //given
         Optional<StudentDto> studentDtoOptional = Optional.of(new StudentDto());
@@ -347,6 +386,25 @@ public class StudentControllerTest {
                 .andExpect(model().size(1));
 
         verify(studentDtoService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    public void test_deleteStudentSlot() throws Exception {
+        //given
+        Optional<StudentDto> studentDtoOptional = Optional.of(new StudentDto());
+
+        //when
+        when(studentDtoService.findById(anyLong())).thenReturn(studentDtoOptional);
+
+        //then
+        mockMvc.perform(get("/students/1/slots/2/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/students/slots"))
+                .andExpect(model().attributeExists("student"))
+                .andExpect(model().size(1));
+
+        verify(studentDtoService, times(1)).findById(anyLong());
+        verify(studentDtoService, times(1)).deleteByStudentIdAndSlotId(anyLong(), anyLong());
     }
 
     @Test

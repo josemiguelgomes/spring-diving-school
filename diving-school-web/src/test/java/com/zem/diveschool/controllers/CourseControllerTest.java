@@ -218,6 +218,25 @@ public class CourseControllerTest {
     }
 
     @Test
+    public void test_deleteCourseSlot() throws Exception {
+        //given
+        Optional<CourseDto> courseDtoOptional = Optional.of(new CourseDto());
+
+        //when
+        when(courseDtoService.findById(anyLong())).thenReturn(courseDtoOptional);
+
+        //then
+        mockMvc.perform(get("/courses/1/slots/2/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/courses/slots"))
+                .andExpect(model().attributeExists("course"))
+                .andExpect(model().size(1));
+
+        verify(courseDtoService, times(1)).findById(anyLong());
+        verify(courseDtoService, times(1)).deleteByCourseIdAndSlotId(anyLong(), anyLong());
+    }
+
+    @Test
     public void test_showCourseSlot() throws Exception {
         //given
         Optional<CourseDto> courseDtoOptional = Optional.of(new CourseDto());

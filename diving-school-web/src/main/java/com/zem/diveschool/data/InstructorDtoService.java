@@ -15,4 +15,8 @@ public interface InstructorDtoService extends CrudService<InstructorDto, Long> {
 
     Set<LocationDto> findLocationsByInstructorId(Long instructorId);
     Optional<LocationDto> findByInstructorIdAndLocationId(Long instructorId, Long locationId);
+
+    void deleteByInstructorIdAndLocationId(Long instructorId, Long locationId);
+
+    void deleteByInstructorIdAndSlotId(Long instructorId, Long slotId);
 }

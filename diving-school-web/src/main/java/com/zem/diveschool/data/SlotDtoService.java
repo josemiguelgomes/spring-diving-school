@@ -19,4 +19,12 @@ public interface SlotDtoService extends CrudService<SlotDto, Long> {
 
     Set<StudentDto> findStudentsBySlotId(Long slotId);
     Optional<StudentDto> findBySlotIdAndStudentId(Long slotId, Long studentId);
+
+    void deleteBySlotIdAndCourseId(Long slotId, Long courseId);
+
+    void deleteBySlotIdAndInstructorId(Long slotId, Long instructorId);
+
+    void deleteBySlotIdAndSlotLanguageId(Long slotId, Long slotLanguageId);
+
+    void deleteBySlotIdAndStudentId(Long slotId, Long studentId);
 }

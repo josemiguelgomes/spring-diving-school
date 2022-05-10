@@ -96,8 +96,18 @@ public class StudentController {
         cardDto.setStudent(studentDtoOptional.get());
 
         model.addAttribute("card", cardDto);
-
         return "students/cards/cardform";
+    }
+
+    @GetMapping("/students/{studentId}/cards/{cardId}/delete")
+    public String deleteStudentCard(@PathVariable String studentId, @PathVariable String cardId, Model model) {
+        log.debug("Getting student id " + studentId + " and card id " + cardId);
+
+        Optional<StudentDto> studentDtoOptional = studentDtoService.findById(Long.valueOf(studentId));
+        studentDtoService.deleteByStudentIdAndCardId(Long.valueOf(studentId), Long.valueOf(cardId));
+
+        model.addAttribute("student", studentDtoOptional.get());
+        return "redirect:/students/cards";
     }
 
     @GetMapping("/students/{studentId}/cards/{cardId}/show")
@@ -141,6 +151,17 @@ public class StudentController {
         return "students/locations/locationform";
     }
 
+    @GetMapping("/students/{studentId}/locations/{locationId}/delete")
+    public String deleteStudentLocation(@PathVariable String studentId, @PathVariable String locationId, Model model) {
+        log.debug("Getting student id " + studentId + " and location id " + locationId);
+
+        Optional<StudentDto> studentDtoOptional = studentDtoService.findById(Long.valueOf(studentId));
+        studentDtoService.deleteByStudentIdAndLocationId(Long.valueOf(studentId), Long.valueOf(locationId));
+
+        model.addAttribute("student", studentDtoOptional.get());
+        return "redirect:/students/locations";
+    }
+
     @GetMapping("/students/{studentId}/locations/{locationId}/show")
     public String showStudentLocation(@PathVariable String studentId, @PathVariable String locationId, Model model){
         log.debug("Getting location id " + locationId + " for student id: " + studentId);
@@ -179,6 +200,17 @@ public class StudentController {
         slotDto.getStudents().add(studentDtoOptional.get());
         model.addAttribute("slot", slotDto);
         return "students/slots/slotform";
+    }
+
+    @GetMapping("/students/{studentId}/slots/{slotId}/delete")
+    public String deleteStudentSlot(@PathVariable String studentId, @PathVariable String slotId, Model model) {
+        log.debug("Getting student id " + studentId + " and slot id " + slotId);
+
+        Optional<StudentDto> studentDtoOptional = studentDtoService.findById(Long.valueOf(studentId));
+        studentDtoService.deleteByStudentIdAndSlotId(Long.valueOf(studentId), Long.valueOf(slotId));
+
+        model.addAttribute("student", studentDtoOptional.get());
+        return "redirect:/students/slots";
     }
 
     @GetMapping("/students/{studentId}/slots/{slotId}/show")

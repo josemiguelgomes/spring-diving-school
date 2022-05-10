@@ -97,6 +97,18 @@ public class InstructorController {
         return "instructors/locations/new";
     }
 
+    @GetMapping("/instructors/{instructorId}/locations/{locationId}/delete")
+    public String deleteInstructorLocation(@PathVariable String instructorId, @PathVariable String locationId,
+                                           Model model){
+        log.debug("Getting location id " + locationId + " for instructor id: " + instructorId);
+
+        Optional<InstructorDto> instructorDtoOptional = instructorDtoService.findById(Long.valueOf(instructorId));
+        instructorDtoService.deleteByInstructorIdAndLocationId(Long.valueOf(instructorId), Long.valueOf(locationId));
+
+        model.addAttribute("instructor", instructorDtoOptional.get());
+        return "redirect:/instructors/locations";
+    }
+
     @GetMapping("/instructors/{instructorId}/locations/{locationId}/show")
     public String showInstructorLocation(@PathVariable String instructorId, @PathVariable String locationId,
                                          Model model){
@@ -136,6 +148,18 @@ public class InstructorController {
 
         model.addAttribute("slot", slotDto);
         return "instructors/slots/new";
+    }
+
+    @GetMapping("/instructors/{instructorId}/slots/{slotId}/delete")
+    public String deleteInstructorSlot(@PathVariable String instructorId, @PathVariable String slotId,
+                                           Model model){
+        log.debug("Getting slot id " + slotId + " for instructor id: " + instructorId);
+
+        Optional<InstructorDto> instructorDtoOptional = instructorDtoService.findById(Long.valueOf(instructorId));
+        instructorDtoService.deleteByInstructorIdAndSlotId(Long.valueOf(instructorId), Long.valueOf(slotId));
+
+        model.addAttribute("instructor", instructorDtoOptional.get());
+        return "redirect:/instructors/slots";
     }
 
     @GetMapping("/instructors/{instructorId}/slots/{slotId}/show")

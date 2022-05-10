@@ -11,4 +11,6 @@ public interface CourseDtoService extends CrudService<CourseDto, Long> {
 
     Set<SlotDto> findSlotsByCourseId(Long courseId);
     Optional<SlotDto> findByCourseIdAndSlotId(Long courseId, Long slotId);
+
+    void deleteByCourseIdAndSlotId(Long courseId, Long slotId);
 }
