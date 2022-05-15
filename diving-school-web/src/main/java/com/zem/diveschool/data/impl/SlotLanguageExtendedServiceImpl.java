@@ -1,7 +1,6 @@
 package com.zem.diveschool.data.impl;
 
-import com.zem.diveschool.data.SlotLanguageDtoService;
-import com.zem.diveschool.dto.SlotLanguageDto;
+import com.zem.diveschool.data.SlotLanguageExtendedService;
 import com.zem.diveschool.persistence.model.SlotLanguage;
 import com.zem.diveschool.persistence.services.SlotLanguageService;
 import org.jetbrains.annotations.NotNull;
@@ -12,26 +11,26 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class SlotLanguageDtoServiceImpl extends AbstractDtoServiceImpl<SlotLanguageDto, Long, SlotLanguage, SlotLanguageService>
-                                implements SlotLanguageDtoService {
+public class SlotLanguageExtendedServiceImpl extends AbstractExtendedServiceImpl<SlotLanguage, Long, SlotLanguageService>
+                                implements SlotLanguageExtendedService {
 
     @Override
-    public Set<SlotLanguageDto> findAll() {
+    public Set<SlotLanguage> findAll() {
         return super.findAll();
     }
 
     @Override
-    public Optional<SlotLanguageDto> findById(Long id) {
+    public Optional<SlotLanguage> findById(Long id) {
         return super.findById(id);
     }
 
     @Override
-    public SlotLanguageDto save(SlotLanguageDto object) {
+    public SlotLanguage save(SlotLanguage object) {
         return super.save(object);
     }
 
     @Override
-    public void delete(SlotLanguageDto object) {
+    public void delete(SlotLanguage object) {
         super.delete(object);
     }
 
@@ -41,8 +40,8 @@ public class SlotLanguageDtoServiceImpl extends AbstractDtoServiceImpl<SlotLangu
     }
 
     @Override
-    public <S extends SlotLanguageDto> List<S> saveAll(@NotNull Iterable<S> dtos) {
-        return super.saveAll(dtos);
+    public <S extends SlotLanguage> List<S> saveAll(@NotNull Iterable<S> entities) {
+        return super.saveAll(entities);
     }
 }
 

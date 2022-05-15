@@ -14,6 +14,7 @@
                          width="225" height="225"></th>
          </div>
          <div class="card-body">
+            <p class="mb-0"><strong class="pr-1">ID </strong><th th:text="${instructor.id}"></th></p>
             <p class="mb-0"><strong class="pr-1">First Name </strong><th th:text="${instructor.firstName}"></th></p>
             <p class="mb-0"><strong class="pr-1">Middle Name </strong><th th:text="${instructor.middleName}"></th></p>
             <p class="mb-0"><strong class="pr-1">Last Name </strong><th th:text="${instructor.lastName}"></th></p>
@@ -26,17 +27,46 @@
          </div>
 
          <hr>
-<!--
+
          <h3>Home Address</h3>
          <div class="card-body">
-            !--/*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Location"*/--
-            <p class="mb-0"><strong class="pr-1">Street </strong><th th:text="${location.streetAddress}"></th></p>
-            <p class="mb-0"><strong class="pr-1">Postal Code </strong><th th:text="${location.postalCode}"></th></p>
-            <p class="mb-0"><strong class="pr-1">City </strong><th th:text="${location.city}"></th></p>
-            <p class="mb-0"><strong class="pr-1">State/Province </strong><th th:text="${location.stateProvince}"></th></p>
-            <p class="mb-0"><strong class="pr-1">Country </strong><th th:text="${location.country}"></th></p>
+            <!--/*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Location"*/-->
+            <p class="mb-0"><strong class="pr-1">Street </strong><th th:text="${instructor.homeAddress?.streetAddress}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Postal Code </strong><th th:text="${instructor.homeAddress?.postalCode}"></th></p>
+            <p class="mb-0"><strong class="pr-1">City </strong><th th:text="${instructor.homeAddress?.city}"></th></p>
+            <p class="mb-0"><strong class="pr-1">State/Province </strong><th th:text="${instructor.homeAddress?.stateProvince}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Country </strong><th th:text="${instructor.homeAddress?.country}"></th></p>
          </div>
--->
+
+         <hr>
+
+         <h3>Scheduled Classes</h3>
+         <div class="card-body">
+            <table id="slots" class="table table-striped">
+               <thead>
+               <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Status</th>
+                  <th>Show</th>
+               </tr>
+               </thead>
+               <tbody>
+               <tr th:each="slot : ${instructor.slots}">
+                  <td th:text="${slot.id}"></td>
+                  <td th:text="${slot.title}"></td>
+                  <td th:text="${slot.startDate}"></td>
+                  <td th:text="${slot.endDate}"></td>
+                  <td th:text="${slot.status}"></td>
+                  <td><a href="#" th:href="@{'/slots/' + ${slot.id} + '/show'}">Show</a></td>
+               </tr>
+               </tbody>
+            </table>
+         </div>
+
+
       </form>
 
       <hr>

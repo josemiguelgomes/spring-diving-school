@@ -1,6 +1,6 @@
 package com.zem.diveschool.services.springdatajpa;
 
-import com.zem.diveschool.converters.ConvertObjectToObject;
+import com.zem.diveschool.converters.ConverterDtoEntityService;
 import com.zem.diveschool.dto.CardDto;
 import com.zem.diveschool.persistence.model.Card;
 import com.zem.diveschool.persistence.repositories.CardRepository;
@@ -12,8 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,10 +28,7 @@ class CardServiceIT {
     private CardRepository cardRepository;
 
     @Autowired
-    private ConvertObjectToObject<Card, CardDto> cardToCardDto;
-
-    @Autowired
-    private ConvertObjectToObject<CardDto, Card> cardDtoToCard;
+    private ConverterDtoEntityService<CardDto, Card> converter;
 
 
 
@@ -43,12 +38,12 @@ class CardServiceIT {
         //given
         Iterable<Card> cards = cardRepository.findAll();
         Card testCard = cards.iterator().next();
-        CardDto testCardDto = cardToCardDto.convert(testCard);
+        CardDto testCardDto = converter.convertFromEntity(testCard);
 
         //when
         testCardDto.setCourse(NEW_COURSE);
-        Card savedCard = cardService.save(cardDtoToCard.convert(testCardDto));
-        CardDto savedCardDto = cardToCardDto.convert(savedCard);
+        Card savedCard = cardService.save(converter.convertFromDto(testCardDto));
+        CardDto savedCardDto = converter.convertFromEntity(savedCard);
 
         //then
         assertEquals(NEW_COURSE, savedCardDto.getCourse());

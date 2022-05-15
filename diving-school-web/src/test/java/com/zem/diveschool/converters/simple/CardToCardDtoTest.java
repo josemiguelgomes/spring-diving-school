@@ -1,9 +1,7 @@
 package com.zem.diveschool.converters.simple;
 
 
-import com.zem.diveschool.converters.ConvertObjectToObject;
-import com.zem.diveschool.converters.impl.simple.CardToCardDtoImpl;
-import com.zem.diveschool.converters.impl.simple.StudentToStudentDtoImpl;
+import com.zem.diveschool.converters.ConverterDtoEntityService;
 import com.zem.diveschool.dto.CardDto;
 import com.zem.diveschool.dto.StudentDto;
 import com.zem.diveschool.persistence.model.Card;
@@ -39,16 +37,13 @@ public class CardToCardDtoTest {
     public static final String INSTRUCTOR2 = "INSTRUCTOR2";
 
     @Autowired
-    ConvertObjectToObject<Card, CardDto> converter;
+    ConverterDtoEntityService<CardDto, Card> converter;
     @Autowired
-    ConvertObjectToObject<Student, StudentDto> convertStudent;
+    ConverterDtoEntityService<StudentDto, Student> convertStudent;
 
 
     @Before
     public void setUp() throws Exception {
-//        convertStudent = new StudentToStudentDtoImpl();
-//        converter = new CardToCardDtoImpl(convertStudent);
-
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         START_DATE1 = sdf.parse("1980-01-01");
@@ -60,17 +55,17 @@ public class CardToCardDtoTest {
 
     @Test
     public void testNullParameter() throws Exception {
-        assertNull(converter.convert((Card) null));
+        assertNull(converter.convertFromEntity((Card) null));
     }
 
     @Test
     public void testNullParameterSet() throws Exception {
-        assertNull(converter.convert((Set<Card>) null));
+        assertNull(converter.convertFromEntities((Set<Card>) null));
     }
 
     @Test
     public void testEmptyObject() throws Exception {
-        assertNotNull(converter.convert(new Card()));
+        assertNotNull(converter.convertFromEntity(new Card()));
     }
 
     @Test
@@ -88,7 +83,7 @@ public class CardToCardDtoTest {
                 .build();
 
         //when
-        CardDto dto = converter.convert(entity);
+        CardDto dto = converter.convertFromEntity(entity);
 
         //then
         assertNotNull(dto);
@@ -133,7 +128,7 @@ public class CardToCardDtoTest {
 
 
         //when
-        Set <CardDto> dtos = converter.convert(entities);
+        Set <CardDto> dtos = converter.convertFromEntities(entities);
 
         //then
         assertNotNull(dtos);

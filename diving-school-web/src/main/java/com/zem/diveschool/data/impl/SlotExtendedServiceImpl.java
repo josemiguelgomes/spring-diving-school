@@ -1,8 +1,8 @@
 package com.zem.diveschool.data.impl;
 
-import com.zem.diveschool.data.SlotDtoService;
+import com.zem.diveschool.data.SlotExtendedService;
 import com.zem.diveschool.dto.*;
-import com.zem.diveschool.persistence.model.Slot;
+import com.zem.diveschool.persistence.model.*;
 import com.zem.diveschool.persistence.services.SlotService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -12,26 +12,26 @@ import java.util.*;
 import static java.util.stream.Collectors.toSet;
 
 @Service
-public class SlotDtoServiceImpl extends AbstractDtoServiceImpl<SlotDto, Long, Slot, SlotService>
-                                implements SlotDtoService {
+public class SlotExtendedServiceImpl extends AbstractExtendedServiceImpl<Slot, Long, SlotService>
+                                implements SlotExtendedService {
 
     @Override
-    public Set<SlotDto> findAll() {
+    public Set<Slot> findAll() {
         return super.findAll();
     }
 
     @Override
-    public Optional<SlotDto> findById(Long id) {
+    public Optional<Slot> findById(Long id) {
         return super.findById(id);
     }
 
     @Override
-    public SlotDto save(SlotDto object) {
+    public Slot save(Slot object) {
         return super.save(object);
     }
 
     @Override
-    public void delete(SlotDto object) {
+    public void delete(Slot object) {
         super.delete(object);
     }
 
@@ -41,22 +41,21 @@ public class SlotDtoServiceImpl extends AbstractDtoServiceImpl<SlotDto, Long, Sl
     }
 
     @Override
-    public <S extends SlotDto> List<S> saveAll(@NotNull Iterable<S> dtos) {
+    public <S extends Slot> List<S> saveAll(@NotNull Iterable<S> dtos) {
         return super.saveAll(dtos);
     }
 
     @Override
-    public Set<CourseDto> findCoursesBySlotId(Long slotId) {
+    public Set<Course> findCoursesBySlotId(Long slotId) {
         return service.findById(slotId)
                 .stream()
-                .map(p -> entityToDto.convert(p))
                 //.map(SlotDto::getCourses) // TODO #93
-                .map(SlotDto::getCourse)// TODO #93
+                .map(Slot::getCourse)// TODO #93
                 .collect(toSet());
     }
 
     @Override
-    public Optional<CourseDto> findBySlotIdAndCourseId(Long slotId, Long courseId) {
+    public Optional<Course> findBySlotIdAndCourseId(Long slotId, Long courseId) {
         return findCoursesBySlotId(slotId)
                 .stream()
                 .filter(p -> p.getId().equals(courseId))
@@ -64,17 +63,16 @@ public class SlotDtoServiceImpl extends AbstractDtoServiceImpl<SlotDto, Long, Sl
     }
 
     @Override
-    public Set<InstructorDto> findInstructorsBySlotId(Long slotId) {
+    public Set<Instructor> findInstructorsBySlotId(Long slotId) {
         return service.findById(slotId)
                 .stream()
-                .map(p -> entityToDto.convert(p))
-                .map(SlotDto::getInstructors)
+                .map(Slot::getInstructors)
                 .flatMap(Collection::stream)
                 .collect(toSet());
     }
 
     @Override
-    public Optional<InstructorDto> findBySlotIdAndInstructorId(Long slotId, Long instructorId) {
+    public Optional<Instructor> findBySlotIdAndInstructorId(Long slotId, Long instructorId) {
         return findInstructorsBySlotId(slotId)
                 .stream()
                 .filter(p -> p.getId().equals(instructorId))
@@ -82,17 +80,16 @@ public class SlotDtoServiceImpl extends AbstractDtoServiceImpl<SlotDto, Long, Sl
     }
 
     @Override
-    public Set<SlotLanguageDto> findLanguagesBySlotId(Long slotId) {
+    public Set<SlotLanguage> findLanguagesBySlotId(Long slotId) {
         return service.findById(slotId)
                 .stream()
-                .map(p -> entityToDto.convert(p))
-                .map(SlotDto::getLanguages)
+                .map(Slot::getLanguages)
                 .flatMap(Collection::stream)
                 .collect(toSet());
     }
 
     @Override
-    public Optional<SlotLanguageDto> findBySlotIdAndSlotLanguageId(Long slotId, Long slotLanguageId) {
+    public Optional<SlotLanguage> findBySlotIdAndSlotLanguageId(Long slotId, Long slotLanguageId) {
         return findLanguagesBySlotId(slotId)
                 .stream()
                 .filter(p -> p.getId().equals(slotLanguageId))
@@ -100,17 +97,16 @@ public class SlotDtoServiceImpl extends AbstractDtoServiceImpl<SlotDto, Long, Sl
     }
 
     @Override
-    public Set<StudentDto> findStudentsBySlotId(Long slotId) {
+    public Set<Student> findStudentsBySlotId(Long slotId) {
         return service.findById(slotId)
                 .stream()
-                .map(p -> entityToDto.convert(p))
-                .map(p -> p.getStudents())
+                .map(Slot::getStudents)
                 .flatMap(Collection::stream)
                 .collect(toSet());
     }
 
     @Override
-    public Optional<StudentDto> findBySlotIdAndStudentId(Long slotId, Long studentId) {
+    public Optional<Student> findBySlotIdAndStudentId(Long slotId, Long studentId) {
         return findStudentsBySlotId(slotId)
                 .stream()
                 .filter(p -> p.getId().equals(studentId))
@@ -120,8 +116,8 @@ public class SlotDtoServiceImpl extends AbstractDtoServiceImpl<SlotDto, Long, Sl
     @Override
     public void deleteBySlotIdAndCourseId(Long slotId, Long courseId) {
         // Step 1 - Get Slot and Course
-        SlotDto slotDto =  entityToDto.convert(service.findById(slotId).get());
-        CourseDto courseDtoToBeRemoved = slotDto
+        Optional<Slot> slotOptional = service.findById(slotId);
+        Course courseToBeRemoved = slotOptional.get()
                 .getCourse();
 //                .stream()
   //              .filter(p -> p.getId().equals(slotId))
@@ -129,73 +125,73 @@ public class SlotDtoServiceImpl extends AbstractDtoServiceImpl<SlotDto, Long, Sl
 
         // Step 2 - remove link slot -> course
 //        slotDto.getCourses().remove(courseDtoOptionalToBeRemoved.get());
-        slotDto.setCourse(null);
+        slotOptional.get().setCourse(null);
 
         // Step 3 - remove link course -> slot
-        courseDtoToBeRemoved.getSlots().remove(slotDto);
+        courseToBeRemoved.getSlots().remove(slotOptional.get());
 
         // Step 4 - persist on database
-        service.save(dtoToEntity.convert(slotDto));
+        service.save(slotOptional.get());
     }
 
     @Override
     public void deleteBySlotIdAndInstructorId(Long slotId, Long instructorId) {
         // Step 1 - Get Slot and Instructor
-        SlotDto slotDto =  entityToDto.convert(service.findById(slotId).get());
-        Optional<InstructorDto> instructorDtoOptionalToBeRemoved = slotDto
+        Optional<Slot> slotOptional = service.findById(slotId);
+        Optional<Instructor> instructorOptionalToBeRemoved = slotOptional.get()
                 .getInstructors()
                 .stream()
                 .filter(p -> p.getId().equals(instructorId))
                 .findFirst();
 
         // Step 2 - remove link slot -> instructor
-        slotDto.getInstructors().remove(instructorDtoOptionalToBeRemoved.get());
+        slotOptional.get().getInstructors().remove(instructorOptionalToBeRemoved.get());
 
         // Step 3 - remove link course -> slot
-        instructorDtoOptionalToBeRemoved.get().getSlots().remove(slotDto);
+        instructorOptionalToBeRemoved.get().getSlots().remove(slotOptional.get());
 
         // Step 4 - persist on database
-        service.save(dtoToEntity.convert(slotDto));
+        service.save(slotOptional.get());
     }
 
     @Override
     public void deleteBySlotIdAndSlotLanguageId(Long slotId, Long slotLanguageId) {
-        // Step 1 - Get Slot and Languages
-        SlotDto slotDto =  entityToDto.convert(service.findById(slotId).get());
-        Optional<SlotLanguageDto> slotLanguageDtoOptionalToBeRemoved = slotDto
+        // Step 1 - Get Slot and Slot Language
+        Optional<Slot> slotOptional = service.findById(slotId);
+        Optional<SlotLanguage> slotLanguageOptionalToBeRemoved = slotOptional.get()
                 .getLanguages()
                 .stream()
                 .filter(p -> p.getId().equals(slotLanguageId))
                 .findFirst();
 
-        // Step 2 - remove link slot -> instructor
-        slotDto.getLanguages().remove(slotLanguageDtoOptionalToBeRemoved.get());
+        // Step 2 - remove link slot -> slot language
+        slotOptional.get().getLanguages().remove(slotLanguageOptionalToBeRemoved.get());
 
-        // Step 3 - remove link course -> slot
+        // Step 3 - remove link slot language -> slot
         //n/a
 
         // Step 4 - persist on database
-        service.save(dtoToEntity.convert(slotDto));
+        service.save(slotOptional.get());
     }
 
     @Override
     public void deleteBySlotIdAndStudentId(Long slotId, Long studentID) {
         // Step 1 - Get Slot and Student
-        SlotDto slotDto =  entityToDto.convert(service.findById(slotId).get());
-        Optional<StudentDto> studentDtoOptionalToBeRemoved = slotDto
+        Optional<Slot> slotOptional = service.findById(slotId);
+        Optional<Student> studentOptionalToBeRemoved = slotOptional.get()
                 .getStudents()
                 .stream()
                 .filter(p -> p.getId().equals(studentID))
                 .findFirst();
 
         // Step 2 - remove link slot -> instructor
-        slotDto.getStudents().remove(studentDtoOptionalToBeRemoved.get());
+        slotOptional.get().getStudents().remove(studentOptionalToBeRemoved.get());
 
         // Step 3 - remove link course -> slot
-        studentDtoOptionalToBeRemoved.get().getSlots().remove(slotDto);
+        studentOptionalToBeRemoved.get().getSlots().remove(slotOptional.get());
 
         // Step 4 - persist on database
-        service.save(dtoToEntity.convert(slotDto));
+        service.save(slotOptional.get());
     }
 
 }

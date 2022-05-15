@@ -1,6 +1,6 @@
 package com.zem.diveschool.services;
 
-import com.zem.diveschool.converters.ConvertObjectToObject;
+import com.zem.diveschool.converters.ConverterDtoEntityService;
 import com.zem.diveschool.dto.CourseDto;
 import com.zem.diveschool.persistence.model.Course;
 import com.zem.diveschool.persistence.repositories.CourseRepository;
@@ -8,7 +8,6 @@ import com.zem.diveschool.persistence.services.impl.springdatajpa.CourseServiceS
 //import org.aspectj.lang.annotation.Before;
 //import org.junit.Before;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 //import static org.junit.Assert.assertEquals;
 //import static org.junit.Assert.assertNotNull;
@@ -21,10 +20,10 @@ public class CourseServiceSDJparseImplTestCase {
     CourseRepository courseRepository;
 
     @Mock
-    ConvertObjectToObject<Course, CourseDto> convertCourseToDto;
+    ConverterDtoEntityService<Course, CourseDto> convertCourseToDto;
 
     @Mock
-    ConvertObjectToObject<CourseDto, Course> convertCourseToEntity;
+    ConverterDtoEntityService<CourseDto, Course> convertCourseToEntity;
 
     /*
     @Before

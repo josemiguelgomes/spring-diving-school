@@ -1,10 +1,15 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.data.InstructorDtoService;
-import com.zem.diveschool.dto.CourseDto;
+import com.zem.diveschool.converters.impl.simple.InstructorConverter;
+import com.zem.diveschool.converters.impl.simple.LocationConverter;
+import com.zem.diveschool.converters.impl.simple.SlotConverter;
+import com.zem.diveschool.data.InstructorExtendedService;
 import com.zem.diveschool.dto.InstructorDto;
 import com.zem.diveschool.dto.LocationDto;
 import com.zem.diveschool.dto.SlotDto;
+import com.zem.diveschool.persistence.model.Instructor;
+import com.zem.diveschool.persistence.model.Location;
+import com.zem.diveschool.persistence.model.Slot;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,22 +22,34 @@ import java.util.Set;
 @Controller
 public class InstructorController {
 
-    private final InstructorDtoService instructorDtoService;
+    private final InstructorExtendedService service;
+    private final InstructorConverter converter;
+    private final LocationConverter locationConverter;
+    private final SlotConverter slotConverter;
 
-    public InstructorController(InstructorDtoService instructorDtoService) {
-        this.instructorDtoService = instructorDtoService;
+    public InstructorController(InstructorExtendedService service,
+                                InstructorConverter converter,
+                                LocationConverter locationConverter,
+                                SlotConverter slotConverter) {
+        this.service = service;
+        this.converter = converter;
+        this.locationConverter = locationConverter;
+        this.slotConverter = slotConverter;
     }
 
-    @RequestMapping({"/instructors", "/instructors/index", "/instructors/index.html", "instructors.html"})
+    @GetMapping({"/instructors", "/instructors/index", "/instructors/index.html", "instructors.html"})
     public String listInstructors(Model model) {
-        model.addAttribute("instructors", instructorDtoService.findAll());
+        Set<Instructor> instructors = service.findAll();
+        Set<InstructorDto> instructorsDto = converter.convertFromEntities(instructors);
+        model.addAttribute("instructors", instructorsDto);
         return "instructors/index";
     }
 
-    @RequestMapping({"/instructors/{id}/show"})
+    @GetMapping({"/instructors/{id}/show"})
     public String showById(@PathVariable String id, Model model) {
-        Optional<InstructorDto> instructorDtoOptional = instructorDtoService.findById(Long.valueOf(id));
-        model.addAttribute("instructor", instructorDtoOptional.get());
+        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(id));
+        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
+        model.addAttribute("instructor", instructorDto);
         return "instructors/show";
     }
 
@@ -44,19 +61,25 @@ public class InstructorController {
 
     @GetMapping("instructors/{id}/update")
     public String updateInstructor(@PathVariable String id, Model model) {
-        model.addAttribute("instructor", instructorDtoService.findById(Long.valueOf(id)));
+        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(id));
+        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
+        model.addAttribute("instructor", instructorDto);
         return  "instructors/instructorform";
     }
 
     @PostMapping("instructors")
     public String saveOrUpdate(@ModelAttribute InstructorDto instructorDto) {
-        InstructorDto savedInstructorDto = instructorDtoService.save(instructorDto);
+        Instructor instructor = converter.convertFromDto(instructorDto);
+
+        Instructor savedInstructor = service.save(instructor);
+
+        InstructorDto savedInstructorDto = converter.convertFromEntity(savedInstructor);
         return "redirect:/instructors/" + savedInstructorDto.getId() + "/show";
     }
 
     @GetMapping("instructors/{id}/delete")
     public String deleteById(@PathVariable String id){
-        instructorDtoService.deleteById(Long.valueOf(id));
+        service.deleteById(Long.valueOf(id));
         return "redirect:/instructors";
     }
 
@@ -64,7 +87,10 @@ public class InstructorController {
 
     @RequestMapping("/instructors/find")
     public String findInstructors(Model model) {
-        model.addAttribute("instructors", instructorDtoService.findAll());
+        Set<Instructor> instructors = service.findAll();
+        Set<InstructorDto> instructorsDto = converter.convertFromEntities(instructors);
+
+        model.addAttribute("instructors", instructorsDto);
         return "instructors/find";
     }
 
@@ -74,12 +100,15 @@ public class InstructorController {
     public String listInstructorLocations(@PathVariable String instructorId, Model model){
         log.debug("Getting locations list for instructor id: " + instructorId);
 
-        Optional<InstructorDto> instructorDtoOptional = instructorDtoService.findById(Long.valueOf(instructorId));
-        Set<LocationDto> locationsDto = instructorDtoService.findLocationsByInstructorId(Long.valueOf(instructorId));
+        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(instructorId));
+        Set<Location> locations = service.findLocationsByInstructorId(Long.valueOf(instructorId));
+
+        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
+        Set<LocationDto> locationsDto = locationConverter.convertFromEntities(locations);
 
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("locations", locationsDto);
-        model.addAttribute("instructor", instructorDtoOptional.orElse(null));
+        model.addAttribute("instructor", instructorDto);
         return "instructors/locations/list";
     }
 
@@ -88,10 +117,11 @@ public class InstructorController {
         log.debug("Getting instructor id " + instructorId);
 
         // TODO make sure we have a good id value, raise exception if null
-        Optional<InstructorDto> instructorDtoOptional = instructorDtoService.findById(Long.valueOf(instructorId));
+        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(instructorId));
+        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
 
         LocationDto locationDto = new LocationDto();
-        instructorDtoOptional.get().setHomeAddress(locationDto);
+        instructorDto.setHomeAddress(locationDto);
 
         model.addAttribute("location", locationDto);
         return "instructors/locations/new";
@@ -102,10 +132,12 @@ public class InstructorController {
                                            Model model){
         log.debug("Getting location id " + locationId + " for instructor id: " + instructorId);
 
-        Optional<InstructorDto> instructorDtoOptional = instructorDtoService.findById(Long.valueOf(instructorId));
-        instructorDtoService.deleteByInstructorIdAndLocationId(Long.valueOf(instructorId), Long.valueOf(locationId));
+        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(instructorId));
+        service.deleteByInstructorIdAndLocationId(Long.valueOf(instructorId), Long.valueOf(locationId));
 
-        model.addAttribute("instructor", instructorDtoOptional.get());
+        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
+
+        model.addAttribute("instructor", instructorDto);
         return "redirect:/instructors/locations";
     }
 
@@ -114,12 +146,15 @@ public class InstructorController {
                                          Model model){
         log.debug("Getting location id " + locationId + " for instructor id: " + instructorId);
 
-        Optional<InstructorDto> instructorDtoOptional = instructorDtoService.findById(Long.valueOf(instructorId));
-        Optional<LocationDto> locationDtoOptional =
-             instructorDtoService.findByInstructorIdAndLocationId(Long.valueOf(instructorId), Long.valueOf(locationId));
+        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(instructorId));
+        Optional<Location> locationOptional =
+                service.findByInstructorIdAndLocationId(Long.valueOf(instructorId), Long.valueOf(locationId));
 
-        model.addAttribute("card", locationDtoOptional.get());
-        model.addAttribute("instructor", instructorDtoOptional.get());
+        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
+        LocationDto locationDto = locationConverter.convertFromEntity(locationOptional.get());
+
+        model.addAttribute("location", locationDto);
+        model.addAttribute("instructor", instructorDto);
         return "instructors/locations/show";
     }
 
@@ -127,12 +162,15 @@ public class InstructorController {
     public String listInstructorSlots(@PathVariable String instructorId, Model model){
         log.debug("Getting slots list for instructor id: " + instructorId);
 
-        Optional<InstructorDto> instructorDtoOptional = instructorDtoService.findById(Long.valueOf(instructorId));
-        Set<SlotDto> slotsDto = instructorDtoService.findSlotsByInstructorId(Long.valueOf(instructorId));
+        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(instructorId));
+        Set<Slot> slots = service.findSlotsByInstructorId(Long.valueOf(instructorId));
+
+        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
+        Set<SlotDto> slotsDto = slotConverter.convertFromEntities(slots);
 
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("slots", slotsDto);
-        model.addAttribute("instructor", instructorDtoOptional.get());
+        model.addAttribute("instructor", instructorDto);
         return "instructors/slots/list";
     }
 
@@ -141,10 +179,11 @@ public class InstructorController {
         log.debug("Getting instructor id " + instructorId);
 
         // TODO make sure we have a good id value, raise exception if null
-        Optional<InstructorDto> instructorDtoOptional = instructorDtoService.findById(Long.valueOf(instructorId));
+        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(instructorId));
+        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
 
         SlotDto slotDto = new SlotDto();
-        instructorDtoOptional.get().getSlots().add(slotDto);
+        instructorDto.getSlots().add(slotDto);
 
         model.addAttribute("slot", slotDto);
         return "instructors/slots/new";
@@ -155,10 +194,12 @@ public class InstructorController {
                                            Model model){
         log.debug("Getting slot id " + slotId + " for instructor id: " + instructorId);
 
-        Optional<InstructorDto> instructorDtoOptional = instructorDtoService.findById(Long.valueOf(instructorId));
-        instructorDtoService.deleteByInstructorIdAndSlotId(Long.valueOf(instructorId), Long.valueOf(slotId));
+        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(instructorId));
+        service.deleteByInstructorIdAndSlotId(Long.valueOf(instructorId), Long.valueOf(slotId));
 
-        model.addAttribute("instructor", instructorDtoOptional.get());
+        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
+
+        model.addAttribute("instructor", instructorDto);
         return "redirect:/instructors/slots";
     }
 
@@ -166,12 +207,15 @@ public class InstructorController {
     public String showInstructorSlot(@PathVariable String instructorId, @PathVariable String slotId, Model model){
         log.debug("Getting slot id " + slotId + " for instructor id: " + instructorId);
 
-        Optional<InstructorDto> instructorDtoOptional = instructorDtoService.findById(Long.valueOf(instructorId));
-        Optional<SlotDto> slotDtoOptional =
-                instructorDtoService.findByInstructorIdAndSlotId(Long.valueOf(instructorId), Long.valueOf(slotId));
-        model.addAttribute("slot", slotDtoOptional.orElse(null));
-        model.addAttribute("instructor", instructorDtoOptional.orElse(null));
+        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(instructorId));
+        Optional<Slot> slotOptional =
+                service.findByInstructorIdAndSlotId(Long.valueOf(instructorId), Long.valueOf(slotId));
+
+        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
+        SlotDto slotDto = slotConverter.convertFromEntity(slotOptional.get());
+
+        model.addAttribute("slot", slotDto);
+        model.addAttribute("instructor", instructorDto);
         return "instructors/slots/show";
     }
-
 }

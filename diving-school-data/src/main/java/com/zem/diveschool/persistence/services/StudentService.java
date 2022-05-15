@@ -9,4 +9,5 @@ public interface StudentService extends CrudService<Student, Long> {
     //
     Optional<Student> findByFirstName(String firstName);
 
+    void saveImageFile(Long studentId, Byte[] image);
 }

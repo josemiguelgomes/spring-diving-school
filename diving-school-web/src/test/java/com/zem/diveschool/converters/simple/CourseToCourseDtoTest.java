@@ -1,8 +1,7 @@
 package com.zem.diveschool.converters.simple;
 
 
-import com.zem.diveschool.converters.ConvertObjectToObject;
-import com.zem.diveschool.converters.impl.simple.CourseToCourseDtoImpl;
+import com.zem.diveschool.converters.ConverterDtoEntityService;
 import com.zem.diveschool.dto.CourseDto;
 import com.zem.diveschool.persistence.model.Course;
 import com.zem.diveschool.persistence.model.Level;
@@ -11,7 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -31,7 +29,7 @@ public class CourseToCourseDtoTest {
     public static final Level LEVEL2 = Level.MEDIUM;
 
 
-    ConvertObjectToObject<Course, CourseDto> converter;
+    ConverterDtoEntityService<CourseDto, Course> converter;
 
     @Before
     public void setUp() throws Exception {
@@ -39,17 +37,17 @@ public class CourseToCourseDtoTest {
 
     @Test
     public void testNullParameter() throws Exception {
-        assertNull(converter.convert((Course) null));
+        assertNull(converter.convertFromEntity((Course) null));
     }
 
     @Test
     public void testNullParameterSet() throws Exception {
-        assertNull(converter.convert((Set<Course>) null));
+        assertNull(converter.convertFromEntities((Set<Course>) null));
     }
 
     @Test
     public void testEmptyObject() throws Exception {
-        assertNotNull(converter.convert(new Course()));
+        assertNotNull(converter.convertFromEntity(new Course()));
     }
 
     @Test
@@ -63,7 +61,7 @@ public class CourseToCourseDtoTest {
                 .build();
 
         //when
-        CourseDto dto = converter.convert(entity);
+        CourseDto dto = converter.convertFromEntity(entity);
 
         //then
         assertNotNull(entity);
@@ -93,7 +91,7 @@ public class CourseToCourseDtoTest {
 
 
         //when
-        Set <CourseDto> dtos = converter.convert(entities);
+        Set <CourseDto> dtos = converter.convertFromEntities(entities);
 
         //then
         assertNotNull(dtos);

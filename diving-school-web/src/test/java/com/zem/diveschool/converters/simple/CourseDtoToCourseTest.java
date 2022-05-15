@@ -1,8 +1,7 @@
 package com.zem.diveschool.converters.simple;
 
 
-import com.zem.diveschool.converters.ConvertObjectToObject;
-import com.zem.diveschool.converters.impl.simple.CourseDtoToCourseImpl;
+import com.zem.diveschool.converters.ConverterDtoEntityService;
 import com.zem.diveschool.dto.CourseDto;
 import com.zem.diveschool.persistence.model.Course;
 import com.zem.diveschool.persistence.model.Level;
@@ -26,7 +25,7 @@ public class CourseDtoToCourseTest {
     public static final Level LEVEL2 = Level.MEDIUM;
 
 
-    ConvertObjectToObject<CourseDto, Course> converter;
+    ConverterDtoEntityService<CourseDto, Course> converter;
 
     @Before
     public void setUp() throws Exception {
@@ -35,17 +34,17 @@ public class CourseDtoToCourseTest {
 
     @Test
     public void testNullParameter() throws Exception {
-        assertNull(converter.convert((CourseDto) null));
+        assertNull(converter.convertFromDto((CourseDto) null));
     }
 
     @Test
     public void testNullParameterSet() throws Exception {
-        assertNull(converter.convert((Set<CourseDto>) null));
+        assertNull(converter.convertFromDtos((Set<CourseDto>) null));
     }
 
     @Test
     public void testEmptyObject() throws Exception {
-        assertNotNull(converter.convert(new CourseDto()));
+        assertNotNull(converter.convertFromDto(new CourseDto()));
     }
 
     @Test
@@ -59,7 +58,7 @@ public class CourseDtoToCourseTest {
                 .build();
 
         //when
-        Course entity = converter.convert(dto);
+        Course entity = converter.convertFromDto(dto);
 
         //then
         assertNotNull(entity);
@@ -89,7 +88,7 @@ public class CourseDtoToCourseTest {
 
 
         //when
-        Set <Course> entities = converter.convert(dtos);
+        Set <Course> entities = converter.convertFromDtos(dtos);
 
         //then
         assertNotNull(entities);

@@ -1,40 +1,41 @@
 package com.zem.diveschool.data.impl;
 
-import com.zem.diveschool.data.StudentDtoService;
-import com.zem.diveschool.dto.LocationDto;
-import com.zem.diveschool.dto.SlotDto;
-import com.zem.diveschool.dto.CardDto;
-import com.zem.diveschool.dto.StudentDto;
+import com.zem.diveschool.data.StudentExtendedService;
+import com.zem.diveschool.persistence.model.Card;
+import com.zem.diveschool.persistence.model.Location;
+import com.zem.diveschool.persistence.model.Slot;
 import com.zem.diveschool.persistence.model.Student;
 import com.zem.diveschool.persistence.services.StudentService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 import static java.util.stream.Collectors.toSet;
 
 @Service
-public class StudentDtoServiceImpl extends AbstractDtoServiceImpl<StudentDto, Long, Student, StudentService>
-                                implements StudentDtoService {
+public class StudentExtendedServiceImpl extends AbstractExtendedServiceImpl<Student, Long, StudentService>
+                                implements StudentExtendedService {
 
     @Override
-    public Set<StudentDto> findAll() {
+    public Set<Student> findAll() {
         return super.findAll();
     }
 
     @Override
-    public Optional<StudentDto> findById(Long id) {
+    public Optional<Student> findById(Long id) {
         return super.findById(id);
     }
 
     @Override
-    public StudentDto save(StudentDto object) {
+    public Student save(Student object) {
        return super.save(object);
     }
 
     @Override
-    public void delete(StudentDto object) {
+    public void delete(Student object) {
        super.delete(object);
     }
 
@@ -44,22 +45,21 @@ public class StudentDtoServiceImpl extends AbstractDtoServiceImpl<StudentDto, Lo
     }
 
     @Override
-    public <S extends StudentDto> List<S> saveAll(@NotNull Iterable<S> dtos) {
-       return super.saveAll(dtos);
+    public <S extends Student> List<S> saveAll(@NotNull Iterable<S> entities) {
+       return super.saveAll(entities);
     }
 
     @Override
-    public Set<CardDto> findCardsByStudentId(Long studentId) {
+    public Set<Card> findCardsByStudentId(Long studentId) {
         return service.findById(studentId)
                 .stream()
-                .map(p -> entityToDto.convert(p))
-                .map(StudentDto::getCards)
+                .map(Student::getCards)
                 .flatMap(Collection::stream)
                 .collect(toSet());
     }
 
     @Override
-    public Optional<CardDto> findByStudentIdAndCardId(Long studentId, Long cardId) {
+    public Optional<Card> findByStudentIdAndCardId(Long studentId, Long cardId) {
         return findCardsByStudentId(studentId)
                 .stream()
                 .filter(p -> p.getId().equals(cardId))
@@ -67,18 +67,17 @@ public class StudentDtoServiceImpl extends AbstractDtoServiceImpl<StudentDto, Lo
     }
 
     @Override
-    public Set<LocationDto> findLocationsByStudentId(Long studentId) {
+    public Set<Location> findLocationsByStudentId(Long studentId) {
         return service.findById(studentId)
                 .stream()
-                .map(p -> entityToDto.convert(p))
 //              .map(p -> p.getLocations())// TODO #93
 //              .flatMap(Collection::stream)
-                .map(StudentDto::getHomeAddress)// TODO #93
+                .map(Student::getHomeAddress)// TODO #93
                 .collect(toSet());
     }
 
     @Override
-    public Optional<LocationDto> findByStudentIdAndLocationId(Long studentId, Long locationId) {
+    public Optional<Location> findByStudentIdAndLocationId(Long studentId, Long locationId) {
         return findLocationsByStudentId(studentId)
                 .stream()
                 .filter(p -> p.getId().equals(locationId))
@@ -86,17 +85,16 @@ public class StudentDtoServiceImpl extends AbstractDtoServiceImpl<StudentDto, Lo
     }
 
     @Override
-    public Set<SlotDto> findSlotsByStudentId(Long studentId) {
+    public Set<Slot> findSlotsByStudentId(Long studentId) {
         return service.findById(studentId)
                 .stream()
-                .map(p ->  entityToDto.convert(p))
-                .map(StudentDto::getSlots)
+                .map(Student::getSlots)
                 .flatMap(Collection::stream)
                 .collect(toSet());
     }
 
     @Override
-    public Optional<SlotDto> findByStudentIdAndSlotId(Long studentId, Long slotId) {
+    public Optional<Slot> findByStudentIdAndSlotId(Long studentId, Long slotId) {
         return findSlotsByStudentId(studentId)
                 .stream()
                 .filter(p -> p.getId().equals(slotId))
@@ -106,61 +104,80 @@ public class StudentDtoServiceImpl extends AbstractDtoServiceImpl<StudentDto, Lo
     @Override
     public void deleteByStudentIdAndCardId(long studentId, long cardId) {
         // Step 1 - Get Slot and Student
-        StudentDto studentDto =  entityToDto.convert(service.findById(studentId).get());
-        Optional<CardDto> cardDtoOptionalToBeRemoved = studentDto
+        Optional<Student> studentOptional = service.findById(studentId);
+        Optional<Card> cardOptionalToBeRemoved = studentOptional.get()
                 .getCards()
                 .stream()
                 .filter(p -> p.getId().equals(cardId))
                 .findFirst();
 
         // Step 2 - remove link student -> card
-        studentDto.getCards().remove(cardDtoOptionalToBeRemoved.get());
+        studentOptional.get().getCards().remove(cardOptionalToBeRemoved.get());
 
         // Step 3 - remove link course -> slot
-        cardDtoOptionalToBeRemoved.get().setStudent(null);;
+        cardOptionalToBeRemoved.get().setStudent(null);;
 
         // Step 4 - persist on database
-        service.save(dtoToEntity.convert(studentDto));
+        service.save(studentOptional.get());
     }
 
     @Override
     public void deleteByStudentIdAndLocationId(long studentId, long locationId) {
         // Step 1 - Get Student and Location
-        StudentDto studentDto =  entityToDto.convert(service.findById(studentId).get());
-        LocationDto locationDtoToBeRemoved = studentDto
+        Optional<Student> studentOptional = service.findById(studentId);
+        Location locationToBeRemoved = studentOptional.get()
                 .getHomeAddress();
 //                .stream()
  //               .filter(p -> p.getId().equals(locationId))
  //               .findFirst();
 
         // Step 2 - remove link student -> location
-        studentDto.getCards().remove(locationDtoToBeRemoved);
+        studentOptional.get().getCards().remove(locationToBeRemoved);
 
         // Step 3 - remove link location -> student
         //n/a
 
         // Step 4 - persist on database
-        service.save(dtoToEntity.convert(studentDto));
+        service.save(studentOptional.get());
     }
 
     @Override
     public void deleteByStudentIdAndSlotId(long studentId, long slotId) {
         // Step 1 - Get Student and Slot
-        StudentDto studentDto =  entityToDto.convert(service.findById(studentId).get());
-        Optional<SlotDto> slotDtoOptionalToBeRemoved = studentDto
+        Optional<Student> studentOptional = service.findById(studentId);
+        Optional<Slot> slotOptionalToBeRemoved = studentOptional.get()
                 .getSlots()
                 .stream()
                 .filter(p -> p.getId().equals(slotId))
                 .findFirst();
 
         // Step 2 - remove link student -> slot
-        studentDto.getCards().remove(slotDtoOptionalToBeRemoved.get());
+        studentOptional.get().getCards().remove(slotOptionalToBeRemoved.get());
 
         // Step 3 - remove link slot -> student
-        slotDtoOptionalToBeRemoved.get().getStudents().remove(studentDto);;
+        slotOptionalToBeRemoved.get().getStudents().remove(studentOptional.get());;
 
         // Step 4 - persist on database
-        service.save(dtoToEntity.convert(studentDto));
+        service.save(studentOptional.get());
+    }
+
+    @Override
+    public void saveImageFile(Long studentId, MultipartFile file) {
+        try {
+            Byte[] byteObjects = new Byte[file.getBytes().length];
+
+            int i = 0;
+
+            for (byte b : file.getBytes()){
+                byteObjects[i++] = b;
+            }
+
+            super.saveImageFile(studentId, byteObjects);
+
+        } catch (IOException e) {
+            //todo handle better
+            e.printStackTrace();
+        }
     }
 }
 

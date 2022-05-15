@@ -1,7 +1,9 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.data.LocationDtoService;
+import com.zem.diveschool.converters.impl.simple.LocationConverter;
+import com.zem.diveschool.data.LocationExtendedService;
 import com.zem.diveschool.dto.LocationDto;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -23,8 +25,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class LocationControllerTest {
 
     @Mock
-    LocationDtoService locationDtoService;
+    LocationExtendedService service;
 
+    @Mock
+    LocationConverter converter;
+
+    @Mock
     LocationController controller;
 
     MockMvc mockMvc;
@@ -33,7 +39,7 @@ public class LocationControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new LocationController(locationDtoService);
+        controller = new LocationController(service, converter);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -48,11 +54,13 @@ public class LocationControllerTest {
 
     @Test
     public void test_listLocations() throws Exception {
+        Assert.assertEquals(1,0);
+        /*
         //given
         Set<LocationDto> locationsDto = new HashSet<>();
 
         //when
-        when(locationDtoService.findAll()).thenReturn(locationsDto);
+        when(locationExtendedService.findAll()).thenReturn(locationsDto);
 
         //then
         mockMvc.perform(get("/locations"))
@@ -61,16 +69,20 @@ public class LocationControllerTest {
                 .andExpect(model().attributeExists("locations"))
                 .andExpect(model().size(1));
 
-        verify(locationDtoService, times(1)).findAll();
+        verify(locationExtendedService, times(1)).findAll();
+
+         */
     }
 
     @Test
     public void test_showById() throws Exception {
+        Assert.assertEquals(1,0);
+        /*
         //given
         LocationDto locationDto = new LocationDto();
 
         //when
-        when(locationDtoService.findById(anyLong())).thenReturn(Optional.of(locationDto));
+        when(locationExtendedService.findById(anyLong())).thenReturn(Optional.of(locationDto));
 
         //then
         mockMvc.perform(get("/locations/1/show"))
@@ -79,11 +91,15 @@ public class LocationControllerTest {
                 .andExpect(model().attributeExists("location"))
                 .andExpect(model().size(1));
 
-        verify(locationDtoService, times(1)).findById(anyLong());
+        verify(locationExtendedService, times(1)).findById(anyLong());
+
+         */
     }
 
     @Test
     public void test_newLocation() throws Exception {
+        Assert.assertEquals(1,0);
+        /*
         //given
 
         //when
@@ -94,15 +110,19 @@ public class LocationControllerTest {
                 .andExpect(view().name("locations/locationform"))
                 .andExpect(model().attributeExists("location"))
                 .andExpect(model().size(1));
+
+         */
     }
 
     @Test
     public void test_updateLocation() throws Exception {
+        Assert.assertEquals(1,0);
+        /*
         //given
         LocationDto locationDto = new LocationDto();
 
         //when
-        when(locationDtoService.findById(anyLong())).thenReturn(Optional.of(locationDto));
+        when(locationExtendedService.findById(anyLong())).thenReturn(Optional.of(locationDto));
 
         //then
         mockMvc.perform(get("/locations/1/update"))
@@ -111,17 +131,21 @@ public class LocationControllerTest {
                 .andExpect(model().attributeExists("location"))
                 .andExpect(model().size(1));
 
-        verify(locationDtoService, times(1)).findById(anyLong());
+        verify(locationExtendedService, times(1)).findById(anyLong());
+
+         */
     }
 
     @Test
     public void test_saveOrUpdate() throws Exception {
+        Assert.assertEquals(1,0);
+        /*
         //given
         LocationDto locationDto = new LocationDto();
         locationDto.setId(2L);
 
         //when
-        when(locationDtoService.save(any())).thenReturn(locationDto);
+        when(locationExtendedService.save(any())).thenReturn(locationDto);
 
         //then
         mockMvc.perform(post("/locations")
@@ -133,12 +157,16 @@ public class LocationControllerTest {
                 .andExpect(view().name("redirect:/locations/2/show"))
                 .andExpect(model().size(1));
 
-        verify(locationDtoService, times(1)).save(any());
+        verify(locationExtendedService, times(1)).save(any());
+
+         */
     }
 
 
     @Test
     public void test_deleteById() throws Exception {
+        Assert.assertEquals(1,0);
+        /*
         //given
 
         //when
@@ -148,6 +176,8 @@ public class LocationControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/locations"));
 
-        verify(locationDtoService, times(1)).deleteById(anyLong());
+        verify(locationExtendedService, times(1)).deleteById(anyLong());
+
+         */
     }
  }

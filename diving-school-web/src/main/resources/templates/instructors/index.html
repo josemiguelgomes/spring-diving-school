@@ -12,6 +12,7 @@
 <table id="students" class="table table-striped">
     <thead>
     <tr>
+        <th>ID</th>
         <th>Name</th>
         <th>Birthdate</th>
         <th>Gender</th>
@@ -26,6 +27,7 @@
     </thead>
     <tbody>
     <tr th:each="instructor : ${instructors}">
+        <td th:text="${instructor.id}"></td>
         <td th:text="${instructor.firstName + ' ' + instructor.middleName + ' ' + instructor.lastName}"></td>
         <td th:text="${instructor.birthDate}"></td>
         <td th:text="${instructor.gender}"></td>

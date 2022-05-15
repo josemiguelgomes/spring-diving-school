@@ -1,38 +1,30 @@
 package com.zem.diveschool.data.impl;
 
-
-import com.zem.diveschool.converters.ConvertObjectToObject;
-import com.zem.diveschool.dto.GenericDto;
 import com.zem.diveschool.persistence.model.BaseEntity;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
-public abstract class AbstractDtoServiceImpl<T extends GenericDto, I extends Long, E extends BaseEntity, S> {
-
-    protected ConvertObjectToObject<E, T> entityToDto;
-
-    protected ConvertObjectToObject<T, E> dtoToEntity;
+public abstract class AbstractExtendedServiceImpl<T extends BaseEntity<?>, I extends Long, S> {
 
     protected S service;
 
     @Autowired
-    public final void setBeans(ConvertObjectToObject<E, T> entityToDto,
-                               ConvertObjectToObject<T, E> dtoToEntity,
-                               S service) {
-        this.entityToDto = entityToDto;
-        this.dtoToEntity = dtoToEntity;
+    public final void setBeans(S service) {
         this.service = service;
     }
-
     Set<T> findAll() {
         Class[] parameterType = null;
         try {
+            // Get Method and invoke
             Method meth = service.getClass().getMethod("findAll", parameterType);
-            return entityToDto.convert((Set<E>) meth.invoke(service, null));
+            return (Set<T>) meth.invoke(service, null);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
@@ -43,8 +35,7 @@ public abstract class AbstractDtoServiceImpl<T extends GenericDto, I extends Lon
         parameterType[0] = id.getClass();
         try {
             Method meth = service.getClass().getMethod("findById", parameterType);
-            Optional<E> e = (Optional<E>) meth.invoke(service, id);
-            return e.map(value -> entityToDto.convert(value));
+            return (Optional<T>) meth.invoke(service, id);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
@@ -55,10 +46,7 @@ public abstract class AbstractDtoServiceImpl<T extends GenericDto, I extends Lon
         parameterType[0] = object.getClass();
         try {
             Method meth = service.getClass().getMethod("save", parameterType);
-            E e = dtoToEntity.convert((T) object);
-            E eSaved = (E) meth.invoke(service, e);
-            return entityToDto.convert(eSaved);
-//          return entityToDto.convert((E) meth.invoke(service, dtoToEntity.convert((T) object)));
+            return (T) meth.invoke(service, (T) object);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
@@ -69,7 +57,7 @@ public abstract class AbstractDtoServiceImpl<T extends GenericDto, I extends Lon
         parameterType[0] = object.getClass();
         try {
             Method meth = service.getClass().getMethod("delete", parameterType);
-            meth.invoke(service, dtoToEntity.convert(object));
+            meth.invoke(service, object);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
@@ -95,5 +83,20 @@ public abstract class AbstractDtoServiceImpl<T extends GenericDto, I extends Lon
         }
 
         return result;
+    }
+
+    protected void saveImageFile(I id, Byte[] byteObjects) {
+        Class[] parameterType = new Class[2];
+        parameterType[0] = id.getClass();
+        parameterType[1] = byteObjects.getClass();
+        Object[] args = new Class[2];
+        args[0] = id;
+        args[1] = byteObjects;
+        try {
+            Method meth = service.getClass().getMethod("saveImageFile", parameterType);
+            meth.invoke(service, args);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

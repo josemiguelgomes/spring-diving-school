@@ -21,4 +21,13 @@ public class StudentServiceSDJpaImpl extends AbstractServiceSDJpaImpl<Student, L
     public Optional<Student> findByFirstName(String firstName) {
         return super.getObjectRepository().findByFirstName(firstName);
     }
+
+    @Override
+    public void saveImageFile(Long studentId, Byte[] image) {
+        Optional<Student> studentOptional = super.findById(studentId);
+        if(studentOptional.isPresent()) {
+            studentOptional.get().setPhoto(image);
+            super.getObjectRepository().save(studentOptional.get());
+        }
+    }
 }

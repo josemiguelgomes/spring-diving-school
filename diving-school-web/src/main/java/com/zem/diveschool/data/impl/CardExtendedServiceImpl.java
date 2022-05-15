@@ -1,7 +1,6 @@
 package com.zem.diveschool.data.impl;
 
-import com.zem.diveschool.data.CardDtoService;
-import com.zem.diveschool.dto.CardDto;
+import com.zem.diveschool.data.CardExtendedService;
 import com.zem.diveschool.persistence.model.Card;
 import com.zem.diveschool.persistence.services.CardService;
 import org.jetbrains.annotations.NotNull;
@@ -10,26 +9,26 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class CardDtoServiceImpl extends AbstractDtoServiceImpl<CardDto, Long, Card, CardService>
-        implements CardDtoService {
+public class CardExtendedServiceImpl extends AbstractExtendedServiceImpl<Card, Long, CardService>
+        implements CardExtendedService {
 
     @Override
-    public Set<CardDto> findAll() {
+    public Set<Card> findAll() {
         return super.findAll();
     }
 
     @Override
-    public Optional<CardDto> findById(Long id) {
+    public Optional<Card> findById(Long id) {
         return super.findById(id);
     }
 
     @Override
-    public CardDto save(CardDto object) {
+    public Card save(Card object) {
         return super.save(object);
     }
 
     @Override
-    public void delete(CardDto object) {
+    public void delete(Card object) {
         super.delete(object);
     }
 
@@ -39,8 +38,8 @@ public class CardDtoServiceImpl extends AbstractDtoServiceImpl<CardDto, Long, Ca
     }
 
     @Override
-    public <S extends CardDto> List<S> saveAll(@NotNull Iterable<S> dtos) {
-        return super.saveAll(dtos);
+    public <S extends Card> List<S> saveAll(@NotNull Iterable<S> entities) {
+        return super.saveAll(entities);
     }
 }
 

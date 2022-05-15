@@ -1,10 +1,11 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.data.CourseDtoService;
-import com.zem.diveschool.dto.CourseDto;
-import com.zem.diveschool.dto.LocationDto;
-import com.zem.diveschool.dto.SlotDto;
-import com.zem.diveschool.dto.StudentDto;
+import com.zem.diveschool.converters.impl.simple.CourseConverter;
+import com.zem.diveschool.converters.impl.simple.SlotConverter;
+import com.zem.diveschool.data.CourseExtendedService;
+import com.zem.diveschool.dto.*;
+import com.zem.diveschool.persistence.model.Course;
+import com.zem.diveschool.persistence.model.Slot;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,21 +18,31 @@ import java.util.Set;
 @Controller
 public class CourseController {
 
-    private final CourseDtoService courseDtoService;
+    private final CourseExtendedService service;
+    private final CourseConverter converter;
+    private final SlotConverter slotConverter;
 
-    public CourseController(CourseDtoService courseDtoService) {
-        this.courseDtoService = courseDtoService;
+    public CourseController(CourseExtendedService service,
+                            CourseConverter converter,
+                            SlotConverter slotConverter) {
+        this.service = service;
+        this.converter = converter;
+        this.slotConverter = slotConverter;
     }
 
-    @RequestMapping({"/courses", "/courses/index", "/courses/index.html", "courses.html"})
+    @GetMapping({"/courses", "/courses/index", "/courses/index.html", "courses.html"})
     public String listCourses(Model model){
-        model.addAttribute("courses", courseDtoService.findAll());
+        Set<Course> courses = service.findAll();
+        Set<CourseDto> coursesDto = converter.convertFromEntities(courses);
+        model.addAttribute("courses", coursesDto);
         return "courses/index";
     }
 
     @RequestMapping({"/courses/{id}/show"})
     public String showById(@PathVariable String id, Model model){
-        model.addAttribute("course", courseDtoService.findById(Long.valueOf(id)));
+        Optional<Course> courseOptional = service.findById(Long.valueOf(id));
+        CourseDto courseDto = converter.convertFromEntity(courseOptional.get());
+        model.addAttribute("course", courseDto);
         return "courses/show";
     }
 
@@ -43,27 +54,33 @@ public class CourseController {
 
     @GetMapping("courses/{id}/update")
     public String updateCourse(@PathVariable String id, Model model){
-        model.addAttribute("course", courseDtoService.findById(Long.valueOf(id)));
+        Optional<Course> courseOptional = service.findById(Long.valueOf(id));
+        CourseDto courseDto = converter.convertFromEntity(courseOptional.get());
+        model.addAttribute("course", courseDto);
         return  "courses/courseform";
     }
 
     @PostMapping("courses")
     public String saveOrUpdate(@ModelAttribute CourseDto courseDto){
-        CourseDto savedCourseDto = courseDtoService.save(courseDto);
+        Course course = converter.convertFromDto(courseDto);
+        Course savedCourse = service.save(course);
+        CourseDto savedCourseDto = converter.convertFromEntity(savedCourse);
         return "redirect:/courses/" + savedCourseDto.getId() + "/show";
     }
 
     @GetMapping("courses/{id}/delete")
     public String deleteById(@PathVariable String id) {
-        courseDtoService.deleteById(Long.valueOf(id));
+        service.deleteById(Long.valueOf(id));
         return "redirect:/courses";
     }
 
     /* --- */
 
-    @RequestMapping("/courses/find")
+    @GetMapping("/courses/find")
     public String findCourses(Model model) {
-        model.addAttribute("courses", courseDtoService.findAll());
+        Set<Course> courses = service.findAll();
+        Set<CourseDto> coursesDto = converter.convertFromEntities(courses);
+        model.addAttribute("courses", coursesDto);
         return "courses/find";
     }
 
@@ -73,12 +90,15 @@ public class CourseController {
     public String listCourseSlots(@PathVariable String courseId, Model model){
         log.debug("Getting slots list for course id: " + courseId);
 
-        Optional<CourseDto> courseDtoOptional = courseDtoService.findById(Long.valueOf(courseId));
-        Set<SlotDto> slotsDto = courseDtoService.findSlotsByCourseId(Long.valueOf(courseId));
+        Optional<Course> courseOptional = service.findById(Long.valueOf(courseId));
+        Set<Slot> slots = service.findSlotsByCourseId(Long.valueOf(courseId));
+
+        CourseDto courseDto = converter.convertFromEntity(courseOptional.get());
+        Set<SlotDto> slotsDto = slotConverter.convertFromEntities(slots);
 
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("slots", slotsDto);
-        model.addAttribute("course", courseDtoOptional.orElse(null));
+        model.addAttribute("course", courseDto);
         return "courses/slots/list";
     }
 
@@ -87,24 +107,27 @@ public class CourseController {
         log.debug("Getting course id " + courseId);
 
         // TODO make sure we have a good id value, raise exception if null
-        Optional<CourseDto> courseDtoOptional = courseDtoService.findById(Long.valueOf(courseId));
+        Optional<Course> courseOptional = service.findById(Long.valueOf(courseId));
+        CourseDto courseDto = converter.convertFromEntity(courseOptional.get());
 
         // need to return back parent id for hidden form property
         SlotDto slotDto = new SlotDto();
-        slotDto.setCourse(courseDtoOptional.get());
+        slotDto.setCourse(courseDto);
 
         model.addAttribute("slot", slotDto);
-        return "students/locations/locationform";
+        return "courses/slots/slotform";
     }
 
     @GetMapping("/courses/{courseId}/slots/{slotId}/delete")
     public String deleteCourseSlot(@PathVariable String courseId, @PathVariable String slotId, Model model) {
         log.debug("Getting course id " + courseId);
 
-        Optional<CourseDto> courseDtoOptional = courseDtoService.findById(Long.valueOf(courseId));
-        courseDtoService.deleteByCourseIdAndSlotId(Long.valueOf(courseId), Long.valueOf(slotId));
+        Optional<Course> courseOptional = service.findById(Long.valueOf(courseId));
+        service.deleteByCourseIdAndSlotId(Long.valueOf(courseId), Long.valueOf(slotId));
 
-        model.addAttribute("course", courseDtoOptional.get());
+        CourseDto courseDto = converter.convertFromEntity(courseOptional.get());
+
+        model.addAttribute("course", courseDto);
         return "redirect:/courses/slots";
     }
 
@@ -112,12 +135,15 @@ public class CourseController {
     public String showCourseSlot(@PathVariable String courseId, @PathVariable String slotId, Model model){
         log.debug("Getting slot id " + slotId + " for course id: " + courseId);
 
-        Optional<CourseDto> courseDtoOptional = courseDtoService.findById(Long.valueOf(courseId));
-        Optional<SlotDto> slotDtoOptional =
-                courseDtoService.findByCourseIdAndSlotId(Long.valueOf(courseId), Long.valueOf(slotId));
+        Optional<Course> courseOptional = service.findById(Long.valueOf(courseId));
+        Optional<Slot> slotOptional =
+                service.findByCourseIdAndSlotId(Long.valueOf(courseId), Long.valueOf(slotId));
 
-        model.addAttribute("slot", slotDtoOptional.orElse(null));
-        model.addAttribute("course", courseDtoOptional.orElse(null));
+        CourseDto courseDto = converter.convertFromEntity(courseOptional.get());
+        SlotDto slotDto = slotConverter.convertFromEntity(slotOptional.get());
+
+        model.addAttribute("slot", slotDto);
+        model.addAttribute("course", courseDto);
         return "courses/slots/show";
     }
 }

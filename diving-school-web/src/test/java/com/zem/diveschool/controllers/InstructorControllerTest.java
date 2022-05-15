@@ -1,6 +1,9 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.data.InstructorDtoService;
+import com.zem.diveschool.converters.impl.simple.InstructorConverter;
+import com.zem.diveschool.converters.impl.simple.LocationConverter;
+import com.zem.diveschool.converters.impl.simple.SlotConverter;
+import com.zem.diveschool.data.InstructorExtendedService;
 import com.zem.diveschool.dto.InstructorDto;
 
 import com.zem.diveschool.dto.LocationDto;
@@ -18,6 +21,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,7 +30,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class InstructorControllerTest {
 
     @Mock
-    InstructorDtoService instructorDtoService;
+    InstructorExtendedService service;
+
+    @Mock
+    InstructorConverter converter;
+
+    @Mock
+    LocationConverter locationConverter;
+
+    @Mock
+    SlotConverter slotConverter;
 
     InstructorController controller;
 
@@ -36,7 +49,7 @@ public class InstructorControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new InstructorController(instructorDtoService);
+        controller = new InstructorController(service, converter, locationConverter, slotConverter);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -51,11 +64,13 @@ public class InstructorControllerTest {
 
     @Test
     public void test_listInstructors() throws Exception {
+        assertEquals(1,0);
+        /*
         //given
         Set<InstructorDto> instructorsDto = new HashSet<>();
 
         //when
-        when(instructorDtoService.findAll()).thenReturn(instructorsDto);
+        when(instructorExtendedService.findAll()).thenReturn(instructorsDto);
 
         //then
         mockMvc.perform(get("/instructors"))
@@ -64,16 +79,19 @@ public class InstructorControllerTest {
                 .andExpect(model().attributeExists("instructors"))
                 .andExpect(model().size(1));
 
-        verify(instructorDtoService, times(1)).findAll();
+        verify(instructorExtendedService, times(1)).findAll();
+         */
     }
 
     @Test
     public void test_showById() throws Exception {
+        assertEquals(1,0);
+        /*
         //given
         InstructorDto instructorDto = new InstructorDto();
 
         //when
-        when(instructorDtoService.findById(anyLong())).thenReturn(Optional.of(instructorDto));
+        when(instructorExtendedService.findById(anyLong())).thenReturn(Optional.of(instructorDto));
 
         //then
         mockMvc.perform(get("/instructors/1/show"))
@@ -82,11 +100,14 @@ public class InstructorControllerTest {
                 .andExpect(model().attributeExists("instructor"))
                 .andExpect(model().size(1));
 
-        verify(instructorDtoService, times(1)).findById(anyLong());
+        verify(instructorExtendedService, times(1)).findById(anyLong());
+         */
     }
 
     @Test
     public void test_newInstructor() throws Exception {
+        assertEquals(1,0);
+        /*
         //given
 
         //when
@@ -97,15 +118,19 @@ public class InstructorControllerTest {
                 .andExpect(view().name("instructors/instructorform"))
                 .andExpect(model().attributeExists("instructor"))
                 .andExpect(model().size(1));
+
+         */
     }
 
     @Test
     public void test_updateInstructor() throws Exception {
+        assertEquals(1,0);
+        /*
         //given
         InstructorDto instructorDto = new InstructorDto();
 
         //when
-        when(instructorDtoService.findById(anyLong())).thenReturn(Optional.of(instructorDto));
+        when(instructorExtendedService.findById(anyLong())).thenReturn(Optional.of(instructorDto));
 
         //then
         mockMvc.perform(get("/instructors/1/update"))
@@ -114,17 +139,21 @@ public class InstructorControllerTest {
                 .andExpect(model().attributeExists("instructor"))
                 .andExpect(model().size(1));
 
-        verify(instructorDtoService, times(1)).findById(anyLong());
+        verify(instructorExtendedService, times(1)).findById(anyLong());
+
+         */
     }
 
     @Test
     public void test_saveOrUpdate() throws Exception {
+        assertEquals(1,0);
+        /*
         //given
         InstructorDto instructorDto = new InstructorDto();
         instructorDto.setId(2L);
 
         //when
-        when(instructorDtoService.save(any())).thenReturn(instructorDto);
+        when(instructorExtendedService.save(any())).thenReturn(instructorDto);
 
         //then
         mockMvc.perform(post("/instructors")
@@ -136,11 +165,15 @@ public class InstructorControllerTest {
                 .andExpect(view().name("redirect:/instructors/2/show"))
                 .andExpect(model().size(1));   // ??????
 
-        verify(instructorDtoService, times(1)).save(any());
+        verify(instructorExtendedService, times(1)).save(any());
+
+         */
     }
 
     @Test
     public void test_deleteById() throws Exception {
+        assertEquals(1,0);
+        /*
         //given
 
         //when
@@ -151,18 +184,22 @@ public class InstructorControllerTest {
                 .andExpect(view().name("redirect:/instructors"))
                 .andExpect(model().size(0));
 
-        verify(instructorDtoService, times(1)).deleteById(anyLong());
+        verify(instructorExtendedService, times(1)).deleteById(anyLong());
+
+         */
     }
 
     /* ---- */
 
     @Test
     public void test_findInstructors() throws Exception {
+        assertEquals(1,0);
+        /*
         //given
         Set<InstructorDto> instructorsDto = new HashSet<InstructorDto>();
 
         //when
-        when(instructorDtoService.findAll()).thenReturn(instructorsDto);
+        when(instructorExtendedService.findAll()).thenReturn(instructorsDto);
 
         //then
         mockMvc.perform(get("/instructors/find"))
@@ -171,20 +208,24 @@ public class InstructorControllerTest {
                 .andExpect(model().attributeExists("instructors"))
                 .andExpect(model().size(1));
 
-        verify(instructorDtoService, times(1)).findAll();
+        verify(instructorExtendedService, times(1)).findAll();
+
+         */
     }
 
     /* ---- */
 
     @Test
     public void test_listInstructorLocations() throws Exception {
+        assertEquals(1,0);
+        /*
         //given
         Optional<InstructorDto> instructorDtoOptional = Optional.of(new InstructorDto());
         Set<LocationDto> locationsDto = new HashSet<LocationDto>();
 
         //when
-        when(instructorDtoService.findById(anyLong())).thenReturn(instructorDtoOptional);
-        when(instructorDtoService.findLocationsByInstructorId(anyLong())).thenReturn(locationsDto);
+        when(instructorExtendedService.findById(anyLong())).thenReturn(instructorDtoOptional);
+        when(instructorExtendedService.findLocationsByInstructorId(anyLong())).thenReturn(locationsDto);
 
         //then
         mockMvc.perform(get("/instructors/1/locations"))
@@ -194,17 +235,21 @@ public class InstructorControllerTest {
                 .andExpect(model().attributeExists("instructor"))
                 .andExpect(model().size(2));
 
-        verify(instructorDtoService, times(1)).findById(anyLong());
-        verify(instructorDtoService, times(1)).findLocationsByInstructorId(anyLong());
+        verify(instructorExtendedService, times(1)).findById(anyLong());
+        verify(instructorExtendedService, times(1)).findLocationsByInstructorId(anyLong());
+
+         */
     }
 
     @Test
     public void test_newInstructorLocation() throws Exception {
+        assertEquals(1,0);
+        /*
         //given
         Optional<InstructorDto> instructorDtoOptional = Optional.of(new InstructorDto());
 
         //when
-        when(instructorDtoService.findById(anyLong())).thenReturn(instructorDtoOptional);
+        when(instructorExtendedService.findById(anyLong())).thenReturn(instructorDtoOptional);
 
         //then
         mockMvc.perform(get("/instructors/1/locations/new"))
@@ -213,16 +258,20 @@ public class InstructorControllerTest {
                 .andExpect(model().attributeExists("location"))
                 .andExpect(model().size(1));
 
-        verify(instructorDtoService, times(1)).findById(anyLong());
+        verify(instructorExtendedService, times(1)).findById(anyLong());
+
+         */
     }
 
     @Test
     public void test_deleteInstructorLocation() throws Exception {
+        assertEquals(1,0);
+        /*
         //given
         Optional<InstructorDto> instructorDtoOptional = Optional.of(new InstructorDto());
 
         //when
-        when(instructorDtoService.findById(anyLong())).thenReturn(instructorDtoOptional);
+        when(instructorExtendedService.findById(anyLong())).thenReturn(instructorDtoOptional);
 
         //then
         mockMvc.perform(get("/instructors/1/locations/2/delete"))
@@ -231,20 +280,24 @@ public class InstructorControllerTest {
                 .andExpect(model().attributeExists("instructor"))
                 .andExpect(model().size(1));
 
-        verify(instructorDtoService, times(1)).findById(anyLong());
-        verify(instructorDtoService, times(1)).deleteByInstructorIdAndLocationId(anyLong(),
+        verify(instructorExtendedService, times(1)).findById(anyLong());
+        verify(instructorExtendedService, times(1)).deleteByInstructorIdAndLocationId(anyLong(),
                 anyLong());
+
+         */
     }
 
     @Test
     public void test_showInstructorLocation() throws Exception {
+        assertEquals(1,0);
+        /*
         //given
         Optional<InstructorDto> instructorDtoOptional = Optional.of(new InstructorDto());
         Optional<LocationDto> locationDtoOptional = Optional.of(new LocationDto());
 
         //when
-        when(instructorDtoService.findById(anyLong())).thenReturn(instructorDtoOptional);
-        when(instructorDtoService.findByInstructorIdAndLocationId(anyLong(), anyLong())).thenReturn(locationDtoOptional);
+        when(instructorExtendedService.findById(anyLong())).thenReturn(instructorDtoOptional);
+        when(instructorExtendedService.findByInstructorIdAndLocationId(anyLong(), anyLong())).thenReturn(locationDtoOptional);
 
         //then
         mockMvc.perform(get("/instructors/1/locations/2/show"))
@@ -254,20 +307,24 @@ public class InstructorControllerTest {
                 .andExpect(model().attributeExists("instructor"))
                 .andExpect(model().size(2));
 
-        verify(instructorDtoService, times(1)).findById(anyLong());
-        verify(instructorDtoService, times(1)).findByInstructorIdAndLocationId(anyLong(),
+        verify(instructorExtendedService, times(1)).findById(anyLong());
+        verify(instructorExtendedService, times(1)).findByInstructorIdAndLocationId(anyLong(),
                 anyLong());
+
+         */
     }
 
     @Test
     public void test_listInstructorSlots() throws Exception {
+        assertEquals(1,0);
+        /*
         //given
         Optional<InstructorDto> instructorDtoOptional = Optional.of(new InstructorDto());
         Set<SlotDto> slotsDto = new HashSet<SlotDto>();
 
         //when
-        when(instructorDtoService.findById(anyLong())).thenReturn(instructorDtoOptional);
-        when(instructorDtoService.findSlotsByInstructorId(anyLong())).thenReturn(slotsDto);
+        when(instructorExtendedService.findById(anyLong())).thenReturn(instructorDtoOptional);
+        when(instructorExtendedService.findSlotsByInstructorId(anyLong())).thenReturn(slotsDto);
 
         //then
         mockMvc.perform(get("/instructors/1/slots"))
@@ -277,17 +334,21 @@ public class InstructorControllerTest {
                 .andExpect(model().attributeExists("instructor"))
                 .andExpect(model().size(2));
 
-        verify(instructorDtoService, times(1)).findById(anyLong());
-        verify(instructorDtoService, times(1)).findSlotsByInstructorId(anyLong());
+        verify(instructorExtendedService, times(1)).findById(anyLong());
+        verify(instructorExtendedService, times(1)).findSlotsByInstructorId(anyLong());
+
+         */
     }
 
     @Test
     public void test_newInstructorSlot() throws Exception {
+        assertEquals(1,0);
+        /*
         //given
         Optional<InstructorDto> instructorDtoOptional = Optional.of(new InstructorDto());
 
         //when
-        when(instructorDtoService.findById(anyLong())).thenReturn(instructorDtoOptional);
+        when(instructorExtendedService.findById(anyLong())).thenReturn(instructorDtoOptional);
 
         //then
         mockMvc.perform(get("/instructors/1/slots/new"))
@@ -296,16 +357,20 @@ public class InstructorControllerTest {
                 .andExpect(model().attributeExists("slot"))
                 .andExpect(model().size(1));
 
-        verify(instructorDtoService, times(1)).findById(anyLong());
+        verify(instructorExtendedService, times(1)).findById(anyLong());
+
+         */
     }
 
     @Test
     public void test_deleteInstructorSlot() throws Exception {
+        assertEquals(1,0);
+        /*
         //given
         Optional<InstructorDto> instructorDtoOptional = Optional.of(new InstructorDto());
 
         //when
-        when(instructorDtoService.findById(anyLong())).thenReturn(instructorDtoOptional);
+        when(instructorExtendedService.findById(anyLong())).thenReturn(instructorDtoOptional);
 
         //then
         mockMvc.perform(get("/instructors/1/slots/2/delete"))
@@ -314,20 +379,24 @@ public class InstructorControllerTest {
                 .andExpect(model().attributeExists("instructor"))
                 .andExpect(model().size(1));
 
-        verify(instructorDtoService, times(1)).findById(anyLong());
-        verify(instructorDtoService, times(1)).deleteByInstructorIdAndSlotId(anyLong(),
+        verify(instructorExtendedService, times(1)).findById(anyLong());
+        verify(instructorExtendedService, times(1)).deleteByInstructorIdAndSlotId(anyLong(),
                 anyLong());
+
+         */
     }
 
     @Test
     public void test_showInstructorSlot() throws Exception {
+        assertEquals(1,0);
+        /*
         //given
         Optional<InstructorDto> instructorDtoOptional = Optional.of(new InstructorDto());
         Optional<SlotDto> slotDtoOptional = Optional.of(new SlotDto());
 
         //when
-        when(instructorDtoService.findById(anyLong())).thenReturn(instructorDtoOptional);
-        when(instructorDtoService.findByInstructorIdAndSlotId(anyLong(), anyLong())).thenReturn(slotDtoOptional);
+        when(instructorExtendedService.findById(anyLong())).thenReturn(instructorDtoOptional);
+        when(instructorExtendedService.findByInstructorIdAndSlotId(anyLong(), anyLong())).thenReturn(slotDtoOptional);
 
         //then
         mockMvc.perform(get("/instructors/1/slots/2/show"))
@@ -337,8 +406,10 @@ public class InstructorControllerTest {
                 .andExpect(model().attributeExists("instructor"))
                 .andExpect(model().size(2));
 
-        verify(instructorDtoService, times(1)).findById(anyLong());
-        verify(instructorDtoService, times(1)).findByInstructorIdAndSlotId(anyLong(), anyLong());
+        verify(instructorExtendedService, times(1)).findById(anyLong());
+        verify(instructorExtendedService, times(1)).findByInstructorIdAndSlotId(anyLong(), anyLong());
+
+         */
     }
 
 }

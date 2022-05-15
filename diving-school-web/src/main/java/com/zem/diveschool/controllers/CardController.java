@@ -1,34 +1,48 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.data.CardDtoService;
+import com.zem.diveschool.converters.ConverterDtoEntityService;
+import com.zem.diveschool.converters.impl.simple.CardConverter;
+import com.zem.diveschool.data.CardExtendedService;
 import com.zem.diveschool.dto.CardDto;
 
+import com.zem.diveschool.persistence.model.Card;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+import java.util.Set;
+
 
 @Slf4j
 @Controller
 public class CardController {
 
-    private final CardDtoService cardDtoService;
+    private final CardExtendedService service;
+    private final CardConverter converter;
 
-    public CardController(CardDtoService cardDtoService) {
-        this.cardDtoService = cardDtoService;
+    public CardController(CardExtendedService service,
+                          CardConverter converter) {
+        super();
+        this.service = service;
+        this.converter = converter;
     }
 
-    @RequestMapping({"/cards", "/cards/index", "/cards/index.html", "cards.html"})
+    @GetMapping({"/cards", "/cards/index", "/cards/index.html", "cards.html"})
     public String listCards(Model model){
-        model.addAttribute("cards", cardDtoService.findAll());
+        Set<Card> cards = service.findAll();
+        Set<CardDto> cardsDto = converter.convertFromEntities(cards);
+        model.addAttribute("cards", cardsDto);
         return "cards/index";
     }
 
-    @RequestMapping({"/cards/{id}/show"})
+    @GetMapping({"/cards/{id}/show"})
     public String showById(@PathVariable String id, Model model){
-        model.addAttribute("card", cardDtoService.findById(Long.valueOf(id)));
+        Optional<Card> cardOptional = service.findById(Long.valueOf(id));
+        CardDto cardDto = converter.convertFromEntity(cardOptional.get());
+        model.addAttribute("card", cardDto);
         return "cards/show";
     }
 
@@ -40,19 +54,23 @@ public class CardController {
 
     @GetMapping("cards/{id}/update")
     public String updateCard(@PathVariable String id, Model model){
-        model.addAttribute("card", cardDtoService.findById(Long.valueOf(id)));
+        Optional<Card> cardOptional = service.findById(Long.valueOf(id));
+        CardDto cardDto = converter.convertFromEntity(cardOptional.get());
+        model.addAttribute("card", cardDto);
         return  "cards/cardform";
     }
 
     @PostMapping("cards")
     public String saveOrUpdate(@ModelAttribute CardDto cardDto){
-        CardDto savedCardDto = cardDtoService.save(cardDto);
+        Card card = converter.convertFromDto(cardDto);
+        Card savedCard = service.save(card);
+        CardDto savedCardDto = converter.convertFromEntity(savedCard);
         return "redirect:/cards/" + savedCardDto.getId() + "/show";
     }
 
     @GetMapping("cards/{id}/delete")
     public String deleteById(@PathVariable String id){
-        cardDtoService.deleteById(Long.valueOf(id));
+        service.deleteById(Long.valueOf(id));
         return "redirect:/cards";
     }
 

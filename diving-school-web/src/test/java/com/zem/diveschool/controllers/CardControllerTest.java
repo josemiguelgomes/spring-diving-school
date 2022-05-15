@@ -1,7 +1,10 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.data.CardDtoService;
+import com.zem.diveschool.converters.ConverterDtoEntityService;
+import com.zem.diveschool.converters.impl.simple.CardConverter;
+import com.zem.diveschool.data.CardExtendedService;
 import com.zem.diveschool.dto.CardDto;
+import com.zem.diveschool.persistence.model.Card;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -22,7 +25,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CardControllerTest {
 
     @Mock
-    CardDtoService cardDtoService;
+    CardConverter converter;
+
+    @Mock
+    CardExtendedService service;
 
     CardController controller;
 
@@ -32,7 +38,7 @@ public class CardControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new CardController(cardDtoService);
+        controller = new CardController(service, converter);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -48,10 +54,12 @@ public class CardControllerTest {
     @Test
     public void test_listCards() throws Exception {
         //given
+        Set<Card> cards = new HashSet<>();
         Set<CardDto> cardsDto = new HashSet<>();
 
         //when
-        when(cardDtoService.findAll()).thenReturn(cardsDto);
+        when(service.findAll()).thenReturn(cards);
+        when(converter.convertFromEntities(anyCollection())).thenReturn(cardsDto);
 
         //then
         mockMvc.perform(get("/cards"))
@@ -60,17 +68,19 @@ public class CardControllerTest {
                 .andExpect(model().attributeExists("cards"))
                 .andExpect(model().size(1));
 
-        verify(cardDtoService, times(1)).findAll();
+        verify(service, times(1)).findAll();
+        verify(converter, times(1)).convertFromEntities(anyCollection());
     }
 
     @Test
     public void test_showById() throws Exception {
         //given
-        CardDto cardDto = new CardDto();
-        cardDto.setId(1L);
+        Optional<Card> cardOptional = Optional.of(new Card());
+        CardDto carDto = new CardDto();
 
         //when
-        when(cardDtoService.findById(anyLong())).thenReturn(Optional.of(cardDto));
+        when(service.findById(anyLong())).thenReturn(cardOptional);
+        when(converter.convertFromEntity(any(Card.class))).thenReturn(carDto);
 
         //then
         mockMvc.perform(get("/cards/1/show"))
@@ -79,14 +89,14 @@ public class CardControllerTest {
                 .andExpect(model().attributeExists("card"))
                 .andExpect(model().size(1));
 
-        verify(cardDtoService, times(1)).findById(anyLong());
+        verify(service, times(1)).findById(anyLong());
+        verify(converter, times(1)).convertFromEntity(any(Card.class));
     }
 
 
     @Test
     public void test_newCard() throws Exception {
         //given
-        CardDto instructorDto = new CardDto();
 
         //when
 
@@ -101,42 +111,49 @@ public class CardControllerTest {
     @Test
     public void test_updateCard() throws Exception {
         //given
+        Optional<Card> cardOptional = Optional.of(new Card());
         CardDto cardDto = new CardDto();
-        cardDto.setId(2L);
 
         //when
-        when(cardDtoService.save(any())).thenReturn(cardDto);
-
-        //then
-        mockMvc.perform(post("/cards")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("id", "")
-                        .param("course", "some string")
-                )
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/cards/2/show"))
-                .andExpect(model().size(1)); //why ???
-
-        verify(cardDtoService, times(1)).save(any());
-    }
-
-    @Test
-    public void test_saveOrUpdate() throws Exception {
-        //given
-        CardDto cardDto = new CardDto();
-        cardDto.setId(2L);
-
-        //when
-        when(cardDtoService.findById(anyLong())).thenReturn(Optional.of(cardDto));
+        when(service.findById(anyLong())).thenReturn(cardOptional);
+        when(converter.convertFromEntity(any(Card.class))).thenReturn(cardDto);
 
         //then
         mockMvc.perform(get("/cards/1/update"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("cards/cardform"))
                 .andExpect(model().attributeExists("card"))
-                .andExpect(model().size(1)); // TODO ???
+                .andExpect(model().size(1));
 
-        verify(cardDtoService, times(1)).findById(anyLong());
+        verify(service, times(1)).findById(anyLong());
+        verify(converter, times(1)).convertFromEntity(any(Card.class));
+    }
+
+    @Test
+    public void test_saveOrUpdate() throws Exception {
+        //given
+        Card card = new Card();
+        Card savedCard = new Card();
+        CardDto savedCardDto = new CardDto();
+
+        //when
+        when(converter.convertFromDto(any(CardDto.class))).thenReturn(card);
+        when(service.save(any(Card.class))).thenReturn(savedCard);
+        when(converter.convertFromEntity(any(Card.class))).thenReturn(savedCardDto);
+
+        //then
+        mockMvc.perform(post("/cards")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("id", "")
+                        .param("card", "some string")
+                )
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/cards/2/show"))
+                .andExpect(model().size(1)); //why ???
+
+        verify(converter, times(1)).convertFromDto(any(CardDto.class));
+        verify(service, times(1)).save(any(Card.class));
+        verify(converter, times(1)).convertFromEntity(any(Card.class));
     }
 
     @Test
@@ -151,7 +168,7 @@ public class CardControllerTest {
                 .andExpect(view().name("redirect:/cards"))
                 .andExpect(model().size(0));
 
-        verify(cardDtoService, times(1)).deleteById(anyLong());
+        verify(service, times(1)).deleteById(anyLong());
     }
 
     /* ---- */
