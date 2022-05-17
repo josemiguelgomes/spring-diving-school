@@ -12,6 +12,7 @@
 <table id="slots" class="table table-striped">
     <thead>
     <tr>
+        <th>ID</th>
         <th>Title</th>
         <th>Start Date</th>
         <th>End Date</th>
@@ -23,6 +24,7 @@
     </thead>
     <tbody>
     <tr th:each="slot : ${slots}">
+        <td th:text="${slot.id}"></td>
         <td th:text="${slot.title}"></td>
         <td th:text="${slot.startDate}"></td>
         <td th:text="${slot.endDate}"></td>

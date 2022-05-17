@@ -16,8 +16,6 @@ import java.util.TimeZone;
 @Setter
 @NoArgsConstructor
 public class CardDto extends GenericDto<CardDto> {
-    private final SimpleDateFormat dateFormat
-            = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     private String course;
     private String studentName;
@@ -26,11 +24,11 @@ public class CardDto extends GenericDto<CardDto> {
     private Country country;
     private String instructorName;
 
-    private Student student;
+    private StudentDto student;
 
     @Builder
     public CardDto(Long id, String course, String studentName, String startDate, String endDate, Country country,
-                   String instructorName, Student student) {
+                   String instructorName, StudentDto student) {
         super(id);
         this.course = course;
         this.studentName = studentName;
@@ -48,7 +46,7 @@ public class CardDto extends GenericDto<CardDto> {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
         try {
             return dateFormat.parse(this.startDate);
-        } catch (ParseException e) {
+        } catch (ParseException | NullPointerException e) {
 //            throw new RuntimeException(e);
             try {
                 return dateFormat.parse("0001-01-01");
@@ -67,7 +65,7 @@ public class CardDto extends GenericDto<CardDto> {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
         try {
             return dateFormat.parse(this.endDate);
-        } catch (ParseException e) {
+        } catch (ParseException | NullPointerException e) {
 //            throw new RuntimeException(e);
             try {
                 return dateFormat.parse("0001-01-01");

@@ -14,21 +14,20 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 public class SlotDto extends GenericDto<SlotDto> {
-    private final SimpleDateFormat dateFormat
-            = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
     private String title;
     private String startDate;
     private String endDate;
     private SlotStatus status;
 
-    private Course course;
-    private Set<SlotLanguage> languages = new HashSet<>();
-    private Set<Student> students = new HashSet<>();
-    private Set<Instructor> instructors = new HashSet<>();
+    private CourseDto course;
+    private Set<SlotLanguageDto> languages = new HashSet<>();
+    private Set<StudentDto> students = new HashSet<>();
+    private Set<InstructorDto> instructors = new HashSet<>();
 
     @Builder
-    public SlotDto(Long id, String title, String startDate, String endDate, SlotStatus status, Course course,
-                   Set<SlotLanguage> languages, Set<Student> students, Set<Instructor> instructors) {
+    public SlotDto(Long id, String title, String startDate, String endDate, SlotStatus status, CourseDto course,
+                   Set<SlotLanguageDto> languages, Set<StudentDto> students, Set<InstructorDto> instructors) {
         super(id);
         this.title = title;
         this.startDate = startDate;
@@ -47,7 +46,7 @@ public class SlotDto extends GenericDto<SlotDto> {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
         try {
             return dateFormat.parse(this.startDate);
-        } catch (ParseException e) {
+        } catch (ParseException | NullPointerException e) {
 //            throw new RuntimeException(e);
             try {
                 return dateFormat.parse("0001-01-01");
@@ -65,7 +64,7 @@ public class SlotDto extends GenericDto<SlotDto> {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
         try {
             return dateFormat.parse(this.endDate);
-        } catch (ParseException e) {
+        } catch (ParseException | NullPointerException e) {
 //            throw new RuntimeException(e);
             try {
                 return dateFormat.parse("0001-01-01");

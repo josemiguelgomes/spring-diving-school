@@ -7,5 +7,5 @@ import java.util.Optional;
 public interface CourseService extends CrudService<Course, Long> {
 
     //
-    Optional<Course> findByName(String name);
+    Optional<Course> findByName(String name); // TODO : it could result on more than one value !!!!
 }

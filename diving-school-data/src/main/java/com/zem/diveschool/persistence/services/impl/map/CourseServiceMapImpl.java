@@ -22,7 +22,7 @@ public class CourseServiceMapImpl extends AbstractServiceMapsImpl<Course, Long>
 
     @Override
     @Transactional
-    public Course findById(Long id) {
+    public Optional<Course> findById(Long id) {
         return super.findById(id);
     }
 
@@ -32,7 +32,6 @@ public class CourseServiceMapImpl extends AbstractServiceMapsImpl<Course, Long>
         if (object == null) {
             return null;
         }
-
         return super.save(object);
     }
 

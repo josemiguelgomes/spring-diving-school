@@ -13,8 +13,8 @@ public abstract class AbstractServiceMapsImpl<T extends BaseEntity, I extends Lo
         return new HashSet<>(map.values());
     }
 
-    T findById(I id) {
-        return map.get(id);
+    Optional <T> findById(I id) {
+        return Optional.ofNullable(map.get(id));
     }
 
     T save(T object) {

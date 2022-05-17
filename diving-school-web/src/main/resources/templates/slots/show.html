@@ -10,26 +10,15 @@
       <h2>Slot</h2>
       <form action="#" th:action="@{/show}" th:object="${slot}"  method="POST">
          <div class="card-body">
+            <p class="mb-0"><strong class="pr-1">ID </strong><th th:text="${slot.id}"></th></p>
             <p class="mb-0"><strong class="pr-1">Title </strong><th th:text="${slot.title}"></th></p>
             <p class="mb-0"><strong class="pr-1">Start date </strong><th th:text="${slot.startDate}"></th></p>
             <p class="mb-0"><strong class="pr-1">End date </strong><th th:text="${slot.endDate}"></th></p>
             <p class="mb-0"><strong class="pr-1">Status </strong><th th:text="${slot.status}"></th></p>
 
             <!--/*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Course"*/-->
-            <p class="mb-0"><strong class="pr-1">Course </strong><th th:text="${course.name}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Course </strong><th th:text="${slot.course?.name}"></th></p>
 
-         </div>
-
-         <hr>
-
-         <h3>Location</h3>
-         <div class="card-body">
-            <!--/*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Location"*/-->
-            <p class="mb-0"><strong class="pr-1">Street </strong><th th:text="${location.streetAddress}"></th></p>
-            <p class="mb-0"><strong class="pr-1">Postal Code </strong><th th:text="${location.postalCode}"></th></p>
-            <p class="mb-0"><strong class="pr-1">City </strong><th th:text="${location.city}"></th></p>
-            <p class="mb-0"><strong class="pr-1">State/Province </strong><th th:text="${location.stateProvince}"></th></p>
-            <p class="mb-0"><strong class="pr-1">Country </strong><th th:text="${location.country}"></th></p>
          </div>
 
          <hr>
@@ -39,12 +28,16 @@
             <table id="slotLanguages" class="table table-striped">
                <thead>
                <tr>
+                  <th>ID</th>
                   <th>Language</th>
+                  <th>Show</th>
                </tr>
                </thead>
                <tbody>
-               <tr th:each="slotLanguage : ${slotLanguages}">
-                  <td th:text="${slotLanguage.language}"></td>
+               <tr th:each="language : ${slot.languages}">
+                  <td th:text="${language.id}"></td>
+                  <td th:text="${language.language}"></td>
+                  <td><a href="#" th:href="@{'/languages/' + ${language.id} + '/show'}">Show</a></td>
                </tr>
                </tbody>
             </table>
@@ -57,12 +50,16 @@
             <table id="students" class="table table-striped">
                <thead>
                <tr>
+                  <th>ID</th>
                   <th>Name</th>
+                  <th>Show</th>
                </tr>
                </thead>
                <tbody>
-               <tr th:each="student : ${students}">
+               <tr th:each="student : ${slot.students}">
+                  <td th:text="${student.id}"></td>
                   <td th:text="${student.firstName}"></td>
+                  <td><a href="#" th:href="@{'/students/' + ${student.id} + '/show'}">Show</a></td>
                </tr>
                </tbody>
             </table>
@@ -75,12 +72,16 @@
             <table id="instructors" class="table table-striped">
                <thead>
                <tr>
+                  <th>ID</th>
                   <th>Name</th>
+                  <th>Show</th>
                </tr>
                </thead>
                <tbody>
-               <tr th:each="student : ${students}">
-                  <td th:text="${student.firstName}"></td>
+               <tr th:each="instructor : ${instructors}">
+                  <td th:text="${instructor.id}"></td>
+                  <td th:text="${instructor.firstName}"></td>
+                  <td><a href="#" th:href="@{'/instructors/' + ${instructor.id} + '/show'}">Show</a></td>
                </tr>
                </tbody>
             </table>

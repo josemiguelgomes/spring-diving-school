@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'instructors')}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Instructor Detail</title>
+</head>
+<body>
+   <div class="container">
+   <!--/*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Instructor"*/-->
+      <h2>Instructor</h2>
+      <form action="#" th:action="@{/show}" th:object="${instructor}"  method="POST">
+         <div class="card-header bg-transparent text-center">
+            <th th:field="${instructor.photo} == null ? _ : @{'data:image/png;base64,'+${instructor.photo}}"
+                         width="225" height="225"></th>
+         </div>
+         <div class="card-body">
+            <p class="mb-0"><strong class="pr-1">First Name </strong><th th:text="${instructor.firstName}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Middle Name </strong><th th:text="${instructor.middleName}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Last Name </strong><th th:text="${instructor.lastName}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Birthdate </strong><th th:text="${instructor.birthDate}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Gender </strong><th th:text="${instructor.gender}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Email </strong><th th:text="${instructor.email}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Phone </strong><th th:text="${instructor.phoneNumber}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Language </strong><th th:text="${instructor.language}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Teaching Status </strong><th th:text="${instructor.statusTeaching}"></th></p>
+         </div>
+
+         <hr>
+
+         <h3>Home Address</h3>
+         <div class="card-body">
+            <!--/*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Location"*/-->
+            <p class="mb-0"><strong class="pr-1">Street </strong><th th:text="${location.streetAddress}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Postal Code </strong><th th:text="${location.postalCode}"></th></p>
+            <p class="mb-0"><strong class="pr-1">City </strong><th th:text="${location.city}"></th></p>
+            <p class="mb-0"><strong class="pr-1">State/Province </strong><th th:text="${location.stateProvince}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Country </strong><th th:text="${location.country}"></th></p>
+         </div>
+
+      </form>
+
+      <hr>
+      <a th:href="@{/instructors}"> Back to Instructors List</a>
+   </div>
+</body>
+</html>

@@ -1,72 +1,81 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.converters.ConvertObjectToObject;
+import com.zem.diveschool.converters.impl.simple.LocationConverter;
+import com.zem.diveschool.data.LocationExtendedService;
 import com.zem.diveschool.dto.LocationDto;
 import com.zem.diveschool.persistence.model.Location;
-import com.zem.diveschool.persistence.services.LocationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.Set;
 
+@Slf4j
 @Controller
 public class LocationController {
 
-    private final LocationService locationService;
-    @Autowired
-    private ConvertObjectToObject<Location, LocationDto> convertToDto;
-    @Autowired
-    private ConvertObjectToObject<LocationDto, Location> convertToEntity;
+    private final LocationExtendedService service;
+    private final LocationConverter converter;
 
-    public LocationController(LocationService locationService) {
-        this.locationService = locationService;
+    public LocationController(LocationExtendedService service,
+                              LocationConverter converter) {
+        this.service = service;
+        this.converter = converter;
     }
 
-    @RequestMapping({"/locations", "/locations/index", "/locations/index.html", "locations.html"})
-    public String listLocations(Model model){
-        model.addAttribute("locations", convertToDto.convert(locationService.findAll()));
+    @InitBinder
+    public void setAllowedFields(WebDataBinder dataBinder) {
+        dataBinder.setDisallowedFields("id");
+    }
 
+    @GetMapping({"/locations", "/locations/index", "/locations/index.html", "locations.html"})
+    public String listLocations(Model model){
+        Set<Location> locations = service.findAll();
+        Set<LocationDto> locationsDto = converter.convertFromEntities(locations);
+        model.addAttribute("locations", locationsDto);
         return "locations/index";
     }
 
-    @RequestMapping({"/locations/{id}/show"})
+    @GetMapping({"/locations/{id}/show"})
     public String showById(@PathVariable String id, Model model){
-        Location location = locationService.findById(Long.valueOf(id));
-        model.addAttribute("location", convertToDto.convert(location));
-
+        Optional<Location> locationOptional = service.findById(Long.valueOf(id));
+        LocationDto locationDto = converter.convertFromEntity(locationOptional.get());
+        model.addAttribute("location", locationDto);
         return "locations/show";
     }
 
     @GetMapping("locations/new")
     public String newLocation(Model model){
-        model.addAttribute("location", new LocationDto());
-
+        model.addAttribute("location", LocationDto.builder().build());
         return "locations/locationform";
     }
 
     @GetMapping("locations/{id}/update")
     public String updateLocation(@PathVariable String id, Model model){
-        model.addAttribute("location", convertToDto.convert(locationService.findById(Long.valueOf(id))));
+        Optional<Location> locationOptional = service.findById(Long.valueOf(id));
+        LocationDto locationDto = converter.convertFromEntity(locationOptional.get());
+        model.addAttribute("location", locationDto);
         return  "locations/locationform";
     }
 
     @PostMapping("locations")
     public String saveOrUpdate(@ModelAttribute LocationDto locationDto){
-        Location savedLocation = locationService.save(convertToEntity.convert(locationDto));
-        return "redirect:/cards/" + savedLocation.getId() + "/show";
+        Location location = converter.convertFromDto(locationDto);
+        Location savedLocation = service.save(location);
+        LocationDto savedLocationDto = converter.convertFromEntity(savedLocation);
+        return "redirect:/locations/" + savedLocationDto.getId() + "/show";
     }
 
     @GetMapping("locations/{id}/delete")
     public String deleteById(@PathVariable String id){
-        locationService.deleteById(Long.valueOf(id));
+        service.deleteById(Long.valueOf(id));
         return "redirect:/locations";
     }
 
-    @GetMapping("/api/locations")
-    public @ResponseBody Set<LocationDto> getLocationJson(){
-        return convertToDto.convert(locationService.findAll());
-    }
+    /* --- */
 
+    /* ---- */
 }

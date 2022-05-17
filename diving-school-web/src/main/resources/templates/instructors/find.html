@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'instructors')}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Find Instructors</title>
+</head>
+<body>
+<!--/*@thymesVar id="instructor" type="com.zem.diveschool.persistence.model.Instructor"*/-->
+<h2>Instructors</h2>
+<h3><a href="#" th:href="@{'/instructors/new'}">New</a></h3>
+
+TODO: FIND Button
+
+<table id="students" class="table table-striped">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Birthdate</th>
+        <th>Gender</th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th>Language</th>
+        <th>Teaching Status</th>
+        <th>Show</th>
+        <th>Update</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="instructor : ${instructors}">
+        <td th:text="${instructor.firstName + ' ' + instructor.middleName + ' ' + instructor.lastName}"></td>
+        <td th:text="${instructor.birthDate}"></td>
+        <td th:text="${instructor.gender}"></td>
+        <td th:text="${instructor.email}"></td>
+        <td th:text="${instructor.phoneNumber}"></td>
+        <td th:text="${instructor.language}"></td>
+        <td th:text="${instructor.statusTeaching}"></td>
+        <td><a href="#" th:href="@{'/instructors/' + ${instructor.id} + '/show'}">Show</a></td>
+        <td><a href="#" th:href="@{'/instructors/' + ${instructor.id} + '/update'}">Update</a></td>
+        <td><a href="#" th:href="@{'/instructors/' + ${instructor.id} + '/delete'}">Delete</a></td>
+    </tr>
+    </tbody>
+</table>
+
+<hr>
+<a th:href="@{/}"> Back Homepage</a>
+</body>
+</html>

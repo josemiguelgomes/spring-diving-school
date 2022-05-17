@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "cards")
-public class Card extends BaseEntity {
+public class Card extends BaseEntity<Card> {
     @Column(name = "course")
     private String course;
     @Column(name = "student_name")
@@ -27,7 +28,7 @@ public class Card extends BaseEntity {
     @Column(name = "instructor_name")
     private String instructorName;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = true)
+    @ManyToOne//(fetch = FetchType.LAZY, optional = true)
     private Student student;
 
     @Builder

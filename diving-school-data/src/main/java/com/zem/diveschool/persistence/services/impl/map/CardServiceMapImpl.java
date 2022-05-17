@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -25,11 +26,13 @@ public class CardServiceMapImpl extends AbstractServiceMapsImpl<Card, Long>
     public Set<Card> findAll() {
         return super.findAll();
     }
+
     @Override
     @Transactional
-    public Card findById(Long id) {
+    public Optional<Card> findById(Long id) {
         return super.findById(id);
     }
+
     @Override
     @Transactional
     public Card save(Card object) {
@@ -47,11 +50,13 @@ public class CardServiceMapImpl extends AbstractServiceMapsImpl<Card, Long>
 
         return super.save(object);
     }
+
     @Override
     @Transactional
     public void delete(Card object) {
         super.delete(object);
     }
+
     @Override
     @Transactional
     public void deleteById(Long id) {

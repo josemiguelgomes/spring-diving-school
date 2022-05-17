@@ -13,7 +13,7 @@ import java.util.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "students")
-public class Student extends BaseEntity {
+public class Student extends BaseEntity<Student> {
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "middle_name")
@@ -30,6 +30,7 @@ public class Student extends BaseEntity {
     private String phoneNumber;
     @Enumerated(EnumType.STRING)
     private Language language;
+    @Lob
     @Column(name = "photo")
     private Byte[] photo;
 

@@ -7,8 +7,10 @@ import com.zem.diveschool.persistence.services.SlotService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Profile({"default", "springdatajpa"})
@@ -21,16 +23,13 @@ public class SlotServiceSDJpaImpl extends AbstractServiceSDJpaImpl<Slot, Long, S
 
     @Override
     public Set<Slot> findByStudentID(Long id) {
-        Set<Slot> slots = new HashSet<>();
-
-        for (Slot slot : super.findAll()) {
-            for(Student student : slot.getStudents()) {
-                if (student.getId().equals(id)) {
-                    slots.add(slot);
-                }
-            }
-        }
-
-        return slots;
+        return super.findAll()
+                .stream()
+                .map(Slot::getStudents)
+                .flatMap(Collection::stream)
+                .filter(p -> p.getId().equals(id))
+                .map(Student::getSlots)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
     }
 }

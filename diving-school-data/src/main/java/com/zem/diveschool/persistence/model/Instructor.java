@@ -14,7 +14,7 @@ import java.util.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "instructors")
-public class Instructor extends BaseEntity {
+public class Instructor extends BaseEntity<Instructor> {
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "middle_name")

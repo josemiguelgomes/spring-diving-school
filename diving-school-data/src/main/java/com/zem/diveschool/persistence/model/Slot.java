@@ -10,7 +10,7 @@ import java.util.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "slots")
-public class Slot extends BaseEntity {
+public class Slot extends BaseEntity<Slot> {
     @Column(name = "title")
     private String title;
     @Column(name = "start_date")

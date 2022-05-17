@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'slots')}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List Slots</title>
+</head>
+<body>
+<!--/*@thymesVar id="slot" type="com.zem.diveschool.dto.SlotDto"*/-->
+<h2>Course/Slots</h2>
+<table id="slots" class="table table-striped">
+   <div class="table-responsive" th:if="${not #lists.isEmpty(course.slots)}">
+       <table class="table table-hover ">
+           <thead>
+           <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Status</th>
+              <th>View</th>
+              <th>Update</th>
+              <th>Delete</th>
+           </tr>
+           </thead>
+           <tr th:each="slot : ${course.slots}">
+              <td th:text="${slot.id}"></td>
+              <td th:text="${slot.title}"></td>
+              <td th:text="${slot.startDate}"></td>
+              <td th:text="${slot.endDate}"></td>
+              <td><a href="#" th:href="@{'/courses/' + ${course.id} + '/slots/' + ${slot.id} + '/show'}">View</a></td>
+              <td><a href="#" th:href="@{'/courses/' + ${course.id} + '/slots/' + ${slot.id} + '/show'}">Update</a></td>
+              <td><a href="#" th:href="@{'/courses/' + ${course.id} + '/slots/' + ${slot.id} + '/show'}">Delete</a></td>
+           </tr>
+       </table>
+   </div>
+</table>
+
+<hr>
+<a th:href="@{'/courses/' + ${course.id} + '/show'}"> Back to Course</a>
+<hr>
+<a th:href="@{/courses}"> Back to Courses List</a>
+
+</body>
+</html>

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
 
@@ -29,7 +30,7 @@ public class StudentServiceMapImpl extends AbstractServiceMapsImpl<Student, Long
 
     @Override
     @Transactional
-    public Student findById(Long id) {
+    public Optional<Student> findById(Long id) {
         return super.findById(id);
     }
 
@@ -91,5 +92,19 @@ public class StudentServiceMapImpl extends AbstractServiceMapsImpl<Student, Long
             }
         }
         return Optional.empty();
+    }
+
+    @Override
+    public void saveImageFile(Long studentId, Byte[] image) {
+        Optional<Student> studentOptional = super.findById(studentId);
+        if(studentOptional.isPresent()) {
+            studentOptional.get().setPhoto(image);
+            super.save(studentOptional.get());
+        }
+    }
+
+    @Override
+    public Set<Student> findAllByLastNameLike(String lastName) {
+        return null;    // TODO implement on MAP !!!
     }
 }

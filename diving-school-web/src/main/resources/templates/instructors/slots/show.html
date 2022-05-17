@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'slots')}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Slot Detail</title>
+</head>
+<body>
+   <div class="container">
+   <!--/*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Slot"*/-->
+      <h2>Slot</h2>
+      <form action="#" th:action="@{/show}" th:object="${slot}"  method="POST">
+         <div class="card-body">
+            <p class="mb-0"><strong class="pr-1">Title </strong><th th:text="${slot.title}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Start date </strong><th th:text="${slot.startDate}"></th></p>
+            <p class="mb-0"><strong class="pr-1">End date </strong><th th:text="${slot.endDate}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Status </strong><th th:text="${slot.status}"></th></p>
+
+            <!--/*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Course"*/-->
+            <p class="mb-0"><strong class="pr-1">Course </strong><th th:text="${course.name}"></th></p>
+
+         </div>
+
+         <hr>
+
+         <h3>Location</h3>
+         <div class="card-body">
+            <!--/*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Location"*/-->
+            <p class="mb-0"><strong class="pr-1">Street </strong><th th:text="${location.streetAddress}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Postal Code </strong><th th:text="${location.postalCode}"></th></p>
+            <p class="mb-0"><strong class="pr-1">City </strong><th th:text="${location.city}"></th></p>
+            <p class="mb-0"><strong class="pr-1">State/Province </strong><th th:text="${location.stateProvince}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Country </strong><th th:text="${location.country}"></th></p>
+         </div>
+
+         <hr>
+
+         <h3>Languages</h3>
+         <div class="card-body">
+            <table id="slotLanguages" class="table table-striped">
+               <thead>
+               <tr>
+                  <th>Language</th>
+               </tr>
+               </thead>
+               <tbody>
+               <tr th:each="slotLanguage : ${slotLanguages}">
+                  <td th:text="${slotLanguage.language}"></td>
+               </tr>
+               </tbody>
+            </table>
+         </div>
+
+         <hr>
+
+         <h3>Students</h3>
+         <div class="card-body">
+            <table id="students" class="table table-striped">
+               <thead>
+               <tr>
+                  <th>Name</th>
+               </tr>
+               </thead>
+               <tbody>
+               <tr th:each="student : ${students}">
+                  <td th:text="${student.firstName}"></td>
+               </tr>
+               </tbody>
+            </table>
+         </div>
+
+         <hr>
+
+         <h3>Instructors</h3>
+         <div class="card-body">
+            <table id="instructors" class="table table-striped">
+               <thead>
+               <tr>
+                  <th>Name</th>
+               </tr>
+               </thead>
+               <tbody>
+               <tr th:each="student : ${students}">
+                  <td th:text="${student.firstName}"></td>
+               </tr>
+               </tbody>
+            </table>
+         </div>
+
+      </form>
+
+      <hr>
+      <a th:href="@{/slots}"> Back to Slots List</a>
+   </div>
+</body>
+</html>

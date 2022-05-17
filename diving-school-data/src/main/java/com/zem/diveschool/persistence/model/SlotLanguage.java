@@ -13,7 +13,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 @Table(name = "slot_language")
-public class SlotLanguage extends BaseEntity {
+public class SlotLanguage extends BaseEntity<SlotLanguage> {
     private Language language;
 
     @ManyToOne(fetch = FetchType.LAZY)

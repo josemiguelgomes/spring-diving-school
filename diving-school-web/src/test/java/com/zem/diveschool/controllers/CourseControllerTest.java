@@ -1,17 +1,20 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.converters.ConvertObjectToObject;
+import com.zem.diveschool.converters.ConverterDtoEntityService;
+import com.zem.diveschool.converters.impl.simple.CourseConverter;
+import com.zem.diveschool.converters.impl.simple.SlotConverter;
+import com.zem.diveschool.data.CourseExtendedService;
 import com.zem.diveschool.dto.CourseDto;
+import com.zem.diveschool.dto.SlotDto;
 import com.zem.diveschool.persistence.model.Course;
-import com.zem.diveschool.persistence.services.CourseService;
+import com.zem.diveschool.persistence.model.Slot;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.ui.Model;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -20,30 +23,30 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class CourseControllerTest {
 
     @Mock
-    CourseService courseService;
+    private CourseConverter converter;
 
     @Mock
-    ConvertObjectToObject<Course, CourseDto> convertToDto;
-    @Mock
-    ConvertObjectToObject<CourseDto, Course> convertToEntity;
-
+    private SlotConverter slotConverter;
 
     @Mock
-    Model model;
+    CourseExtendedService service;
 
     CourseController controller;
+
+    MockMvc mockMvc;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new CourseController(courseService);
+        controller = new CourseController(service, converter, slotConverter);
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
@@ -56,99 +59,241 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void requestListCourses() throws Exception {
+    public void test_listCourses() throws Exception {
         //given
+        Set<Course> courses = new HashSet<>();
         Set<CourseDto> coursesDto = new HashSet<>();
 
-        CourseDto courseDto1 = new CourseDto();
-        courseDto1.setId(1L);
-        coursesDto.add(courseDto1);
-
-        CourseDto courseDto2 = new CourseDto();
-        courseDto2.setId(2L);
-        coursesDto.add(courseDto2);
-
-
-        when(convertToDto.convert(courseService.findAll())).thenReturn(coursesDto);
-
-        ArgumentCaptor<Set<CourseDto>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
-
         //when
-        String viewName = controller.listCourses(model);
+        when(service.findAll()).thenReturn(courses);
+        when(converter.convertFromEntities(anyCollection())).thenReturn(coursesDto);
 
         //then
-        assertEquals("courses/index", viewName);
-        verify(model, times(1)).addAttribute(eq("courses"), argumentCaptor.capture());
-        Set<CourseDto> setInController = argumentCaptor.getValue();
-        assertEquals(coursesDto.size(), setInController.size());
+        mockMvc.perform(get("/courses"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("courses/index"))
+                .andExpect(model().attributeExists("courses"))
+                .andExpect(model().size(1));
+
+        verify(service, times(1)).findAll();
+        verify(converter, times(1)).convertFromEntities(anyCollection());
     }
 
     @Test
-    public void requestShowById() throws Exception {
+    public void test_showById() throws Exception {
         //given
+        Optional<Course> courseOptional = Optional.of(new Course());
         CourseDto courseDto = new CourseDto();
-        courseDto.setId(1L);
-
-        when(convertToDto.convert(courseService.findById(1L))).thenReturn(courseDto);
-
-        ArgumentCaptor<CourseDto> argumentCaptor = ArgumentCaptor.forClass(CourseDto.class);
 
         //when
-        String id = Long.valueOf(1L).toString();
-        String viewName = controller.showById(id, model);
+        when(service.findById(anyLong())).thenReturn(courseOptional);
+        when(converter.convertFromEntity(any(Course.class))).thenReturn(courseDto);
 
         //then
-        assertEquals("courses/show", viewName);
-        verify(model, times(1)).addAttribute(eq("course"), argumentCaptor.capture());
-        CourseDto inController = argumentCaptor.getValue();
-        assertEquals(Optional.of(1L), Optional.ofNullable(inController.getId()));
+        mockMvc.perform(get("/courses/1/show"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("courses/show"))
+                .andExpect(model().attributeExists("course"))
+                .andExpect(model().size(1));
+
+        verify(service, times(1)).findById(anyLong());
+        verify(converter, times(1)).convertFromEntity(any(Course.class));
     }
 
 
     @Test
-    public void getNewCourse() throws Exception {
-        ///////// TODO
+    public void test_newCourse() throws Exception {
         //given
 
         //when
 
         //then
-        assertEquals(1,0);
+        mockMvc.perform(get("/courses/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("courses/courseform"))
+                .andExpect(model().attributeExists("course"))
+                .andExpect(model().size(1));
     }
 
     @Test
-    public void getUpdateCourse() throws Exception {
-        ///////// TODO
+    public void test_updateCourse() throws Exception {
+        //given
+        Optional<Course> courseOptional = Optional.of(new Course());
+        CourseDto courseDto = new CourseDto();
+
+        //when
+        when(service.findById(anyLong())).thenReturn(courseOptional);
+        when(converter.convertFromEntity(any(Course.class))).thenReturn(courseDto);
+
+        //then
+        mockMvc.perform(get("/courses/1/update"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("courses/courseform"))
+                .andExpect(model().attributeExists("course"))
+                .andExpect(model().size(1));
+
+        verify(service, times(1)).findById(anyLong());
+        verify(converter, times(1)).convertFromEntity(any(Course.class));
+    }
+
+    @Test
+    public void test_saveOrUpdate() throws Exception {
+        //given
+        Course course = new Course();
+        Course savedCourse = new Course();
+        CourseDto savedCourseDto = new CourseDto();
+
+        //when
+        when(converter.convertFromDto(any(CourseDto.class))).thenReturn(course);
+        when(service.save(any(Course.class))).thenReturn(savedCourse);
+        when(converter.convertFromEntity(any(Course.class))).thenReturn(savedCourseDto);
+
+        //then
+        mockMvc.perform(post("/courses")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("id", "")
+                        .param("name", "some string")
+                )
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/courses/2/show"))
+                .andExpect(model().size(1));
+
+        verify(converter, times(1)).convertFromDto(any(CourseDto.class));
+        verify(service, times(1)).save(any(Course.class));
+        verify(converter, times(1)).convertFromEntity(any(Course.class));
+    }
+
+    @Test
+    public void test_deleteById() throws Exception {
         //given
 
         //when
 
         //then
-        assertEquals(1,0);
+        mockMvc.perform(get("/courses/1/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/courses"))
+                .andExpect(model().size(0));
 
+        verify(service, times(1)).deleteById(anyLong());
+    }
+
+    /* ---- */
+
+    @Test
+    public void test_findCourses() throws Exception {
+        //given
+        Set<Course> courses = new HashSet<>();
+        Set<CourseDto> coursesDto = new HashSet<>();
+
+        //when
+        when(service.findAll()).thenReturn(courses);
+        when(converter.convertFromEntities(anyCollection())).thenReturn(coursesDto);
+
+        //then
+        mockMvc.perform(get("/courses/find"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("courses/find"))
+                .andExpect(model().attributeExists("courses"))
+                .andExpect(model().size(1));
+
+        verify(service, times(1)).findAll();
+        verify(converter, times(1)).convertFromEntities(anyCollection());
+    }
+
+    /* ---- */
+
+    @Test
+    public void test_listCourseSlots() throws Exception {
+        assertEquals(1,0);
+        /*
+        //given
+        Optional<CourseDto> courseDtoOptional = Optional.of(new CourseDto());
+        Set<SlotDto> slotsDto = new HashSet<SlotDto>();
+
+        //when
+        when(service.findById(anyLong())).thenReturn(courseDtoOptional);
+        when(service.findSlotsByCourseId(anyLong())).thenReturn(slotsDto);
+
+        //then
+        mockMvc.perform(get("/courses/1/slots"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("courses/slots/list"))
+                .andExpect(model().attributeExists("slots"))
+                .andExpect(model().attributeExists("course"))
+                .andExpect(model().size(2));
+
+        verify(service, times(1)).findById(anyLong());
+        verify(service, times(1)).findSlotsByCourseId(anyLong());
+        */
     }
 
     @Test
-    public void postSaveOrUpdate() throws Exception {
-        ///////// TODO
+    public void test_newCourseSlot() throws Exception {
+        assertEquals(1,0);
+        /*
         //given
+        Optional<CourseDto> courseDtoOptional = Optional.of(new CourseDto());
 
         //when
+        when(service.findById(anyLong())).thenReturn(courseDtoOptional);
 
         //then
-        assertEquals(1,0);
+        mockMvc.perform(get("/courses/1/slots/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("students/locations/locationform"))
+                .andExpect(model().attributeExists("slot"))
+                .andExpect(model().size(1));
 
+        verify(service, times(1)).findById(anyLong());
+         */
     }
 
     @Test
-    public void getDeleteById() throws Exception {
-        ///////// TODO
+    public void test_deleteCourseSlot() throws Exception {
+        assertEquals(1,0);
+        /*
         //given
+        Optional<CourseDto> courseDtoOptional = Optional.of(new CourseDto());
 
         //when
+        when(service.findById(anyLong())).thenReturn(courseDtoOptional);
 
         //then
+        mockMvc.perform(get("/courses/1/slots/2/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/courses/slots"))
+                .andExpect(model().attributeExists("course"))
+                .andExpect(model().size(1));
+
+        verify(service, times(1)).findById(anyLong());
+        verify(service, times(1)).deleteByCourseIdAndSlotId(anyLong(), anyLong());
+         */
+    }
+
+    @Test
+    public void test_showCourseSlot() throws Exception {
         assertEquals(1,0);
+        /*
+        //given
+        Optional<CourseDto> courseDtoOptional = Optional.of(new CourseDto());
+        Optional<SlotDto> slotDtoOptional = Optional.of(new SlotDto());
+
+        //when
+        when(service.findById(anyLong())).thenReturn(courseDtoOptional);
+        when(service.findByCourseIdAndSlotId(anyLong(), anyLong())).thenReturn(slotDtoOptional);
+
+        //then
+        mockMvc.perform(get("/courses/1/slots/2/show"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("courses/slots/show"))
+                .andExpect(model().attributeExists("slot"))
+                .andExpect(model().attributeExists("course"))
+                .andExpect(model().size(2));
+
+        verify(service, times(1)).findById(anyLong());
+        verify(service, times(1)).findByCourseIdAndSlotId(anyLong(), anyLong());
+         */
     }
 
 }

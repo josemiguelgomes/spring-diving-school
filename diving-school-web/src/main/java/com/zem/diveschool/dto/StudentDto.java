@@ -14,8 +14,6 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 public class StudentDto extends GenericDto<StudentDto> {
-    private final SimpleDateFormat dateFormat
-            = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     private String firstName;
     private String middleName;
@@ -27,14 +25,14 @@ public class StudentDto extends GenericDto<StudentDto> {
     private Language language;
     private Byte[] photo;
 
-    private Location homeAddress;
-    private Set<Card> cards = new HashSet<>();
-    private Set<Slot> slots = new HashSet<>();
+    private LocationDto homeAddress;
+    private Set<CardDto> cards = new HashSet<>();
+    private Set<SlotDto> slots = new HashSet<>();
 
     @Builder
     public StudentDto(Long id, String firstName, String middleName, String lastName, String birthDate, Gender gender,
-                      String email, String phoneNumber, Language language, Byte[] photo, Location homeAddress,
-                      Set<Card> cards, Set<Slot> slots) {
+                      String email, String phoneNumber, Language language, Byte[] photo, LocationDto homeAddress,
+                      Set<CardDto> cards, Set<SlotDto> slots) {
         super(id);
         this.firstName = firstName;
         this.middleName = middleName;
@@ -57,7 +55,7 @@ public class StudentDto extends GenericDto<StudentDto> {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
         try {
             return dateFormat.parse(this.birthDate);
-        } catch (ParseException e) {
+        } catch (ParseException | NullPointerException e) {
 //            throw new RuntimeException(e);
             try {
                 return dateFormat.parse("0001-01-01");

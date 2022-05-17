@@ -6,14 +6,15 @@
 </head>
 <body>
    <div class="container">
-   <!--/*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Student"*/-->
       <h2>Student</h2>
       <form action="#" th:action="@{/show}" th:object="${student}"  method="POST">
          <div class="card-header bg-transparent text-center">
             <th th:field="${student.photo} == null ? _ : @{'data:image/png;base64,'+${student.photo}}"
                          width="225" height="225"></th>
          </div>
+
          <div class="card-body">
+            <p class="mb-0"><strong class="pr-1">ID </strong><th th:text="${student.id}"></th></p>
             <p class="mb-0"><strong class="pr-1">First Name </strong><th th:text="${student.firstName}"></th></p>
             <p class="mb-0"><strong class="pr-1">Middle Name </strong><th th:text="${student.middleName}"></th></p>
             <p class="mb-0"><strong class="pr-1">Last Name </strong><th th:text="${student.lastName}"></th></p>
@@ -25,17 +26,15 @@
          </div>
 
          <hr>
-<!--
+
          <h3>Home Address</h3>
          <div class="card-body">
-            /*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Location"*/
-            <p class="mb-0"><strong class="pr-1">Street </strong><th th:text="${location.streetAddress}"></th></p>
-            <p class="mb-0"><strong class="pr-1">Postal Code </strong><th th:text="${location.postalCode}"></th></p>
-            <p class="mb-0"><strong class="pr-1">City </strong><th th:text="${location.city}"></th></p>
-            <p class="mb-0"><strong class="pr-1">State/Province </strong><th th:text="${location.stateProvince}"></th></p>
-            <p class="mb-0"><strong class="pr-1">Country </strong><th th:text="${location.country}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Street </strong><th th:text="${student.homeAddress?.streetAddress}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Postal Code </strong><th th:text="${student.homeAddress?.postalCode}"></th></p>
+            <p class="mb-0"><strong class="pr-1">City </strong><th th:text="${student.homeAddress?.city}"></th></p>
+            <p class="mb-0"><strong class="pr-1">State/Province </strong><th th:text="${student.homeAddress?.stateProvince}"></th></p>
+            <p class="mb-0"><strong class="pr-1">Country </strong><th th:text="${student.homeAddress?.country}"></th></p>
          </div>
--->
 
          <hr>
 
@@ -44,6 +43,7 @@
             <table id="cards" class="table table-striped">
                <thead>
                <tr>
+                  <th>ID</th>
                   <th>Course</th>
                   <th>Student Name</th>
                   <th>Start Date</th>
@@ -51,9 +51,12 @@
                   <th>Country</th>
                   <th>Instructor Name</th>
                </tr>
+               <a class="btn btn-default" href="#" th:href="@{'/students/' + ${student.id} + '/cards'}"
+                  role="button">View</a>
                </thead>
                <tbody>
-               <tr th:each="card : ${cards}">
+               <tr th:each="card : ${student.cards}">
+                  <td th:text="${card.id}"></td>
                   <td th:text="${card.course}"></td>
                   <td th:text="${card.studentName}"></td>
                   <td th:text="${card.startDate}"></td>
@@ -72,6 +75,7 @@
             <table id="slots" class="table table-striped">
                <thead>
                <tr>
+                  <th>ID</th>
                   <th>Title</th>
                   <th>Start Date</th>
                   <th>End Date</th>
@@ -79,11 +83,14 @@
                </tr>
                </thead>
                <tbody>
-               <tr th:each="slot : ${slots}">
+               <tr th:each="slot : ${student.slots}">
+                  <td th:text="${slot.id}"></td>
                   <td th:text="${slot.title}"></td>
-                  <td th:text="${slot.startDate}"></td>
-                  <td th:text="${slot.endDate}"></td>
-                  <td th:text="${slot.status}"></td>
+<!--                  <td th:text="${slot.startDate}"></td> -->
+                  <td>START</td>
+<!--                  <td th:text="${slot.endDate()}"></td> -->
+                  <td>END</td>
+                  <td th:text="${slot.status()}"></td>
                </tr>
                </tbody>
             </table>
