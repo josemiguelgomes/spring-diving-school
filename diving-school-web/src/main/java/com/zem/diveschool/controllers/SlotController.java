@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -39,6 +40,11 @@ public class SlotController {
         this.studentConverter = studentConverter;
     }
 
+    @InitBinder
+    public void setAllowedFields(WebDataBinder dataBinder) {
+        dataBinder.setDisallowedFields("id");
+    }
+
     @GetMapping({"/slots", "/slots/index", "/slots/index.html", "slots.html"})
     public String listSlots(@NotNull Model model){
         Set<Slot> slots = service.findAll();
@@ -57,7 +63,7 @@ public class SlotController {
 
     @GetMapping("slots/new")
     public String newSlot(@NotNull Model model){
-        model.addAttribute("slot", new SlotDto());
+        model.addAttribute("slot", SlotDto.builder().build());
         return "slots/slotform";
     }
 

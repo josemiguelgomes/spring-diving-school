@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Profile({"default", "springdatajpa"})
@@ -29,5 +30,10 @@ public class StudentServiceSDJpaImpl extends AbstractServiceSDJpaImpl<Student, L
             studentOptional.get().setPhoto(image);
             super.getObjectRepository().save(studentOptional.get());
         }
+    }
+
+    @Override
+    public Set<Student> findAllByLastNameLike(String lastName) {
+        return super.getObjectRepository().findAllByLastNameLike(lastName);
     }
 }

@@ -1,6 +1,5 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.converters.ConverterDtoEntityService;
 import com.zem.diveschool.converters.impl.simple.CardConverter;
 import com.zem.diveschool.data.CardExtendedService;
 import com.zem.diveschool.dto.CardDto;
@@ -25,10 +24,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CardControllerTest {
 
     @Mock
-    CardConverter converter;
+    CardExtendedService service;
 
     @Mock
-    CardExtendedService service;
+    CardConverter converter;
 
     CardController controller;
 

@@ -102,4 +102,9 @@ public class StudentServiceMapImpl extends AbstractServiceMapsImpl<Student, Long
             super.save(studentOptional.get());
         }
     }
+
+    @Override
+    public Set<Student> findAllByLastNameLike(String lastName) {
+        return null;    // TODO implement on MAP !!!
+    }
 }

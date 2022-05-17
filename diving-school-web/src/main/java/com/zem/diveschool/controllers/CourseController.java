@@ -9,6 +9,7 @@ import com.zem.diveschool.persistence.model.Slot;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -30,6 +31,11 @@ public class CourseController {
         this.slotConverter = slotConverter;
     }
 
+    @InitBinder
+    public void setAllowedFields(WebDataBinder dataBinder) {
+        dataBinder.setDisallowedFields("id");
+    }
+
     @GetMapping({"/courses", "/courses/index", "/courses/index.html", "courses.html"})
     public String listCourses(Model model){
         Set<Course> courses = service.findAll();
@@ -48,7 +54,7 @@ public class CourseController {
 
     @GetMapping("courses/new")
     public String newCourse(Model model){
-        model.addAttribute("course", new CourseDto());
+        model.addAttribute("course", CourseDto.builder().build());
         return "courses/courseform";
     }
 

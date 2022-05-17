@@ -89,7 +89,7 @@ public abstract class AbstractExtendedServiceImpl<T extends BaseEntity<?>, I ext
         Class[] parameterType = new Class[2];
         parameterType[0] = id.getClass();
         parameterType[1] = byteObjects.getClass();
-        Object[] args = new Class[2];
+        Object[] args = new Object[2];
         args[0] = id;
         args[1] = byteObjects;
         try {

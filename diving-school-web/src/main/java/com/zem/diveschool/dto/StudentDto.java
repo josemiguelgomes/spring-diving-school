@@ -14,8 +14,6 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 public class StudentDto extends GenericDto<StudentDto> {
-    private final SimpleDateFormat dateFormat
-            = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     private String firstName;
     private String middleName;
@@ -57,7 +55,7 @@ public class StudentDto extends GenericDto<StudentDto> {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
         try {
             return dateFormat.parse(this.birthDate);
-        } catch (ParseException e) {
+        } catch (ParseException | NullPointerException e) {
 //            throw new RuntimeException(e);
             try {
                 return dateFormat.parse("0001-01-01");

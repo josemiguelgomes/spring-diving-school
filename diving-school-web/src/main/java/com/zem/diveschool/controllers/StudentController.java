@@ -17,9 +17,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -45,7 +48,12 @@ public class StudentController {
         this.cardConverter = cardConverter;
     }
 
-    @GetMapping({"/students", "/students/index", "/students/index.html", "students.html"})
+    @InitBinder
+    public void setAllowedFields(WebDataBinder dataBinder) {
+        dataBinder.setDisallowedFields("id");
+    }
+
+    @GetMapping({"/students/index", "/students/index.html"})
     public String listStudents(@NotNull Model model){
         Set<Student> students = service.findAll();
         Set<StudentDto> studentsDto = converter.convertFromEntities(students);
@@ -55,15 +63,20 @@ public class StudentController {
 
     @GetMapping({"/students/{id}/show"})
     public String showById(@PathVariable String id, @NotNull Model model){
-        Optional<Student> student = service.findById(Long.valueOf(id));
-        StudentDto studentDto = converter.convertFromEntity(student.get());
+        Optional<Student> studentOptional = service.findById(Long.valueOf(id));
+        StudentDto studentDto = converter.convertFromEntity(studentOptional.get());
+
+        studentDto.setHomeAddress(locationConverter.convertFromEntity(studentOptional.get().getHomeAddress()));
+        studentDto.setCards(cardConverter.convertFromEntities(studentOptional.get().getCards()));
+        studentDto.setSlots(slotConverter.convertFromEntities(studentOptional.get().getSlots()));
+
         model.addAttribute("student", studentDto);
         return "students/show";
     }
 
     @GetMapping("students/new")
     public String newStudent(@NotNull Model model){
-        model.addAttribute("student", new StudentDto());
+        model.addAttribute("student", StudentDto.builder().build());
         return "students/studentform";
     }
 
@@ -71,6 +84,9 @@ public class StudentController {
     public String updateStudent(@PathVariable String id, @NotNull Model model){
         Optional<Student> studentOptional = service.findById(Long.valueOf(id));
         StudentDto studentDto = converter.convertFromEntity(studentOptional.get());
+
+        studentDto.setHomeAddress(locationConverter.convertFromEntity(studentOptional.get().getHomeAddress()));
+
         model.addAttribute("student", studentDto);
         return  "students/studentform";
     }
@@ -108,11 +124,36 @@ public class StudentController {
     /* --- */
 
     @GetMapping("/students/find")
-    public String findStudents(@NotNull Model model) {
-        Set<Student> students = service.findAll();
-        Set<StudentDto> studentsDto = converter.convertFromEntities(students);
-        model.addAttribute("students", studentsDto);
+    public String findStudents(Model model) {
+        model.addAttribute("student", StudentDto.builder().build());
         return "students/find";
+    }
+
+    @GetMapping("/students")
+    public String processFindForm(StudentDto studentDto, BindingResult result, Model model) {
+        // allow parameterless GET request for /students to return all records
+        if (studentDto.getLastName() == null) {
+            studentDto.setLastName(""); // empty string signifies a more abroad possible search
+        }
+
+        // find students by last name
+        Student student = converter.convertFromDto(studentDto);
+        Set<Student> students = service.findAllByLastNameLike("%" + student.getLastName() + "%");
+        Set<StudentDto> studentsDto = converter.convertFromEntities(students);
+
+        if (studentsDto.isEmpty()) {
+            // no students found
+            result.rejectValue("lastName", "notFound", "not found");
+            return "students/find";
+        } else if (studentsDto.size() == 1) {
+            // 1 student found
+            studentDto = studentsDto.stream().findFirst().get();
+            return "redirect:/students/" + studentDto.getId() + "/show";
+        } else {
+            // multiple students found
+            model.addAttribute("students", studentsDto);
+            return "students/index";
+        }
     }
 
     /* --- */

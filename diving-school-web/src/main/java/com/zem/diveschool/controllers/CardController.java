@@ -1,6 +1,5 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.converters.ConverterDtoEntityService;
 import com.zem.diveschool.converters.impl.simple.CardConverter;
 import com.zem.diveschool.data.CardExtendedService;
 import com.zem.diveschool.dto.CardDto;
@@ -10,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -30,6 +30,11 @@ public class CardController {
         this.converter = converter;
     }
 
+    @InitBinder
+    public void setAllowedFields(WebDataBinder dataBinder) {
+        dataBinder.setDisallowedFields("id");
+    }
+
     @GetMapping({"/cards", "/cards/index", "/cards/index.html", "cards.html"})
     public String listCards(Model model){
         Set<Card> cards = service.findAll();
@@ -48,7 +53,7 @@ public class CardController {
 
     @GetMapping("cards/new")
     public String newCard(Model model){
-        model.addAttribute("card", new CardDto());
+        model.addAttribute("card", CardDto.builder().build());
         return "cards/cardform";
     }
 

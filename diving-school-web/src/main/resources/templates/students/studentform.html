@@ -8,6 +8,9 @@
    <div class="container-fluid">
    <!--/*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Student"*/-->
       <h2>Student Form</h2>
+
+      <a href="#" th:href="@{'/students/' + ${student.id} + '/photo'}">Change Photo</a>
+
       <form  th:object="${student}" th:action="@{/students/}" method="post">
          <input type="hidden" th:field="*{id}"/>
          <div class="card-body">
@@ -45,7 +48,7 @@
             </select>
 
             <h3>Home Address</h3>
-            <div th:object="${location}">
+            <div th:object="${student.homeAddress}">
                <p class="mb-0"><strong class="pr-1">Street </strong>
                   <input type="text" class="form-control" th:field="*{streetAddress}"/>
                </p>

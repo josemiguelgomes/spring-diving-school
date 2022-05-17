@@ -6,11 +6,12 @@
 </head>
 <body>
 <!--/*@thymesVar id="location" type="com.zem.diveschool.persistence.model.Location"*/-->
-<h2>Instructors</h2>
+<h2>Locations</h2>
 
 <table id="locations" class="table table-striped">
     <thead>
     <tr>
+        <th>ID</th>
         <th>Street</th>
         <th>Postal Code</th>
         <th>City</th>
@@ -20,6 +21,7 @@
     </thead>
     <tbody>
     <tr th:each="location : ${locations}">
+        <td th:text="${location.id}"></td>
         <td th:text="${location.streetAddress}"></td>
         <td th:text="${location.postalCode}"></td>
         <td th:text="${location.city}"></td>

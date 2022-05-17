@@ -14,8 +14,7 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 public class SlotDto extends GenericDto<SlotDto> {
-    private final SimpleDateFormat dateFormat
-            = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
     private String title;
     private String startDate;
     private String endDate;
@@ -47,7 +46,7 @@ public class SlotDto extends GenericDto<SlotDto> {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
         try {
             return dateFormat.parse(this.startDate);
-        } catch (ParseException e) {
+        } catch (ParseException | NullPointerException e) {
 //            throw new RuntimeException(e);
             try {
                 return dateFormat.parse("0001-01-01");
@@ -65,7 +64,7 @@ public class SlotDto extends GenericDto<SlotDto> {
         dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
         try {
             return dateFormat.parse(this.endDate);
-        } catch (ParseException e) {
+        } catch (ParseException | NullPointerException e) {
 //            throw new RuntimeException(e);
             try {
                 return dateFormat.parse("0001-01-01");

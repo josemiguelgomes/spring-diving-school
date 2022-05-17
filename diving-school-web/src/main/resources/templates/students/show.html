@@ -12,6 +12,7 @@
             <th th:field="${student.photo} == null ? _ : @{'data:image/png;base64,'+${student.photo}}"
                          width="225" height="225"></th>
          </div>
+
          <div class="card-body">
             <p class="mb-0"><strong class="pr-1">ID </strong><th th:text="${student.id}"></th></p>
             <p class="mb-0"><strong class="pr-1">First Name </strong><th th:text="${student.firstName}"></th></p>

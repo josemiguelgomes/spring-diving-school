@@ -25,4 +25,6 @@ public interface StudentExtendedService extends CrudService<Student, Long> {
     void deleteByStudentIdAndSlotId(long studentId, long slotId);
 
     void saveImageFile(Long studentId, MultipartFile file);
+
+    Set<Student> findAllByLastNameLike(String lastName);
 }

@@ -179,5 +179,9 @@ public class StudentExtendedServiceImpl extends AbstractExtendedServiceImpl<Stud
             e.printStackTrace();
         }
     }
+
+    public Set<Student> findAllByLastNameLike(String lastName) {
+        return service.findAllByLastNameLike(lastName);
+    }
 }
 

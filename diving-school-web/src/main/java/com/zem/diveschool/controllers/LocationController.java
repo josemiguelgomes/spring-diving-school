@@ -7,6 +7,7 @@ import com.zem.diveschool.persistence.model.Location;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -23,6 +24,11 @@ public class LocationController {
                               LocationConverter converter) {
         this.service = service;
         this.converter = converter;
+    }
+
+    @InitBinder
+    public void setAllowedFields(WebDataBinder dataBinder) {
+        dataBinder.setDisallowedFields("id");
     }
 
     @GetMapping({"/locations", "/locations/index", "/locations/index.html", "locations.html"})
@@ -43,7 +49,7 @@ public class LocationController {
 
     @GetMapping("locations/new")
     public String newLocation(Model model){
-        model.addAttribute("location", new LocationDto());
+        model.addAttribute("location", LocationDto.builder().build());
         return "locations/locationform";
     }
 

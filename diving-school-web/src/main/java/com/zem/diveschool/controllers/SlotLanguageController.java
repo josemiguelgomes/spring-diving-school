@@ -7,6 +7,7 @@ import com.zem.diveschool.persistence.model.SlotLanguage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -23,6 +24,11 @@ public class SlotLanguageController {
                                   SlotLanguageConverter converter) {
         this.service = service;
         this.converter = converter;
+    }
+
+    @InitBinder
+    public void setAllowedFields(WebDataBinder dataBinder) {
+        dataBinder.setDisallowedFields("id");
     }
 
     @GetMapping({"/slotLanguages", "/slotLanguages/index", "/slotLanguages/index.html", "slotLanguages.html"})
@@ -43,7 +49,7 @@ public class SlotLanguageController {
 
     @GetMapping("slotLanguages/new")
     public String newSlotLanguage(Model model){
-        model.addAttribute("slotLanguage", new SlotLanguageDto());
+        model.addAttribute("slotLanguage", SlotLanguageDto.builder().build());
         return "slotLanguages/slotLanguageform";
     }
 
