@@ -19,6 +19,18 @@ import java.util.Set;
 @Controller
 public class CourseController {
 
+    private static final String VIEWS_COURSES_INDEX = "courses/index";
+    private static final String VIEWS_COURSES_SHOW = "courses/show";
+    private static final String VIEWS_COURSES_COURSEFORM = "courses/courseform";
+    private static final String VIEWS_COURSES_FIND = "courses/find";
+
+    private static final String VIEWS_COURSES_SLOTS_LIST = "courses/slots/list";
+    private static final String VIEWS_COURSES_SLOTS_SLOTFORM = "courses/slots/slotform";
+    private static final String VIEWS_COURSES_SLOTS_SHOW = "courses/slots/show";
+
+    private static final String REDIRECT_COURSES = "redirect:/courses";
+    private static final String REDIRECT_COURSES_SLOTS = "redirect:/courses/slots";
+
     private final CourseExtendedService service;
     private final CourseConverter converter;
     private final SlotConverter slotConverter;
@@ -41,7 +53,7 @@ public class CourseController {
         Set<Course> courses = service.findAll();
         Set<CourseDto> coursesDto = converter.convertFromEntities(courses);
         model.addAttribute("courses", coursesDto);
-        return "courses/index";
+        return VIEWS_COURSES_INDEX;
     }
 
     @RequestMapping({"/courses/{id}/show"})
@@ -49,13 +61,13 @@ public class CourseController {
         Optional<Course> courseOptional = service.findById(Long.valueOf(id));
         CourseDto courseDto = converter.convertFromEntity(courseOptional.get());
         model.addAttribute("course", courseDto);
-        return "courses/show";
+        return VIEWS_COURSES_SHOW;
     }
 
     @GetMapping("courses/new")
     public String newCourse(Model model){
         model.addAttribute("course", CourseDto.builder().build());
-        return "courses/courseform";
+        return VIEWS_COURSES_COURSEFORM;
     }
 
     @GetMapping("courses/{id}/update")
@@ -63,7 +75,7 @@ public class CourseController {
         Optional<Course> courseOptional = service.findById(Long.valueOf(id));
         CourseDto courseDto = converter.convertFromEntity(courseOptional.get());
         model.addAttribute("course", courseDto);
-        return  "courses/courseform";
+        return VIEWS_COURSES_COURSEFORM;
     }
 
     @PostMapping("courses")
@@ -71,13 +83,13 @@ public class CourseController {
         Course course = converter.convertFromDto(courseDto);
         Course savedCourse = service.save(course);
         CourseDto savedCourseDto = converter.convertFromEntity(savedCourse);
-        return "redirect:/courses/" + savedCourseDto.getId() + "/show";
+        return REDIRECT_COURSES + "/" + savedCourseDto.getId() + "/show";
     }
 
     @GetMapping("courses/{id}/delete")
     public String deleteById(@PathVariable String id) {
         service.deleteById(Long.valueOf(id));
-        return "redirect:/courses";
+        return REDIRECT_COURSES;
     }
 
     /* --- */
@@ -87,7 +99,7 @@ public class CourseController {
         Set<Course> courses = service.findAll();
         Set<CourseDto> coursesDto = converter.convertFromEntities(courses);
         model.addAttribute("courses", coursesDto);
-        return "courses/find";
+        return VIEWS_COURSES_FIND;
     }
 
     /* --- */
@@ -105,7 +117,7 @@ public class CourseController {
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("slots", slotsDto);
         model.addAttribute("course", courseDto);
-        return "courses/slots/list";
+        return VIEWS_COURSES_SLOTS_LIST;
     }
 
     @GetMapping("/courses/{courseId}/slots/new")
@@ -121,7 +133,7 @@ public class CourseController {
         slotDto.setCourse(courseDto);
 
         model.addAttribute("slot", slotDto);
-        return "courses/slots/slotform";
+        return VIEWS_COURSES_SLOTS_SLOTFORM;
     }
 
     @GetMapping("/courses/{courseId}/slots/{slotId}/delete")
@@ -134,7 +146,7 @@ public class CourseController {
         CourseDto courseDto = converter.convertFromEntity(courseOptional.get());
 
         model.addAttribute("course", courseDto);
-        return "redirect:/courses/slots";
+        return REDIRECT_COURSES_SLOTS;
     }
 
     @GetMapping("/courses/{courseId}/slots/{slotId}/show")
@@ -150,6 +162,6 @@ public class CourseController {
 
         model.addAttribute("slot", slotDto);
         model.addAttribute("course", courseDto);
-        return "courses/slots/show";
+        return VIEWS_COURSES_SLOTS_SHOW;
     }
 }

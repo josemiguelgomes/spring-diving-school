@@ -20,6 +20,12 @@ import java.util.Set;
 @Controller
 public class CardController {
 
+    private static final String VIEWS_CARDS_INDEX = "cards/index";
+    private static final String VIEWS_CARDS_SHOW = "cards/show";
+    private static final String VIEWS_CARDS_CARDFORM = "cards/cardform";
+
+    private static final String REDIRECT_CARDS = "redirect:/cards";
+
     private final CardExtendedService service;
     private final CardConverter converter;
 
@@ -40,7 +46,7 @@ public class CardController {
         Set<Card> cards = service.findAll();
         Set<CardDto> cardsDto = converter.convertFromEntities(cards);
         model.addAttribute("cards", cardsDto);
-        return "cards/index";
+        return VIEWS_CARDS_INDEX;
     }
 
     @GetMapping({"/cards/{id}/show"})
@@ -48,13 +54,13 @@ public class CardController {
         Optional<Card> cardOptional = service.findById(Long.valueOf(id));
         CardDto cardDto = converter.convertFromEntity(cardOptional.get());
         model.addAttribute("card", cardDto);
-        return "cards/show";
+        return VIEWS_CARDS_SHOW;
     }
 
     @GetMapping("cards/new")
     public String newCard(Model model){
         model.addAttribute("card", CardDto.builder().build());
-        return "cards/cardform";
+        return VIEWS_CARDS_CARDFORM;
     }
 
     @GetMapping("cards/{id}/update")
@@ -62,7 +68,7 @@ public class CardController {
         Optional<Card> cardOptional = service.findById(Long.valueOf(id));
         CardDto cardDto = converter.convertFromEntity(cardOptional.get());
         model.addAttribute("card", cardDto);
-        return  "cards/cardform";
+        return  VIEWS_CARDS_CARDFORM;
     }
 
     @PostMapping("cards")
@@ -70,13 +76,13 @@ public class CardController {
         Card card = converter.convertFromDto(cardDto);
         Card savedCard = service.save(card);
         CardDto savedCardDto = converter.convertFromEntity(savedCard);
-        return "redirect:/cards/" + savedCardDto.getId() + "/show";
+        return REDIRECT_CARDS + "/" + savedCardDto.getId() + "/show";
     }
 
     @GetMapping("cards/{id}/delete")
     public String deleteById(@PathVariable String id){
         service.deleteById(Long.valueOf(id));
-        return "redirect:/cards";
+        return REDIRECT_CARDS;
     }
 
     /* ---- */

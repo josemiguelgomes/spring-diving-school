@@ -30,6 +30,29 @@ import java.util.Set;
 @Controller
 public class StudentController {
 
+    private static final String VIEWS_STUDENTS_INDEX = "students/index";
+    private static final String VIEWS_STUDENTS_SHOW = "students/show";
+    private static final String VIEWS_STUDENTS_STUDENTFORM = "students/studentform";
+    private static final String VIEWS_STUDENTS_IMAGEUPLOADFORM = "students/imageuploadform";
+    private static final String VIEWS_STUDENTS_FIND = "students/find";
+
+    private static final String VIEWS_STUDENTS_CARDS_LIST = "students/cards/list";
+    private static final String VIEWS_STUDENTS_CARDS_CARDFORM = "students/cards/cardform";
+    private static final String VIEWS_STUDENTS_CARDS_SHOW = "students/cards/show";
+
+    private static final String VIEWS_STUDENTS_LOCATIONS_LIST = "students/locations/list";
+    private static final String VIEWS_STUDENTS_LOCATIONS_LOCATIONFORM = "students/locations/locationform";
+    private static final String VIEWS_STUDENTS_LOCATIONS_SHOW = "students/locations/show";
+
+    private static final String VIEWS_STUDENTS_SLOTS_LIST = "students/slots/list";
+    private static final String VIEWS_STUDENTS_SLOTS_SLOTFORM = "students/slots/slotform";
+    private static final String VIEWS_STUDENTS_SLOTS_SHOW = "students/slots/show";
+
+    private static final String REDIRECT_STUDENTS = "redirect:/students";
+    private static final String REDIRECT_STUDENTS_CARDS = "redirect:/students/cards";
+    private static final String REDIRECT_STUDENTS_LOCATIONS = "redirect:/students/locations";
+    private static final String REDIRECT_STUDENTS_SLOTS = "redirect:/students/slots";
+
     private final StudentExtendedService service;
     private final StudentConverter converter;
     private final SlotConverter slotConverter;
@@ -58,7 +81,7 @@ public class StudentController {
         Set<Student> students = service.findAll();
         Set<StudentDto> studentsDto = converter.convertFromEntities(students);
         model.addAttribute("students", studentsDto);
-        return "students/index";
+        return VIEWS_STUDENTS_INDEX;
     }
 
     @GetMapping({"/students/{id}/show"})
@@ -71,13 +94,13 @@ public class StudentController {
         studentDto.setSlots(slotConverter.convertFromEntities(studentOptional.get().getSlots()));
 
         model.addAttribute("student", studentDto);
-        return "students/show";
+        return VIEWS_STUDENTS_SHOW;
     }
 
     @GetMapping("students/new")
     public String newStudent(@NotNull Model model){
         model.addAttribute("student", StudentDto.builder().build());
-        return "students/studentform";
+        return VIEWS_STUDENTS_STUDENTFORM;
     }
 
     @GetMapping("students/{id}/update")
@@ -88,7 +111,7 @@ public class StudentController {
         studentDto.setHomeAddress(locationConverter.convertFromEntity(studentOptional.get().getHomeAddress()));
 
         model.addAttribute("student", studentDto);
-        return  "students/studentform";
+        return  VIEWS_STUDENTS_STUDENTFORM;
     }
 
     @PostMapping("students")
@@ -96,13 +119,13 @@ public class StudentController {
         Student student = converter.convertFromDto(studentDto);
         Student savedStudent = service.save(student);
         StudentDto savedStudentDto = converter.convertFromEntity(savedStudent);
-        return "redirect:/students/" + savedStudentDto.getId() + "/show";
+        return REDIRECT_STUDENTS + "/" + savedStudentDto.getId() + "/show";
     }
 
     @GetMapping("students/{id}/delete")
     public String deleteById(@PathVariable String id){
         service.deleteById(Long.valueOf(id));
-        return "redirect:/students";
+        return REDIRECT_STUDENTS;
     }
 
     /* --- */
@@ -112,13 +135,13 @@ public class StudentController {
         Optional<Student> studentOptional = service.findById(Long.valueOf(id));
         StudentDto studentDto = converter.convertFromEntity(studentOptional.get());
         model.addAttribute("student", studentDto);
-        return "students/imageuploadform";
+        return VIEWS_STUDENTS_IMAGEUPLOADFORM;
     }
 
     @PostMapping("/students/{id}/photo")
     public String handleImagePost(@PathVariable String id, @RequestParam("imagefile") MultipartFile file){
         service.saveImageFile(Long.valueOf(id), file);
-        return "redirect:/students/" + id + "/show";
+        return REDIRECT_STUDENTS + "/" + id + "/show";
     }
 
     /* --- */
@@ -126,7 +149,7 @@ public class StudentController {
     @GetMapping("/students/find")
     public String findStudents(Model model) {
         model.addAttribute("student", StudentDto.builder().build());
-        return "students/find";
+        return VIEWS_STUDENTS_FIND;
     }
 
     @GetMapping("/students")
@@ -144,11 +167,11 @@ public class StudentController {
         if (studentsDto.isEmpty()) {
             // no students found
             result.rejectValue("lastName", "notFound", "not found");
-            return "students/find";
+            return VIEWS_STUDENTS_FIND;
         } else if (studentsDto.size() == 1) {
             // 1 student found
             studentDto = studentsDto.stream().findFirst().get();
-            return "redirect:/students/" + studentDto.getId() + "/show";
+            return REDIRECT_STUDENTS + "/" + studentDto.getId() + "/show";
         } else {
             // multiple students found
             model.addAttribute("students", studentsDto);
@@ -172,7 +195,7 @@ public class StudentController {
         model.addAttribute("cards", cardsDto);
         model.addAttribute("student", studentDto);
 
-        return "students/cards/list";
+        return VIEWS_STUDENTS_CARDS_LIST;
     }
 
     @GetMapping("/students/{studentId}/cards/new")
@@ -189,7 +212,7 @@ public class StudentController {
         CardDto cardDto = cardConverter.convertFromEntity(card);
 
         model.addAttribute("card", cardDto);
-        return "students/cards/cardform";
+        return VIEWS_STUDENTS_CARDS_CARDFORM;
     }
 
     @GetMapping("/students/{studentId}/cards/{cardId}/delete")
@@ -202,7 +225,7 @@ public class StudentController {
         StudentDto studentDto = converter.convertFromEntity(studentOptional.get());
 
         model.addAttribute("student", studentDto);
-        return "redirect:/students/cards";
+        return REDIRECT_STUDENTS_CARDS;
     }
 
     @GetMapping("/students/{studentId}/cards/{cardId}/show")
@@ -218,7 +241,7 @@ public class StudentController {
 
         model.addAttribute("card", cardDto);
         model.addAttribute("student", studentDto);
-        return "students/cards/show";
+        return VIEWS_STUDENTS_CARDS_SHOW;
     }
 
     @GetMapping("/students/{studentId}/locations")
@@ -234,7 +257,7 @@ public class StudentController {
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("locations", locationsDto);
         model.addAttribute("student", studentDto);
-        return "students/locations/list";
+        return VIEWS_STUDENTS_LOCATIONS_LIST;
     }
 
     @GetMapping("/students/{studentId}/locations/new")
@@ -251,7 +274,7 @@ public class StudentController {
         LocationDto locationDto = locationConverter.convertFromEntity(location);
 
         model.addAttribute("location", locationDto);
-        return "students/locations/locationform";
+        return VIEWS_STUDENTS_LOCATIONS_LOCATIONFORM;
     }
 
     @GetMapping("/students/{studentId}/locations/{locationId}/delete")
@@ -264,7 +287,7 @@ public class StudentController {
         StudentDto studentDto = converter.convertFromEntity(studentOptional.get());
 
         model.addAttribute("student", studentDto);
-        return "redirect:/students/locations";
+        return REDIRECT_STUDENTS_LOCATIONS;
     }
 
     @GetMapping("/students/{studentId}/locations/{locationId}/show")
@@ -280,7 +303,7 @@ public class StudentController {
 
         model.addAttribute("location", locationDto);
         model.addAttribute("student", studentDto);
-        return "students/locations/show";
+        return VIEWS_STUDENTS_LOCATIONS_SHOW;
     }
 
     @GetMapping("/students/{studentId}/slots")
@@ -296,7 +319,7 @@ public class StudentController {
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("slots", slotsDto);
         model.addAttribute("student", studentDto);
-        return "students/slots/list";
+        return VIEWS_STUDENTS_SLOTS_LIST;
     }
 
     @GetMapping("/students/{studentId}/slots/new")
@@ -313,7 +336,7 @@ public class StudentController {
         SlotDto slotDto = slotConverter.convertFromEntity(slot);
 
         model.addAttribute("slot", slotDto);
-        return "students/slots/slotform";
+        return VIEWS_STUDENTS_SLOTS_SLOTFORM;
     }
 
     @GetMapping("/students/{studentId}/slots/{slotId}/delete")
@@ -326,7 +349,7 @@ public class StudentController {
         StudentDto studentDto = converter.convertFromEntity(studentOptional.get());
 
         model.addAttribute("student", studentDto);
-        return "redirect:/students/slots";
+        return REDIRECT_STUDENTS_SLOTS;
     }
 
     @GetMapping("/students/{studentId}/slots/{slotId}/show")
@@ -342,6 +365,6 @@ public class StudentController {
 
         model.addAttribute("slot", slotDto);
         model.addAttribute("student", studentDto);
-        return "students/slots/show";
+        return VIEWS_STUDENTS_SLOTS_SHOW;
     }
 }

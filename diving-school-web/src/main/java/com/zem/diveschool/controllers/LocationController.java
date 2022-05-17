@@ -17,6 +17,12 @@ import java.util.Set;
 @Controller
 public class LocationController {
 
+    private static final String VIEWS_LOCATIONS_INDEX = "locations/index";
+    private static final String VIEWS_LOCATIONS_SHOW = "locations/show";
+    private static final String VIEWS_LOCATIONS_LOCATIONFORM = "locations/locationform";
+
+    private static final String REDIRECT_LOCATIONS = "redirect:/locations";
+
     private final LocationExtendedService service;
     private final LocationConverter converter;
 
@@ -36,7 +42,7 @@ public class LocationController {
         Set<Location> locations = service.findAll();
         Set<LocationDto> locationsDto = converter.convertFromEntities(locations);
         model.addAttribute("locations", locationsDto);
-        return "locations/index";
+        return VIEWS_LOCATIONS_INDEX;
     }
 
     @GetMapping({"/locations/{id}/show"})
@@ -44,13 +50,13 @@ public class LocationController {
         Optional<Location> locationOptional = service.findById(Long.valueOf(id));
         LocationDto locationDto = converter.convertFromEntity(locationOptional.get());
         model.addAttribute("location", locationDto);
-        return "locations/show";
+        return VIEWS_LOCATIONS_SHOW;
     }
 
     @GetMapping("locations/new")
     public String newLocation(Model model){
         model.addAttribute("location", LocationDto.builder().build());
-        return "locations/locationform";
+        return VIEWS_LOCATIONS_LOCATIONFORM;
     }
 
     @GetMapping("locations/{id}/update")
@@ -58,7 +64,7 @@ public class LocationController {
         Optional<Location> locationOptional = service.findById(Long.valueOf(id));
         LocationDto locationDto = converter.convertFromEntity(locationOptional.get());
         model.addAttribute("location", locationDto);
-        return  "locations/locationform";
+        return VIEWS_LOCATIONS_LOCATIONFORM;
     }
 
     @PostMapping("locations")
@@ -66,13 +72,13 @@ public class LocationController {
         Location location = converter.convertFromDto(locationDto);
         Location savedLocation = service.save(location);
         LocationDto savedLocationDto = converter.convertFromEntity(savedLocation);
-        return "redirect:/locations/" + savedLocationDto.getId() + "/show";
+        return REDIRECT_LOCATIONS + "/" + savedLocationDto.getId() + "/show";
     }
 
     @GetMapping("locations/{id}/delete")
     public String deleteById(@PathVariable String id){
         service.deleteById(Long.valueOf(id));
-        return "redirect:/locations";
+        return REDIRECT_LOCATIONS;
     }
 
     /* --- */
