@@ -32,10 +32,10 @@ public class LocationController {
         this.converter = converter;
     }
 
-    @InitBinder
-    public void setAllowedFields(WebDataBinder dataBinder) {
-        dataBinder.setDisallowedFields("id");
-    }
+//    @InitBinder
+//    public void setAllowedFields(WebDataBinder dataBinder) {
+//        dataBinder.setDisallowedFields("id");
+//    }
 
     @GetMapping({"/locations", "/locations/index", "/locations/index.html", "locations.html"})
     public String listLocations(Model model){

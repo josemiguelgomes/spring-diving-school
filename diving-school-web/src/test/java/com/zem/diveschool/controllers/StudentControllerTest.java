@@ -4,27 +4,16 @@ import com.zem.diveschool.converters.impl.simple.CardConverter;
 import com.zem.diveschool.converters.impl.simple.LocationConverter;
 import com.zem.diveschool.converters.impl.simple.SlotConverter;
 import com.zem.diveschool.converters.impl.simple.StudentConverter;
+import com.zem.diveschool.data.SlotExtendedService;
 import com.zem.diveschool.data.StudentExtendedService;
-import com.zem.diveschool.dto.CardDto;
-import com.zem.diveschool.dto.LocationDto;
-import com.zem.diveschool.dto.SlotDto;
-import com.zem.diveschool.dto.StudentDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -32,6 +21,9 @@ public class StudentControllerTest {
 
     @Mock
     StudentExtendedService service;
+
+    @Mock
+    SlotExtendedService slotService;
 
     @Mock
     StudentConverter converter;
@@ -53,7 +45,7 @@ public class StudentControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new StudentController(service, converter, slotConverter, locationConverter, cardConverter);
+        controller = new StudentController(service, slotService, converter, slotConverter, locationConverter, cardConverter);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 

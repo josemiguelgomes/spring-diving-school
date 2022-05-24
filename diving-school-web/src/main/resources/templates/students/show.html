@@ -40,6 +40,10 @@
 
          <h3>Cards</h3>
          <div class="card-body">
+            <a class="btn btn-default" href="#" th:href="@{/students/{studentId}/cards(studentId=${student.id})}"
+               role="button">View</a>
+            <a class="btn btn-default" href="#" th:href="@{/students/{studentId}/cards/new(studentId=${student.id})}"
+               role="button">New</a>
             <table id="cards" class="table table-striped">
                <thead>
                <tr>
@@ -50,9 +54,10 @@
                   <th>End Date</th>
                   <th>Country</th>
                   <th>Instructor Name</th>
+                  <th>Show</th>
+                  <th>Update</th>
+                  <th>Delete</th>
                </tr>
-               <a class="btn btn-default" href="#" th:href="@{'/students/' + ${student.id} + '/cards'}"
-                  role="button">View</a>
                </thead>
                <tbody>
                <tr th:each="card : ${student.cards}">
@@ -63,6 +68,9 @@
                   <td th:text="${card.endDate}"></td>
                   <td th:text="${card.country}"></td>
                   <td th:text="${card.instructorName}"></td>
+                  <td><a href="#" th:href="@{/students/{studentId}/cards/{cardId}/show(studentId=${student.id},cardId=${card.id})}">Show</a></td>
+                  <td><a href="#" th:href="@{/students/{studentId}/cards/{cardId}/update(studentId=${student.id},cardId=${card.id})}">Update</a></td>
+                  <td><a href="#" th:href="@{/students/{studentId}/cards/{cardId}/delete(studentId=${student.id},cardId=${card.id})}">Delete</a></td>
                </tr>
                </tbody>
             </table>
@@ -80,6 +88,9 @@
                   <th>Start Date</th>
                   <th>End Date</th>
                   <th>Status</th>
+                  <th>Show</th>
+                  <th>Update</th>
+                  <th>Delete</th>
                </tr>
                </thead>
                <tbody>
@@ -91,6 +102,9 @@
 <!--                  <td th:text="${slot.endDate()}"></td> -->
                   <td>END</td>
                   <td th:text="${slot.status()}"></td>
+                  <td><a href="#" th:href="@{/students/{studentId}/slots/{slotId}/show(studentId=${student.id},slotId=${slot.id})}">Show</a></td>
+                  <td><a href="#" th:href="@{/students/{studentId}/slots/{slotId}/update(studentId=${student.id},slotId=${slot.id})}">Update</a></td>
+                  <td><a href="#" th:href="@{/students/{studentId}/slots/{slotId}/delete(studentId=${student.id},slotId=${slot.id})}">Delete</a></td>
                </tr>
                </tbody>
             </table>

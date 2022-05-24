@@ -22,14 +22,19 @@ public class Location extends BaseEntity<Location> {
     private String city;
     @Column(name = "state_province")
     private String stateProvince;
-    @Enumerated(EnumType.STRING)
+ //   @Enumerated(EnumType.STRING)
+    @Column(name = "country")
     private Country country;
 
     //
     // Constructors
     //
     @Builder
-    public Location(Long id, String streetAddress, String postalCode, String city, String stateProvince,
+    public Location(Long id,
+                    String streetAddress,
+                    String postalCode,
+                    String city,
+                    String stateProvince,
                     Country country) {
         super(id);
         this.streetAddress = streetAddress;

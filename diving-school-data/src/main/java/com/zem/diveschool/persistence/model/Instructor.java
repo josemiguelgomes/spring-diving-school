@@ -22,7 +22,7 @@ public class Instructor extends BaseEntity<Instructor> {
     @Column(name = "last_Name")
     private String lastName;
     @Column(name = "birth_Date")
-    private Date birthDate;
+    private Date birthDate = new Date();
     @Enumerated(EnumType.STRING)
     private Gender gender;
     @Column(name = "email")

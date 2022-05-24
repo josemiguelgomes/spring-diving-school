@@ -43,7 +43,8 @@ public abstract class AbstractExtendedServiceImpl<T extends BaseEntity<?>, I ext
 
     T save(T object) {
         Class[] parameterType = new Class[1];
-        parameterType[0] = object.getClass();
+//      parameterType[0] = object.getClass();
+        parameterType[0] = Object.class;
         try {
             Method meth = service.getClass().getMethod("save", parameterType);
             return (T) meth.invoke(service, (T) object);

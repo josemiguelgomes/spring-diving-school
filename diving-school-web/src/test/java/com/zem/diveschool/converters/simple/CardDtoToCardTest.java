@@ -67,7 +67,7 @@ public class CardDtoToCardTest {
                 .studentName(STUDENT1)
                 .startDate(START_DATE1)
                 .endDate(END_DATE1)
-                .country(Country.PORTUGAL)
+                .country(Country.builder().country("PORTUGAL").build())
                 .instructorName(INSTRUCTOR1)
                 .student(null)
                 .build();
@@ -82,7 +82,7 @@ public class CardDtoToCardTest {
         assertEquals(STUDENT1, entity.getStudentName());
         assertEquals(START_DATE1, entity.getStartDate().toString()); // TODO refactor all dates
         assertEquals(END_DATE1, entity.getEndDate().toString()); // TODO
-        assertEquals(Country.PORTUGAL, entity.getCountry());
+        assertEquals(Country.builder().country("PORTUGAL").build(), entity.getCountry());
         assertEquals(INSTRUCTOR1, entity.getInstructorName());
         assertNull(entity.getStudent());
     }
@@ -96,7 +96,7 @@ public class CardDtoToCardTest {
                 .studentName(STUDENT1)
                 .startDate(START_DATE1)
                 .endDate(END_DATE1)
-                .country(Country.PORTUGAL)
+                .country(Country.builder().country("PORTUGAL").build())
                 .instructorName(INSTRUCTOR1)
                 .student(new StudentDto())
                 .build();
@@ -111,7 +111,7 @@ public class CardDtoToCardTest {
         assertEquals(STUDENT1, entity.getStudentName());
         assertEquals(START_DATE1, entity.getStartDate().toString()); // TODO refactor all dates
         assertEquals(END_DATE1, entity.getEndDate().toString()); // TODO
-        assertEquals(Country.PORTUGAL, entity.getCountry());
+        assertEquals(Country.builder().country("PORTUGAL").build(), entity.getCountry());
         assertEquals(INSTRUCTOR1, entity.getInstructorName());
         assertNotNull(entity.getStudent());
     }
@@ -127,7 +127,7 @@ public class CardDtoToCardTest {
                 .studentName(STUDENT1)
                 .startDate(START_DATE1)
                 .endDate(END_DATE1)
-                .country(Country.PORTUGAL)
+                .country(Country.builder().country("PORTUGAL").build())
                 .instructorName(INSTRUCTOR1)
                 .student(null)
                 .build();
@@ -139,7 +139,7 @@ public class CardDtoToCardTest {
                 .studentName(STUDENT2)
                 .startDate(START_DATE2)
                 .endDate(END_DATE2)
-                .country(Country.UKRAINE)
+                .country(Country.builder().country("UKRAINE").build())
                 .instructorName(INSTRUCTOR2)
                 .student(null)
                 .build();
@@ -160,7 +160,7 @@ public class CardDtoToCardTest {
                    assertEquals(STUDENT1, entity.getStudentName());
                    assertEquals(START_DATE1, entity.getStartDate().toString()); // TODO refactor all dates
                    assertEquals(END_DATE1, entity.getEndDate().toString()); // TODO
-                   assertEquals(Country.PORTUGAL, entity.getCountry());
+                   assertEquals(Country.builder().country("PORTUGAL").build(), entity.getCountry());
                    assertEquals(INSTRUCTOR1, entity.getInstructorName());
                    assertNull(entity.getStudent());
                    break;
@@ -170,7 +170,7 @@ public class CardDtoToCardTest {
                    assertEquals(STUDENT2, entity.getStudentName());
                    assertEquals(START_DATE2, entity.getStartDate().toString()); // TODO refactor all dates
                    assertEquals(END_DATE2, entity.getEndDate().toString()); // TODO
-                   assertEquals(Country.UKRAINE, entity.getCountry());
+                   assertEquals(Country.builder().country("UKRAINE").build(), entity.getCountry());
                    assertEquals(INSTRUCTOR2, entity.getInstructorName());
                    assertNull(entity.getStudent());
                    break;
@@ -191,7 +191,7 @@ public class CardDtoToCardTest {
                 .studentName(STUDENT1)
                 .startDate(START_DATE1)
                 .endDate(END_DATE1)
-                .country(Country.PORTUGAL)
+                .country(Country.builder().country("PORTUGAL").build())
                 .instructorName(INSTRUCTOR1)
                 .student(new StudentDto())
                 .build();
@@ -203,7 +203,7 @@ public class CardDtoToCardTest {
                 .studentName(STUDENT2)
                 .startDate(START_DATE2)
                 .endDate(END_DATE2)
-                .country(Country.UKRAINE)
+                .country(Country.builder().country("UKRAINE").build())
                 .instructorName(INSTRUCTOR2)
                 .student(new StudentDto())
                 .build();
@@ -224,7 +224,7 @@ public class CardDtoToCardTest {
                     assertEquals(STUDENT1, entity.getStudentName());
                     assertEquals(START_DATE1, entity.getStartDate().toString()); // TODO refactor all dates
                     assertEquals(END_DATE1, entity.getEndDate().toString()); // TODO
-                    assertEquals(Country.PORTUGAL, entity.getCountry());
+                    assertEquals(Country.builder().country("PORTUGAL").build(), entity.getCountry());
                     assertEquals(INSTRUCTOR1, entity.getInstructorName());
                     assertNotNull(entity.getStudent());
                     break;
@@ -234,7 +234,7 @@ public class CardDtoToCardTest {
                     assertEquals(STUDENT2, entity.getStudentName());
                     assertEquals(START_DATE2, entity.getStartDate().toString()); // TODO refactor all dates
                     assertEquals(END_DATE2, entity.getEndDate().toString()); // TODO
-                    assertEquals(Country.UKRAINE, entity.getCountry());
+                    assertEquals(Country.builder().country("UKRAINE").build(), entity.getCountry());
                     assertEquals(INSTRUCTOR2, entity.getInstructorName());
                     assertNotNull(entity.getStudent());
                     break;

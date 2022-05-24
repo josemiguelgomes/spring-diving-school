@@ -10,7 +10,7 @@
 <h3><a href="#" th:href="@{'/students/new'}">New Student</a></h3>
 
 
-<form th:object="${student}" th:action="@{/students}" method="get"
+<form th:object="${student}" th:action="@{/students/find}" method="post"
       class="form-horizontal" id="search-student-form">
     <div class="form-group">
         <div class="control-group" id="lastNameGroup">

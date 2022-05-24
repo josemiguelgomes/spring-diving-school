@@ -21,7 +21,7 @@ public class Student extends BaseEntity<Student> {
     @Column(name = "last_name")
     private String lastName;
     @Column(name = "birth_date")
-    private Date birthDate;
+    private Date birthDate = new Date();;
     @Enumerated(EnumType.STRING)
     private Gender gender;
     @Column(name = "email")
@@ -60,8 +60,8 @@ public class Student extends BaseEntity<Student> {
         this.language = language;
         this.homeAddress = homeAddress;
         this.photo = photo;
-        this.cards = cards;
-        this.slots = slots;
+        if(cards != null) { this.cards = cards; }
+        if(slots != null) { this.slots = slots; }
     }
 
     //

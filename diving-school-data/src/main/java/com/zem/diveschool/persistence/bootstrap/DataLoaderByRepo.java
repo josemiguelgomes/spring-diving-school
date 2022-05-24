@@ -81,7 +81,7 @@ public class DataLoaderByRepo implements ApplicationListener<ContextRefreshedEve
                         .postalCode("2775-283")
                         .city("Parede")
                         .stateProvince("Lisboa")
-                        .country(Country.PORTUGAL)
+                        .country(Country.builder().country("PORTUGAL").build())
                         .build())
                 .build()
         );
@@ -102,7 +102,7 @@ public class DataLoaderByRepo implements ApplicationListener<ContextRefreshedEve
                         .postalCode("2775-223")
                         .city("Cascais")
                         .stateProvince("Lisboa")
-                        .country(Country.PORTUGAL)
+                        .country(Country.builder().country("PORTUGAL").build())
                         .build())
                 .build()
         );
@@ -123,7 +123,7 @@ public class DataLoaderByRepo implements ApplicationListener<ContextRefreshedEve
                         .postalCode("1215-223")
                         .city("Massamá")
                         .stateProvince("Lisboa")
-                        .country(Country.PORTUGAL)
+                        .country(Country.builder().country("PORTUGAL").build())
                         .build())
                 .build()
         );
@@ -179,7 +179,7 @@ public class DataLoaderByRepo implements ApplicationListener<ContextRefreshedEve
                         .postalCode("180WSS")
                         .city("London")
                         .stateProvince("London")
-                        .country(Country.UNITED_KINGDOM)
+                        .country(Country.builder().country("UNITED KINGDOM").build())
                         .build())
                 .build());
 
@@ -198,7 +198,7 @@ public class DataLoaderByRepo implements ApplicationListener<ContextRefreshedEve
                         .postalCode("180W-A-ASS")
                         .city("Southern")
                         .stateProvince("London")
-                        .country(Country.UNITED_KINGDOM)
+                        .country(Country.builder().country("UNITED KINGDOM").build())
                         .build())
                 .build());
         //
@@ -218,7 +218,7 @@ public class DataLoaderByRepo implements ApplicationListener<ContextRefreshedEve
                         .postalCode("")
                         .city("")
                         .stateProvince("London")
-                        .country(Country.UNITED_KINGDOM)
+                        .country(Country.builder().country("UNITED KINGDOM").build())
                         .build())
                 .course(coursePointer.findByName("GUE Rec1").orElse(null))
                 .languages(new HashSet<>())
@@ -248,7 +248,7 @@ public class DataLoaderByRepo implements ApplicationListener<ContextRefreshedEve
                         .postalCode("")
                         .city("")
                         .stateProvince("lisbon")
-                        .country(Country.PORTUGAL)
+                        .country(Country.builder().country("UNITED KINGDOM").build())
                         .build())
                 .course(coursePointer.findByName("GUE Fundamentals").orElse(null))
                 .languages(new HashSet<>())
@@ -280,7 +280,7 @@ public class DataLoaderByRepo implements ApplicationListener<ContextRefreshedEve
                 .studentName("Joaquinita Fundies")
                 .startDate(sdf.parse("2021-05-20"))
                 .endDate(sdf.parse("2021-05-30"))
-                .country(Country.PORTUGAL)
+                .country(Country.builder().country("UNITED KINGDOM").build())
                 .instructorName("El Grand Instructor")
                 .build()
         );
@@ -291,7 +291,7 @@ public class DataLoaderByRepo implements ApplicationListener<ContextRefreshedEve
                 .studentName("Joaquina Caver")
                 .startDate(sdf.parse("2021-07-30"))
                 .endDate(sdf.parse("2021-08-15"))
-                .country(Country.FRANCE)
+                .country(Country.builder().country("FRANCE").build())
                 .instructorName("El Grand Instructor Caver")
                 .build()
         );

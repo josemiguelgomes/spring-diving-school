@@ -55,10 +55,10 @@ public class InstructorController {
         this.slotConverter = slotConverter;
     }
 
-    @InitBinder
-    public void setAllowedFields(WebDataBinder dataBinder) {
-        dataBinder.setDisallowedFields("id");
-    }
+//    @InitBinder
+//    public void setAllowedFields(WebDataBinder dataBinder) {
+//        dataBinder.setDisallowedFields("id");
+//    }
 
     @GetMapping({"/instructors", "/instructors/index", "/instructors/index.html", "instructors.html"})
     public String listInstructors(Model model) {

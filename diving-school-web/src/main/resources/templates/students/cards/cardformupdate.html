@@ -9,7 +9,7 @@
    <!--/*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Student"*/-->
       <h2>Card Form</h2>
          <form th:object="${card}"
-               th:action="@{'/students/' + ${student.id} + '/cards/new'}"
+               th:action="@{'/students/' + ${student.id} + '/cards/' + ${card.id} + '/update'}"
                method="post">
              <input type="hidden" th:field="${card.id}"/>
          <a>Country </a>
@@ -18,20 +18,16 @@
                <input type="text" class="form-control" th:field="${student.lastName}"/>
             </p>  -->
             <p class="mb-0"><strong class="pr-1">Course </strong>
-               <input type="text" class="form-control" th:field="${card.course}"/>
+               <input type="text" class="form-control" th:field="${card?.course}"/>
             </p>
             <p class="mb-0"><strong class="pr-1">Student Name </strong>
-               <input type="text" class="form-control" th:field="${card.studentName}"/>
+               <input type="text" class="form-control" th:field="${card|?.studentName}"/>
             </p>
-             <!--
-            <p class="mb-0"><strong class="pr-1"></strong>
-                 <input th:replace="~{fragments/inputField :: input ('Start Date', 'startDate', 'date')}" />
-            </p>             -->
             <p class="mb-0"><strong class="pr-1">Start date </strong>
-                <input type="text" class="form-control" th:text="${card.startDate}"/>
+               <input type="text" class="form-control" th:text="${card?.startDate}"/>
             </p>
             <p class="mb-0"><strong class="pr-1">End date </strong>
-                <input type="text" class="form-control" th:text="${card.endDate}"/>
+                <input type="text" class="form-control" th:text="${card?.endDate}"/>
             </p>
             <label>Country </label>
             <select class="form-control" th:field="${card.country}">
@@ -45,7 +41,11 @@
             </p>
          </div>
 
-         <button type="submit" class="btn btn-primary">Submit</button>
+         <button
+                 th:with="text=${card['new']} ? 'Add Card' : 'Update Card'"
+                 class="btn btn-default" type="submit" th:text="${text}">Add Card
+         </button>
+
       </form>
 
       <hr>

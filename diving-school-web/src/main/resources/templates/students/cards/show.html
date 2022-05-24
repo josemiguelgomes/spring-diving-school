@@ -8,7 +8,7 @@
 <div class="container">
     <!--/*@thymesVar id="cards" type="java.util.Set<com.zem.diveschool.dto.CardDto>"*/-->
     <h2>Card</h2>
-    <form action="#" th:action="@{/show}" th:object="${course}"  method="POST">
+    <form action="#" th:action="@{/show}" th:object="${card}"  method="POST">
         <div class="card-body">
             <p class="mb-0"><strong class="pr-1">Course </strong><th th:text="${card.course}"></th></p>
             <p class="mb-0"><strong class="pr-1">Student Name </strong><th th:text="${card.studentName}"></th></p>

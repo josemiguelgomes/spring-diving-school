@@ -36,41 +36,33 @@ public class SlotController {
     private static final String VIEWS_SLOTS_SLOTLANGUAGES_SLOTLANGUAGEFORM = "slots/slotLanguages/slotLanguageform";
     private static final String VIEWS_SLOTS_SLOTLANGUAGES_SHOW = "slots/slotLanguages/show";
 
-    private static final String VIEWS_SLOTS_STUDENTS_LIST = "slots/students/list";
-    private static final String VIEWS_SLOTS_STUDENTS_STUDENTFORM = "slots/student/studentform";
-    private static final String VIEWS_SLOTS_STUDENTS_SHOW = "slots/students/show";
-
     private static final String REDIRECT_SLOTS = "redirect:/slots";
     private static final String REDIRECT_SLOTS_COURSES = "redirect:/slots/courses";
     private static final String REDIRECT_SLOTS_INSTRUCTORS = "redirect:/slots/instructors";
     private static final String REDIRECT_SLOTS_SLOTLANGUAGES = "redirect:/slots/slotLanguages";
-    private static final String REDIRECT_SLOTS_STUDENTS = "redirect:/slots/students";
 
     private final SlotExtendedService service;
     private final SlotConverter converter;
     private final CourseConverter courseConverter;
     private final InstructorConverter instructorConverter;
     private final SlotLanguageConverter slotLanguageConverter;
-    private final StudentConverter studentConverter;
 
     public SlotController(SlotExtendedService service,
                           SlotConverter converter,
                           CourseConverter courseConverter,
                           InstructorConverter instructorConverter,
-                          SlotLanguageConverter slotLanguageConverter,
-                          StudentConverter studentConverter) {
+                          SlotLanguageConverter slotLanguageConverter) {
         this.service = service;
         this.converter = converter;
         this.courseConverter = courseConverter;
         this.instructorConverter = instructorConverter;
         this.slotLanguageConverter = slotLanguageConverter;
-        this.studentConverter = studentConverter;
     }
 
-    @InitBinder
-    public void setAllowedFields(WebDataBinder dataBinder) {
-        dataBinder.setDisallowedFields("id");
-    }
+//    @InitBinder
+//    public void setAllowedFields(WebDataBinder dataBinder) {
+//        dataBinder.setDisallowedFields("id");
+//    }
 
     @GetMapping({"/slots", "/slots/index", "/slots/index.html", "slots.html"})
     public String listSlots(@NotNull Model model){
@@ -314,65 +306,4 @@ public class SlotController {
         return VIEWS_SLOTS_SLOTLANGUAGES_SHOW;
     }
 
-    @GetMapping("/slots/{slotId}/students")
-    public String listSlotStudents(@PathVariable String slotId, Model model){
-        log.debug("Getting students list for slot id: " + slotId);
-
-        Optional<Slot> slotOptional = service.findById(Long.valueOf(slotId));
-        Set<Student> students = service.findStudentsBySlotId(Long.valueOf(slotId));
-
-        SlotDto slotDto = converter.convertFromEntity(slotOptional.get());
-        Set<StudentDto> studentsDto = studentConverter.convertFromEntities(students);
-
-        // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("students", studentsDto);
-        model.addAttribute("slot", slotDto);
-        return VIEWS_SLOTS_STUDENTS_LIST;
-    }
-
-    @GetMapping("/slots/{slotId}/student/new")
-    public String newSlotStudent(@PathVariable String slotId, Model model){
-        log.debug("Getting slot id: " + slotId);
-
-        Optional<Slot> slotOptional = service.findById(Long.valueOf(slotId));
-        Student student = new Student();
-        slotOptional.ifPresent(slot -> slot.getStudents().add(student));
-
-        SlotDto slotDto = converter.convertFromEntity(slotOptional.get());
-        StudentDto studentDto = studentConverter.convertFromEntity(student);
-
-        // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("student", studentDto);
-        return VIEWS_SLOTS_STUDENTS_STUDENTFORM;
-    }
-
-    @GetMapping("/slots/{slotId}/student/{studentId}/delete")
-    public String deleteSlotStudent(@PathVariable String slotId, @PathVariable String studentId, Model model){
-        log.debug("Getting slot id: " + slotId + " and student Id: " + studentId);
-
-        Optional<Slot> slotOptional = service.findById(Long.valueOf(slotId));
-        service.deleteBySlotIdAndStudentId(Long.valueOf(slotId), Long.valueOf(studentId));
-
-        SlotDto slotDto = converter.convertFromEntity(slotOptional.get());
-
-        // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("student", slotDto);
-        return REDIRECT_SLOTS_STUDENTS;
-    }
-
-    @GetMapping("/slots/{slotId}/students/{studentId}/show")
-    public String showSlotStudent(@PathVariable String slotId, @PathVariable String studentId, Model model){
-        log.debug("Getting student id " + studentId + " for slot id: " + slotId);
-
-        Optional<Slot> slotOptional = service.findById(Long.valueOf(slotId));
-        Optional<Student> studentOptional =
-                service.findBySlotIdAndStudentId(Long.valueOf(slotId), Long.valueOf(studentId));
-
-        SlotDto slotDto = converter.convertFromEntity(slotOptional.get());
-        StudentDto studentDto = studentConverter.convertFromEntity(studentOptional.get());
-
-        model.addAttribute("student", studentDto);
-        model.addAttribute("slot", slotDto);
-        return VIEWS_SLOTS_STUDENTS_SHOW;
-    }
 }
