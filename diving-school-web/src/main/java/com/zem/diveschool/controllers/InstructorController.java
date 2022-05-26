@@ -23,6 +23,23 @@ import java.util.Set;
 @Controller
 public class InstructorController {
 
+    private static final String VIEWS_INSTRUCTORS_INDEX = "instructors/index";
+    private static final String VIEWS_INSTRUCTORS_SHOW = "instructors/show";
+    private static final String VIEWS_INSTRUCTORS_INSTRUCTORFORM = "instructors/instructorform";
+    private static final String VIEWS_INSTRUCTORS_FIND = "instructors/find";
+
+    private static final String VIEWS_INSTRUCTORS_LOCATIONS_LIST = "instructors/locations/list";
+    private static final String VIEWS_INSTRUCTORS_LOCATIONS_NEW = "instructors/locations/new";
+    private static final String VIEWS_INSTRUCTORS_LOCATIONS_SHOW = "instructors/locations/show";
+
+    private static final String VIEWS_INSTRUCTORS_SLOTS_LIST = "instructors/slots/list";
+    private static final String VIEWS_INSTRUCTORS_SLOTS_NEW = "instructors/slots/new";
+    private static final String VIEWS_INSTRUCTORS_SLOTS_SHOW =  "instructors/slots/show";
+
+    private static final String REDIRECT_INSTRUCTORS = "redirect:/instructors";
+    private static final String REDIRECT_INSTRUCTORS_LOCATIONS = "redirect:/instructors/locations";
+    private static final String REDIRECT_INSTRUCTORS_SLOTS = "redirect:/instructors/slots";
+
     private final InstructorExtendedService service;
     private final InstructorConverter converter;
     private final LocationConverter locationConverter;
@@ -38,17 +55,17 @@ public class InstructorController {
         this.slotConverter = slotConverter;
     }
 
-    @InitBinder
-    public void setAllowedFields(WebDataBinder dataBinder) {
-        dataBinder.setDisallowedFields("id");
-    }
+//    @InitBinder
+//    public void setAllowedFields(WebDataBinder dataBinder) {
+//        dataBinder.setDisallowedFields("id");
+//    }
 
     @GetMapping({"/instructors", "/instructors/index", "/instructors/index.html", "instructors.html"})
     public String listInstructors(Model model) {
         Set<Instructor> instructors = service.findAll();
         Set<InstructorDto> instructorsDto = converter.convertFromEntities(instructors);
         model.addAttribute("instructors", instructorsDto);
-        return "instructors/index";
+        return VIEWS_INSTRUCTORS_INDEX;
     }
 
     @GetMapping({"/instructors/{id}/show"})
@@ -56,13 +73,13 @@ public class InstructorController {
         Optional<Instructor> instructorOptional = service.findById(Long.valueOf(id));
         InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
         model.addAttribute("instructor", instructorDto);
-        return "instructors/show";
+        return VIEWS_INSTRUCTORS_SHOW;
     }
 
     @GetMapping("instructors/new")
     public String newInstructor(Model model) {
         model.addAttribute("instructor", InstructorDto.builder().build());
-        return "instructors/instructorform";
+        return VIEWS_INSTRUCTORS_INSTRUCTORFORM;
     }
 
     @GetMapping("instructors/{id}/update")
@@ -70,7 +87,7 @@ public class InstructorController {
         Optional<Instructor> instructorOptional = service.findById(Long.valueOf(id));
         InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
         model.addAttribute("instructor", instructorDto);
-        return  "instructors/instructorform";
+        return  VIEWS_INSTRUCTORS_INSTRUCTORFORM;
     }
 
     @PostMapping("instructors")
@@ -80,13 +97,13 @@ public class InstructorController {
         Instructor savedInstructor = service.save(instructor);
 
         InstructorDto savedInstructorDto = converter.convertFromEntity(savedInstructor);
-        return "redirect:/instructors/" + savedInstructorDto.getId() + "/show";
+        return REDIRECT_INSTRUCTORS + "/" + savedInstructorDto.getId() + "/show";
     }
 
     @GetMapping("instructors/{id}/delete")
     public String deleteById(@PathVariable String id){
         service.deleteById(Long.valueOf(id));
-        return "redirect:/instructors";
+        return REDIRECT_INSTRUCTORS;
     }
 
     /* --- */
@@ -97,7 +114,7 @@ public class InstructorController {
         Set<InstructorDto> instructorsDto = converter.convertFromEntities(instructors);
 
         model.addAttribute("instructors", instructorsDto);
-        return "instructors/find";
+        return VIEWS_INSTRUCTORS_FIND;
     }
 
     /* --- */
@@ -115,7 +132,7 @@ public class InstructorController {
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("locations", locationsDto);
         model.addAttribute("instructor", instructorDto);
-        return "instructors/locations/list";
+        return VIEWS_INSTRUCTORS_LOCATIONS_LIST;
     }
 
     @GetMapping("/instructors/{instructorId}/locations/new")
@@ -130,7 +147,7 @@ public class InstructorController {
         instructorDto.setHomeAddress(locationDto);
 
         model.addAttribute("location", locationDto);
-        return "instructors/locations/new";
+        return VIEWS_INSTRUCTORS_LOCATIONS_NEW;
     }
 
     @GetMapping("/instructors/{instructorId}/locations/{locationId}/delete")
@@ -144,7 +161,7 @@ public class InstructorController {
         InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
 
         model.addAttribute("instructor", instructorDto);
-        return "redirect:/instructors/locations";
+        return REDIRECT_INSTRUCTORS_LOCATIONS;
     }
 
     @GetMapping("/instructors/{instructorId}/locations/{locationId}/show")
@@ -161,7 +178,7 @@ public class InstructorController {
 
         model.addAttribute("location", locationDto);
         model.addAttribute("instructor", instructorDto);
-        return "instructors/locations/show";
+        return VIEWS_INSTRUCTORS_LOCATIONS_SHOW;
     }
 
     @GetMapping("/instructors/{instructorId}/slots")
@@ -177,7 +194,7 @@ public class InstructorController {
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("slots", slotsDto);
         model.addAttribute("instructor", instructorDto);
-        return "instructors/slots/list";
+        return VIEWS_INSTRUCTORS_SLOTS_LIST;
     }
 
     @GetMapping("/instructors/{instructorId}/slots/new")
@@ -192,7 +209,7 @@ public class InstructorController {
         instructorDto.getSlots().add(slotDto);
 
         model.addAttribute("slot", slotDto);
-        return "instructors/slots/new";
+        return VIEWS_INSTRUCTORS_SLOTS_NEW;
     }
 
     @GetMapping("/instructors/{instructorId}/slots/{slotId}/delete")
@@ -206,7 +223,7 @@ public class InstructorController {
         InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
 
         model.addAttribute("instructor", instructorDto);
-        return "redirect:/instructors/slots";
+        return REDIRECT_INSTRUCTORS_SLOTS;
     }
 
     @GetMapping("/instructors/{instructorId}/slots/{slotId}/show")
@@ -222,6 +239,6 @@ public class InstructorController {
 
         model.addAttribute("slot", slotDto);
         model.addAttribute("instructor", instructorDto);
-        return "instructors/slots/show";
+        return VIEWS_INSTRUCTORS_SLOTS_SHOW;
     }
 }

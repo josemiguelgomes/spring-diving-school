@@ -19,38 +19,57 @@ import java.util.Set;
 @Controller
 public class SlotController {
 
+    private static final String VIEWS_SLOTS_INDEX = "slots/index";
+    private static final String VIEWS_SLOTS_SHOW = "slots/show";
+    private static final String VIEWS_SLOTS_SLOTFORM = "slots/slotform";
+    private static final String VIEWS_SLOTS_FIND = "slots/find";
+
+    private static final String VIEWS_SLOTS_COURSES_LIST = "slots/courses/list";
+    private static final String VIEWS_SLOTS_SOURSES_COURSEFORM = "slots/courses/courseform";
+    private static final String VIEWS_SLOTS_COURSES_SHOW = "slots/courses/show";
+
+    private static final String VIEWS_SLOTS_INSTRUCTORS_LIST = "slots/instructors/list";
+    private static final String VIEWS_SLOTS_INSTRUCTORS_INSTRUCTORFORM = "slots/instructors/instructorform";
+    private static final String VIEWS_SLOTS_INSTRUCTORS_SHOW = "slots/instructors/show";
+
+    private static final String VIEWS_SLOTS_SLOTLANGUAGES_LIST = "slots/slotLanguages/list";
+    private static final String VIEWS_SLOTS_SLOTLANGUAGES_SLOTLANGUAGEFORM = "slots/slotLanguages/slotLanguageform";
+    private static final String VIEWS_SLOTS_SLOTLANGUAGES_SHOW = "slots/slotLanguages/show";
+
+    private static final String REDIRECT_SLOTS = "redirect:/slots";
+    private static final String REDIRECT_SLOTS_COURSES = "redirect:/slots/courses";
+    private static final String REDIRECT_SLOTS_INSTRUCTORS = "redirect:/slots/instructors";
+    private static final String REDIRECT_SLOTS_SLOTLANGUAGES = "redirect:/slots/slotLanguages";
+
     private final SlotExtendedService service;
     private final SlotConverter converter;
     private final CourseConverter courseConverter;
     private final InstructorConverter instructorConverter;
     private final SlotLanguageConverter slotLanguageConverter;
-    private final StudentConverter studentConverter;
 
     public SlotController(SlotExtendedService service,
                           SlotConverter converter,
                           CourseConverter courseConverter,
                           InstructorConverter instructorConverter,
-                          SlotLanguageConverter slotLanguageConverter,
-                          StudentConverter studentConverter) {
+                          SlotLanguageConverter slotLanguageConverter) {
         this.service = service;
         this.converter = converter;
         this.courseConverter = courseConverter;
         this.instructorConverter = instructorConverter;
         this.slotLanguageConverter = slotLanguageConverter;
-        this.studentConverter = studentConverter;
     }
 
-    @InitBinder
-    public void setAllowedFields(WebDataBinder dataBinder) {
-        dataBinder.setDisallowedFields("id");
-    }
+//    @InitBinder
+//    public void setAllowedFields(WebDataBinder dataBinder) {
+//        dataBinder.setDisallowedFields("id");
+//    }
 
     @GetMapping({"/slots", "/slots/index", "/slots/index.html", "slots.html"})
     public String listSlots(@NotNull Model model){
         Set<Slot> slots = service.findAll();
         Set<SlotDto> slotsDto = converter.convertFromEntities(slots);
         model.addAttribute("slots", slotsDto);
-        return "slots/index";
+        return VIEWS_SLOTS_INDEX;
     }
 
     @GetMapping({"/slots/{id}/show"})
@@ -58,13 +77,13 @@ public class SlotController {
         Optional<Slot> slotOptional = service.findById(Long.valueOf(id));
         SlotDto slotDto = converter.convertFromEntity(slotOptional.get());
         model.addAttribute("slot", slotDto);
-        return "slots/show";
+        return VIEWS_SLOTS_SHOW;
     }
 
     @GetMapping("slots/new")
     public String newSlot(@NotNull Model model){
         model.addAttribute("slot", SlotDto.builder().build());
-        return "slots/slotform";
+        return VIEWS_SLOTS_SLOTFORM;
     }
 
     @GetMapping("slots/{id}/update")
@@ -72,7 +91,7 @@ public class SlotController {
         Optional<Slot> slot = service.findById(Long.valueOf(id));
         SlotDto slotDto = converter.convertFromEntity(slot.get());
         model.addAttribute("slot", slotDto);
-        return  "slots/slotform";
+        return VIEWS_SLOTS_SLOTFORM;
     }
 
     @PostMapping("slots")
@@ -80,7 +99,7 @@ public class SlotController {
         Slot slot = converter.convertFromDto(slotDto);
         Slot savedSlot = service.save(slot);
         SlotDto savedSlotDto = converter.convertFromEntity(savedSlot);
-        return "redirect:/slots/" + savedSlotDto.getId() + "/show";
+        return REDIRECT_SLOTS + "/" + savedSlotDto.getId() + "/show";
     }
 
     @GetMapping("slots/{id}/delete")
@@ -96,7 +115,7 @@ public class SlotController {
         Set<Slot> slots = service.findAll();
         Set<SlotDto> slotsDto = converter.convertFromEntities(slots);
         model.addAttribute("slots", slotsDto);
-        return "slots/find";
+        return VIEWS_SLOTS_FIND;
     }
 
     /* --- */
@@ -114,7 +133,7 @@ public class SlotController {
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("courses", coursesDto);
         model.addAttribute("slot", slotDto);
-        return "slots/courses/list";
+        return VIEWS_SLOTS_COURSES_LIST;
     }
 
     @GetMapping("/slots/{slotId}/courses/new")
@@ -130,7 +149,7 @@ public class SlotController {
 
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("course", courseDto);
-        return "slots/courses/courseform";
+        return VIEWS_SLOTS_SOURSES_COURSEFORM;
     }
 
     @GetMapping("/slots/{slotId}/courses/{courseId}/delete")
@@ -144,7 +163,7 @@ public class SlotController {
 
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("slot", slotDto);
-        return "redirect:/slots/courses";
+        return REDIRECT_SLOTS_COURSES;
     }
 
     @GetMapping("/slots/{slotId}/courses/{courseId}/show")
@@ -160,7 +179,7 @@ public class SlotController {
 
         model.addAttribute("course", courseDto);
         model.addAttribute("slot", slotDto);
-        return "slots/courses/show";
+        return VIEWS_SLOTS_COURSES_SHOW;
     }
 
     @GetMapping("/slots/{slotId}/instructors")
@@ -176,7 +195,7 @@ public class SlotController {
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("instructors", instructorsDto);
         model.addAttribute("slot", slotDto);
-        return "slots/instructors/list";
+        return VIEWS_SLOTS_INSTRUCTORS_LIST;
     }
 
     @GetMapping("/slots/{slotId}/instructors/new")
@@ -191,7 +210,7 @@ public class SlotController {
 
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("instructor", instructorDto);
-        return "slots/instructors/instructorform";
+        return VIEWS_SLOTS_INSTRUCTORS_INSTRUCTORFORM;
     }
 
     @GetMapping("/slots/{slotId}/instructors/{instructorId}/delete")
@@ -205,7 +224,7 @@ public class SlotController {
 
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("slot", slotDto);
-        return "redirect:/slots/instructors";
+        return REDIRECT_SLOTS_INSTRUCTORS;
     }
 
     @GetMapping("/slots/{slotId}/instructors/{instructorId}/show")
@@ -221,7 +240,7 @@ public class SlotController {
 
         model.addAttribute("instructor", instructorDto);
         model.addAttribute("slot", slotDto);
-        return "slots/instructors/show";
+        return VIEWS_SLOTS_INSTRUCTORS_SHOW;
     }
 
     @GetMapping("/slots/{slotId}/slotlanguages")
@@ -238,7 +257,7 @@ public class SlotController {
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("slotLanguages", slotLanguagesDto);
         model.addAttribute("slot", slotDto);
-        return "slots/slotLanguages/list";
+        return VIEWS_SLOTS_SLOTLANGUAGES_LIST;
     }
 
     @GetMapping("/slots/{slotId}/slotLanguages/new")
@@ -254,7 +273,7 @@ public class SlotController {
 
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("slotLanguage", slotLanguageDto);
-        return "slots/slotLanguages/slotLanguageform";
+        return VIEWS_SLOTS_SLOTLANGUAGES_SLOTLANGUAGEFORM;
     }
 
     @GetMapping("/slots/{slotId}/slotlanguages/{slotLanguageId}/delete")
@@ -268,7 +287,7 @@ public class SlotController {
 
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("slot", slotDto);
-        return "redirect:/slots/slotLanguages";
+        return REDIRECT_SLOTS_SLOTLANGUAGES;
     }
 
     @GetMapping("/slots/{slotId}/slotlanguages/{slotLanguageId}/show")
@@ -284,68 +303,7 @@ public class SlotController {
 
         model.addAttribute("slotLanguage", slotLanguageDto);
         model.addAttribute("slot", slotDto);
-        return "slots/slotLanguages/show";
+        return VIEWS_SLOTS_SLOTLANGUAGES_SHOW;
     }
 
-    @GetMapping("/slots/{slotId}/students")
-    public String listSlotStudents(@PathVariable String slotId, Model model){
-        log.debug("Getting students list for slot id: " + slotId);
-
-        Optional<Slot> slotOptional = service.findById(Long.valueOf(slotId));
-        Set<Student> students = service.findStudentsBySlotId(Long.valueOf(slotId));
-
-        SlotDto slotDto = converter.convertFromEntity(slotOptional.get());
-        Set<StudentDto> studentsDto = studentConverter.convertFromEntities(students);
-
-        // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("students", studentsDto);
-        model.addAttribute("slot", slotDto);
-        return "slots/students/list";
-    }
-
-    @GetMapping("/slots/{slotId}/student/new")
-    public String newSlotStudent(@PathVariable String slotId, Model model){
-        log.debug("Getting slot id: " + slotId);
-
-        Optional<Slot> slotOptional = service.findById(Long.valueOf(slotId));
-        Student student = new Student();
-        slotOptional.ifPresent(slot -> slot.getStudents().add(student));
-
-        SlotDto slotDto = converter.convertFromEntity(slotOptional.get());
-        StudentDto studentDto = studentConverter.convertFromEntity(student);
-
-        // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("student", studentDto);
-        return "slots/student/studentform";
-    }
-
-    @GetMapping("/slots/{slotId}/student/{studentId}/delete")
-    public String deleteSlotStudent(@PathVariable String slotId, @PathVariable String studentId, Model model){
-        log.debug("Getting slot id: " + slotId + " and student Id: " + studentId);
-
-        Optional<Slot> slotOptional = service.findById(Long.valueOf(slotId));
-        service.deleteBySlotIdAndStudentId(Long.valueOf(slotId), Long.valueOf(studentId));
-
-        SlotDto slotDto = converter.convertFromEntity(slotOptional.get());
-
-        // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("student", slotDto);
-        return "redirect:/slots/students";
-    }
-
-    @GetMapping("/slots/{slotId}/students/{studentId}/show")
-    public String showSlotStudent(@PathVariable String slotId, @PathVariable String studentId, Model model){
-        log.debug("Getting student id " + studentId + " for slot id: " + slotId);
-
-        Optional<Slot> slotOptional = service.findById(Long.valueOf(slotId));
-        Optional<Student> studentOptional =
-                service.findBySlotIdAndStudentId(Long.valueOf(slotId), Long.valueOf(studentId));
-
-        SlotDto slotDto = converter.convertFromEntity(slotOptional.get());
-        StudentDto studentDto = studentConverter.convertFromEntity(studentOptional.get());
-
-        model.addAttribute("student", studentDto);
-        model.addAttribute("slot", slotDto);
-        return "slots/students/show";
-    }
 }

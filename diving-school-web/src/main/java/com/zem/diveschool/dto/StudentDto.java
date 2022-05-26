@@ -44,8 +44,8 @@ public class StudentDto extends GenericDto<StudentDto> {
         this.language = language;
         this.photo = photo;
         this.homeAddress = homeAddress;
-        this.cards = cards;
-        this.slots = slots;
+        if(cards != null) { this.cards = cards; }
+        if(slots != null) { this.slots = slots; }
     }
 
     //

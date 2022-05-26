@@ -14,9 +14,9 @@ public class Slot extends BaseEntity<Slot> {
     @Column(name = "title")
     private String title;
     @Column(name = "start_date")
-    private Date startDate;
+    private Date startDate = new Date();
     @Column(name = "end_date")
-    private Date endDate;
+    private Date endDate = new Date();
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;

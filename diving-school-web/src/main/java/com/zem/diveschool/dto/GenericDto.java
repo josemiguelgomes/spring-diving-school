@@ -21,6 +21,10 @@ public abstract class GenericDto<T extends GenericDto>  implements Comparable<T>
         this.id = id;
     }
 
+    public boolean isNew() {
+        return this.id == null;
+    }
+
     @Override
     public int compareTo(T o) {
         return id.compareTo(o.getId());

@@ -1,13 +1,11 @@
 package com.zem.diveschool.controllers;
 
-import com.zem.diveschool.converters.ConverterDtoEntityService;
 import com.zem.diveschool.converters.impl.simple.CourseConverter;
 import com.zem.diveschool.converters.impl.simple.SlotConverter;
 import com.zem.diveschool.data.CourseExtendedService;
+import com.zem.diveschool.data.SlotExtendedService;
 import com.zem.diveschool.dto.CourseDto;
-import com.zem.diveschool.dto.SlotDto;
 import com.zem.diveschool.persistence.model.Course;
-import com.zem.diveschool.persistence.model.Slot;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -37,6 +35,9 @@ public class CourseControllerTest {
     @Mock
     CourseExtendedService service;
 
+    @Mock
+    SlotExtendedService slotService;
+
     CourseController controller;
 
     MockMvc mockMvc;
@@ -45,7 +46,7 @@ public class CourseControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new CourseController(service, converter, slotConverter);
+        controller = new CourseController(service, slotService, converter, slotConverter);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 

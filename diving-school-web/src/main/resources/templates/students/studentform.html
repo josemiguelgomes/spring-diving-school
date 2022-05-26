@@ -9,7 +9,9 @@
    <!--/*@thymesVar id="student" type="com.zem.diveschool.persistence.model.Student"*/-->
       <h2>Student Form</h2>
 
-      <a href="#" th:href="@{'/students/' + ${student.id} + '/photo'}">Change Photo</a>
+      <a href="#" th:href="@{'/students/' + ${student.id} + '/photo'}"
+         th:with="text=${student['new']} ? 'Add Photo' : 'Update Photo'"
+         th:text="${text}">Change Photo</a>
 
       <form  th:object="${student}" th:action="@{/students/}" method="post">
          <input type="hidden" th:field="*{id}"/>
@@ -72,7 +74,16 @@
 
          </div>
 
-         <button type="submit" class="btn btn-primary">Submit</button>
+         <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+               <button
+                       th:with="text=${student['new']} ? 'Add Student' : 'Update Student'"
+                       class="btn btn-default" type="submit" th:text="${text}">Add Student
+               </button>
+            </div>
+
+<!--     </div>button type="submit" class="btn btn-primary">Add/Update Student</button>   -->
+
       </form>
 
       <hr>

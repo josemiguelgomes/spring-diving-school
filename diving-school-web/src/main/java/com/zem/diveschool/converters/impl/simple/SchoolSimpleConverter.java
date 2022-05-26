@@ -1,7 +1,6 @@
 package com.zem.diveschool.converters.impl.simple;
 
 import com.zem.diveschool.converters.ConverterDtoEntityService;
-import org.springframework.core.convert.converter.Converter;
 
 import java.text.SimpleDateFormat;
 import java.util.Collection;

@@ -17,6 +17,12 @@ import java.util.Set;
 @Controller
 public class SlotLanguageController {
 
+    private static final String VIEWS_SLOTLANGUAGES_INDEX = "slotLanguages/index";
+    private static final String VIEWS_SLOTLANGUAGES_INDEX_SHOW = "slotLanguages/show";
+    private static final String VIEWS_SLOTLANGUAGES_SLOTLANGUAGEFORM = "slotLanguages/slotLanguageform";
+
+    private static final String REDIRECT_SLOTLANGUAGES = "redirect:/slotLanguages";
+
     private final SlotLanguageExtendedService service;
     private final SlotLanguageConverter converter;
 
@@ -26,17 +32,17 @@ public class SlotLanguageController {
         this.converter = converter;
     }
 
-    @InitBinder
-    public void setAllowedFields(WebDataBinder dataBinder) {
-        dataBinder.setDisallowedFields("id");
-    }
+//    @InitBinder
+//    public void setAllowedFields(WebDataBinder dataBinder) {
+//        dataBinder.setDisallowedFields("id");
+//    }
 
     @GetMapping({"/slotLanguages", "/slotLanguages/index", "/slotLanguages/index.html", "slotLanguages.html"})
     public String listSlotLanguages(Model model){
         Set<SlotLanguage> slotLanguages = service.findAll();
         Set<SlotLanguageDto> slotLanguagesDto = converter.convertFromEntities(slotLanguages);
         model.addAttribute("slotLanguages", slotLanguagesDto);
-        return "slotLanguages/index";
+        return VIEWS_SLOTLANGUAGES_INDEX;
     }
 
     @GetMapping({"/slotLanguages/{id}/show"})
@@ -44,13 +50,13 @@ public class SlotLanguageController {
         Optional<SlotLanguage> slotLanguageOptional = service.findById(Long.valueOf(id));
         SlotLanguageDto slotLanguageDto = converter.convertFromEntity(slotLanguageOptional.get());
         model.addAttribute("slotLanguage", slotLanguageDto);
-        return "slotLanguages/show";
+        return VIEWS_SLOTLANGUAGES_INDEX_SHOW;
     }
 
     @GetMapping("slotLanguages/new")
     public String newSlotLanguage(Model model){
         model.addAttribute("slotLanguage", SlotLanguageDto.builder().build());
-        return "slotLanguages/slotLanguageform";
+        return VIEWS_SLOTLANGUAGES_SLOTLANGUAGEFORM;
     }
 
     @GetMapping("slotLanguages/{id}/update")
@@ -58,7 +64,7 @@ public class SlotLanguageController {
         Optional<SlotLanguage> slotLanguage = service.findById(Long.valueOf(id));
         SlotLanguageDto slotLanguageDto = converter.convertFromEntity(slotLanguage.get());
         model.addAttribute("slotLanguage", slotLanguageDto);
-        return  "slotLanguages/slotLanguageform";
+        return  VIEWS_SLOTLANGUAGES_SLOTLANGUAGEFORM;
     }
 
     @PostMapping("slotLanguages")
@@ -66,13 +72,13 @@ public class SlotLanguageController {
         SlotLanguage slotLanguage = converter.convertFromDto(slotLanguageDto);
         SlotLanguage savedSlotLanguage = service.save(slotLanguage);
         SlotLanguageDto savedSlotLanguageDto = converter.convertFromEntity(savedSlotLanguage);
-        return "redirect:/slotLanguages/" + savedSlotLanguageDto.getId() + "/show";
+        return REDIRECT_SLOTLANGUAGES + "/" + savedSlotLanguageDto.getId() + "/show";
     }
 
     @GetMapping("slotLanguages/{id}/delete")
     public String deleteById(@PathVariable String id){
         service.deleteById(Long.valueOf(id));
-        return "redirect:/slotLanguages";
+        return REDIRECT_SLOTLANGUAGES;
     }
 
     /* --- */

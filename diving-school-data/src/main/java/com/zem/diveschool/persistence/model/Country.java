@@ -1,19 +1,31 @@
 package com.zem.diveschool.persistence.model;
 
-public enum Country {
-    PORTUGAL("PRT"),
-    FRANCE("FRA"),
-    UNITED_KINGDOM("GBR"),
-    SPAIN("ESP"),
-    UKRAINE("UKR");
 
-    private final String field;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-    private Country(String field) {
-        this.field = field;
-    }
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-    public String getCountry() {
-        return field;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@Entity
+@Table(name = "countries")
+public class Country extends BaseEntity<Country> {
+    @Column(name = "country")
+    private String country;
+    @Column(name = "isocode")
+    private String isoCode;
+
+    @Builder
+    public Country(Long id, String country, String isocode) {
+        super(id);
+        this.country = country;
+        this.isoCode = isocode;
     }
 }

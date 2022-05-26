@@ -10,13 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class IndexController {
 
+    private static final String VIEWS_INDEX = "index";
+    private static final String VIEWS_NOTIMPLEMENTED = "notimplemented";
+
     @GetMapping({"", "/", "index", "index.html"})
     public String getIndexPage(){
-        return "index";
+        return VIEWS_INDEX;
     }
 
     @GetMapping("/oups")
     public String oupsHandler(){
-        return "notimplemented";
+        return VIEWS_NOTIMPLEMENTED;
     }
 }

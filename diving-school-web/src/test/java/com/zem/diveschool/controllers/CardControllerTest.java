@@ -1,7 +1,9 @@
 package com.zem.diveschool.controllers;
 
 import com.zem.diveschool.converters.impl.simple.CardConverter;
+import com.zem.diveschool.converters.impl.simple.StudentConverter;
 import com.zem.diveschool.data.CardExtendedService;
+import com.zem.diveschool.data.StudentExtendedService;
 import com.zem.diveschool.dto.CardDto;
 import com.zem.diveschool.persistence.model.Card;
 import org.junit.Before;
@@ -27,7 +29,13 @@ public class CardControllerTest {
     CardExtendedService service;
 
     @Mock
+    StudentExtendedService studentService;
+
+    @Mock
     CardConverter converter;
+
+    @Mock
+    StudentConverter studentConverter;
 
     CardController controller;
 
@@ -37,7 +45,7 @@ public class CardControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new CardController(service, converter);
+        controller = new CardController(service, studentService, converter, studentConverter);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 

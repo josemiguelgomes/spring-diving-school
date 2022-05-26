@@ -50,7 +50,7 @@ public class SlotControllerTest {
         MockitoAnnotations.initMocks(this);
 
         controller = new SlotController(service, converter, courseConverter, instructorConverter,
-                                        slotLanguageConverter, studentConverter);
+                                        slotLanguageConverter);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 

@@ -6,7 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.ZoneId;
+
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -20,10 +23,11 @@ public class Card extends BaseEntity<Card> {
     @Column(name = "student_name")
     private String studentName;
     @Column(name = "start_date")
-    private Date startDate ;
+    private Date startDate = new Date();
     @Column(name = "end_date")
-    private Date endDate;
-    @Enumerated(EnumType.STRING)
+    private Date endDate = new Date();
+//    @Enumerated(EnumType.STRING)
+    @Column(name = "country")
     private Country country;
     @Column(name = "instructor_name")
     private String instructorName;
@@ -32,8 +36,14 @@ public class Card extends BaseEntity<Card> {
     private Student student;
 
     @Builder
-    public Card(Long id, String course, String studentName, Date startDate, Date endDate, Country country,
-                String instructorName, Student student) {
+    public Card(Long id,
+                String course,
+                String studentName,
+                Date startDate,
+                Date endDate,
+                Country country,
+                String instructorName,
+                Student student) {
         super(id);
         this.course = course;
         this.studentName = studentName;
