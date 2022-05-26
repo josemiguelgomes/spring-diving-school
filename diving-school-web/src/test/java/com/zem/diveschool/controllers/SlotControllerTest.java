@@ -30,16 +30,10 @@ public class SlotControllerTest {
     SlotConverter converter;
 
     @Mock
-    CourseConverter courseConverter;
-
-    @Mock
     InstructorConverter instructorConverter;
 
     @Mock
     SlotLanguageConverter slotLanguageConverter;
-
-    @Mock
-    StudentConverter studentConverter;
 
     SlotController controller;
 
@@ -49,8 +43,7 @@ public class SlotControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new SlotController(service, converter, courseConverter, instructorConverter,
-                                        slotLanguageConverter);
+        controller = new SlotController(service, converter, instructorConverter, slotLanguageConverter);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 

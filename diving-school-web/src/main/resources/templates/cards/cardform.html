@@ -30,6 +30,7 @@
                        th:text="${countryValue.name()}"
                >val</option>
             </select>
+<!--            <input th:replace="~{fragments/selectField :: select ('Country', 'country', ${countries})}" />  -->
             <p class="mb-0"><strong class="pr-1">Instructor Name </strong>
                <input type="text" class="form-control" th:field="*{instructorName}"/>
             </p>

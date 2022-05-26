@@ -1,23 +1,18 @@
 package com.zem.diveschool.controllers;
 
+import com.zem.diveschool.converters.impl.simple.InstructorConverter;
 import com.zem.diveschool.converters.impl.simple.LocationConverter;
+import com.zem.diveschool.data.InstructorExtendedService;
 import com.zem.diveschool.data.LocationExtendedService;
-import com.zem.diveschool.dto.LocationDto;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -28,7 +23,13 @@ public class LocationControllerTest {
     LocationExtendedService service;
 
     @Mock
+    InstructorExtendedService instructorService;
+
+    @Mock
     LocationConverter converter;
+
+    @Mock
+    InstructorConverter instructorConverter;
 
     @Mock
     LocationController controller;
@@ -39,7 +40,7 @@ public class LocationControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new LocationController(service, converter);
+        controller = new LocationController(service, instructorService, converter, instructorConverter);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 

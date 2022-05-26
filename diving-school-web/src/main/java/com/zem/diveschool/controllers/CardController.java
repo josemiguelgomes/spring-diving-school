@@ -34,20 +34,20 @@ public class CardController {
 
     private static final String REDIRECT_STUDENTS = "redirect:/students";
 
-    private final CardExtendedService service;
+    private final CardExtendedService cardService;
     private final StudentExtendedService studentService;
 
-    private final CardConverter converter;
+    private final CardConverter cardConverter;
     private final StudentConverter studentConverter;
 
-    public CardController(CardExtendedService service,
+    public CardController(CardExtendedService cardService,
                           StudentExtendedService studentService,
-                          CardConverter converter,
+                          CardConverter cardConverter,
                           StudentConverter studentConverter) {
         super();
-        this.service = service;
+        this.cardService = cardService;
         this.studentService = studentService;
-        this.converter = converter;
+        this.cardConverter = cardConverter;
         this.studentConverter = studentConverter;
     }
 
@@ -59,7 +59,7 @@ public class CardController {
         }
         Student student = studentOptional.get();
         StudentDto studentDto = studentConverter.convertFromEntity(student);
-        studentDto.setCards(converter.convertFromEntities(student.getCards()));
+        studentDto.setCards(cardConverter.convertFromEntities(student.getCards()));
         return studentDto;
     }
 /*
@@ -108,14 +108,14 @@ public class CardController {
             model.put("card", cardDto);
             return VIEWS_STUDENTS_CARDS_CARDFORM;
         } else {
-            Card card = converter.convertFromDto(cardDto);
+            Card card = cardConverter.convertFromDto(cardDto);
             Student student = studentService.findById(studentId).get();
 
             // Link the Entities
             card.setStudent(student);
             student.getCards().add(card);
 
-            service.save(card);
+            cardService.save(card);
 
             return REDIRECT_STUDENTS + "/" + student.getId() + "/show";
         }
@@ -142,7 +142,7 @@ public class CardController {
         log.debug("Getting card id " + cardId + " for student id: " + studentId);
 
         Optional<Card> cardOptional = studentService.findByStudentIdAndCardId(studentId, cardId);
-        CardDto cardDto = converter.convertFromEntity(cardOptional.get());
+        CardDto cardDto = cardConverter.convertFromEntity(cardOptional.get());
 
         model.addAttribute("student", studentDto);
         model.addAttribute("card", cardDto);
@@ -155,8 +155,8 @@ public class CardController {
                                         Model model) {
         log.debug("Getting student id " + studentDto.getId());
 
-        Optional<Card> cardOptional = service.findById(cardId);
-        CardDto cardDto = converter.convertFromEntity(cardOptional.get());
+        Optional<Card> cardOptional = cardService.findById(cardId);
+        CardDto cardDto = cardConverter.convertFromEntity(cardOptional.get());
         cardDto.setStudent(studentDto);
 
         model.addAttribute("student", studentDto);
@@ -180,13 +180,13 @@ public class CardController {
             model.addAttribute("card", cardDto);
             return VIEWS_STUDENTS_CARDS_CARDFORMUPDATE;
         } else {
-            Card card = converter.convertFromDto(cardDto);
+            Card card = cardConverter.convertFromDto(cardDto);
             Student student = studentService.findById(studentId).get();
 
             student.getCards().add(card);
             card.setStudent(student);
 
-            service.save(card);
+            cardService.save(card);
 
             return REDIRECT_STUDENTS + "/" + student.getId() + "/show";
         }

@@ -4,17 +4,21 @@ import com.zem.diveschool.converters.impl.simple.InstructorConverter;
 import com.zem.diveschool.converters.impl.simple.LocationConverter;
 import com.zem.diveschool.converters.impl.simple.SlotConverter;
 import com.zem.diveschool.data.InstructorExtendedService;
+import com.zem.diveschool.data.SlotExtendedService;
 import com.zem.diveschool.dto.InstructorDto;
-import com.zem.diveschool.dto.LocationDto;
 import com.zem.diveschool.dto.SlotDto;
+import com.zem.diveschool.dto.StudentDto;
 import com.zem.diveschool.persistence.model.Instructor;
-import com.zem.diveschool.persistence.model.Location;
 import com.zem.diveschool.persistence.model.Slot;
+import com.zem.diveschool.persistence.model.Student;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 import java.util.Set;
@@ -26,31 +30,31 @@ public class InstructorController {
     private static final String VIEWS_INSTRUCTORS_INDEX = "instructors/index";
     private static final String VIEWS_INSTRUCTORS_SHOW = "instructors/show";
     private static final String VIEWS_INSTRUCTORS_INSTRUCTORFORM = "instructors/instructorform";
+    private static final String VIEWS_INSTRUCTORS_IMAGEUPLOADFORM = "instructors/imageuploadform";
     private static final String VIEWS_INSTRUCTORS_FIND = "instructors/find";
 
-    private static final String VIEWS_INSTRUCTORS_LOCATIONS_LIST = "instructors/locations/list";
-    private static final String VIEWS_INSTRUCTORS_LOCATIONS_NEW = "instructors/locations/new";
-    private static final String VIEWS_INSTRUCTORS_LOCATIONS_SHOW = "instructors/locations/show";
-
-    private static final String VIEWS_INSTRUCTORS_SLOTS_LIST = "instructors/slots/list";
-    private static final String VIEWS_INSTRUCTORS_SLOTS_NEW = "instructors/slots/new";
-    private static final String VIEWS_INSTRUCTORS_SLOTS_SHOW =  "instructors/slots/show";
+    private static final String VIEWS_SLOTS_INSTRUCTORS_LIST = "slots/instructors/list";
+    private static final String VIEWS_SLOTS_INSTRUCTORS_INSTRUCTORFORM = "slots/instructor/studentform";
+    private static final String VIEWS_SLOTS_INSTRUCTORS_SHOW = "slots/instructors/show";
 
     private static final String REDIRECT_INSTRUCTORS = "redirect:/instructors";
-    private static final String REDIRECT_INSTRUCTORS_LOCATIONS = "redirect:/instructors/locations";
-    private static final String REDIRECT_INSTRUCTORS_SLOTS = "redirect:/instructors/slots";
+    private static final String REDIRECT_SLOTS_INSTRUCTORS = "redirect:/slots/instructors";
 
-    private final InstructorExtendedService service;
-    private final InstructorConverter converter;
+    private final InstructorExtendedService instructorService;
+    private final SlotExtendedService slotService;
+
+    private final InstructorConverter instructorConverter;
     private final LocationConverter locationConverter;
     private final SlotConverter slotConverter;
 
-    public InstructorController(InstructorExtendedService service,
-                                InstructorConverter converter,
+    public InstructorController(InstructorExtendedService instructorService,
+                                SlotExtendedService slotService,
+                                InstructorConverter instructorConverter,
                                 LocationConverter locationConverter,
                                 SlotConverter slotConverter) {
-        this.service = service;
-        this.converter = converter;
+        this.instructorService = instructorService;
+        this.slotService = slotService;
+        this.instructorConverter = instructorConverter;
         this.locationConverter = locationConverter;
         this.slotConverter = slotConverter;
     }
@@ -62,16 +66,16 @@ public class InstructorController {
 
     @GetMapping({"/instructors", "/instructors/index", "/instructors/index.html", "instructors.html"})
     public String listInstructors(Model model) {
-        Set<Instructor> instructors = service.findAll();
-        Set<InstructorDto> instructorsDto = converter.convertFromEntities(instructors);
+        Set<Instructor> instructors = instructorService.findAll();
+        Set<InstructorDto> instructorsDto = instructorConverter.convertFromEntities(instructors);
         model.addAttribute("instructors", instructorsDto);
         return VIEWS_INSTRUCTORS_INDEX;
     }
 
     @GetMapping({"/instructors/{id}/show"})
     public String showById(@PathVariable String id, Model model) {
-        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(id));
-        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
+        Optional<Instructor> instructorOptional = instructorService.findById(Long.valueOf(id));
+        InstructorDto instructorDto = instructorConverter.convertFromEntity(instructorOptional.get());
         model.addAttribute("instructor", instructorDto);
         return VIEWS_INSTRUCTORS_SHOW;
     }
@@ -83,35 +87,52 @@ public class InstructorController {
     }
 
     @GetMapping("instructors/{id}/update")
-    public String updateInstructor(@PathVariable String id, Model model) {
-        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(id));
-        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
+    public String updateInstructor(@PathVariable Long id, Model model) {
+        Optional<Instructor> instructorOptional = instructorService.findById(id);
+        InstructorDto instructorDto = instructorConverter.convertFromEntity(instructorOptional.get());
         model.addAttribute("instructor", instructorDto);
         return  VIEWS_INSTRUCTORS_INSTRUCTORFORM;
     }
 
     @PostMapping("instructors")
     public String saveOrUpdate(@ModelAttribute InstructorDto instructorDto) {
-        Instructor instructor = converter.convertFromDto(instructorDto);
+        Instructor instructor = instructorConverter.convertFromDto(instructorDto);
 
-        Instructor savedInstructor = service.save(instructor);
+        Instructor savedInstructor = instructorService.save(instructor);
 
-        InstructorDto savedInstructorDto = converter.convertFromEntity(savedInstructor);
+        InstructorDto savedInstructorDto = instructorConverter.convertFromEntity(savedInstructor);
         return REDIRECT_INSTRUCTORS + "/" + savedInstructorDto.getId() + "/show";
     }
 
     @GetMapping("instructors/{id}/delete")
     public String deleteById(@PathVariable String id){
-        service.deleteById(Long.valueOf(id));
+        instructorService.deleteById(Long.valueOf(id));
         return REDIRECT_INSTRUCTORS;
+    }
+
+    /* --- */
+
+    @GetMapping("/instructors/{instructorId}/photo")
+    public String showUploadForm(@PathVariable Long instructorId, @NotNull Model model) {
+        Optional<Instructor> instructorOptional = instructorService.findById(instructorId);
+        InstructorDto instructorDto = instructorConverter.convertFromEntity(instructorOptional.get());
+        model.addAttribute("instructor", instructorDto);
+        return VIEWS_INSTRUCTORS_IMAGEUPLOADFORM;
+    }
+
+    @PostMapping("/instructors/{instructorId}/photo")
+    public String handleImagePost(@PathVariable Long instructorId,
+                                  @RequestParam("imagefile") MultipartFile file) {
+        instructorService.saveImageFile(instructorId, file);
+        return REDIRECT_INSTRUCTORS + "/" + instructorId + "/show";
     }
 
     /* --- */
 
     @RequestMapping("/instructors/find")
     public String findInstructors(Model model) {
-        Set<Instructor> instructors = service.findAll();
-        Set<InstructorDto> instructorsDto = converter.convertFromEntities(instructors);
+        Set<Instructor> instructors = instructorService.findAll();
+        Set<InstructorDto> instructorsDto = instructorConverter.convertFromEntities(instructors);
 
         model.addAttribute("instructors", instructorsDto);
         return VIEWS_INSTRUCTORS_FIND;
@@ -119,126 +140,114 @@ public class InstructorController {
 
     /* --- */
 
-    @GetMapping("/instructors/{instructorId}/locations")
-    public String listInstructorLocations(@PathVariable String instructorId, Model model){
-        log.debug("Getting locations list for instructor id: " + instructorId);
+    @GetMapping("/slots/{slotId}/instructors")
+    public String listSlotInstructors(@PathVariable Long slotId, Model model){
+        log.debug("Getting instructors list for slot id: " + slotId);
 
-        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(instructorId));
-        Set<Location> locations = service.findLocationsByInstructorId(Long.valueOf(instructorId));
+        Optional<Slot> slotOptional = slotService.findById(slotId);
+        Set<Instructor> instructors = slotService.findInstructorsBySlotId(slotId);
 
-        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
-        Set<LocationDto> locationsDto = locationConverter.convertFromEntities(locations);
-
-        // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("locations", locationsDto);
-        model.addAttribute("instructor", instructorDto);
-        return VIEWS_INSTRUCTORS_LOCATIONS_LIST;
-    }
-
-    @GetMapping("/instructors/{instructorId}/locations/new")
-    public String newInstructorLocation(@PathVariable String instructorId, Model model){
-        log.debug("Getting instructor id " + instructorId);
-
-        // TODO make sure we have a good id value, raise exception if null
-        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(instructorId));
-        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
-
-        LocationDto locationDto = new LocationDto();
-        instructorDto.setHomeAddress(locationDto);
-
-        model.addAttribute("location", locationDto);
-        return VIEWS_INSTRUCTORS_LOCATIONS_NEW;
-    }
-
-    @GetMapping("/instructors/{instructorId}/locations/{locationId}/delete")
-    public String deleteInstructorLocation(@PathVariable String instructorId, @PathVariable String locationId,
-                                           Model model){
-        log.debug("Getting location id " + locationId + " for instructor id: " + instructorId);
-
-        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(instructorId));
-        service.deleteByInstructorIdAndLocationId(Long.valueOf(instructorId), Long.valueOf(locationId));
-
-        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
-
-        model.addAttribute("instructor", instructorDto);
-        return REDIRECT_INSTRUCTORS_LOCATIONS;
-    }
-
-    @GetMapping("/instructors/{instructorId}/locations/{locationId}/show")
-    public String showInstructorLocation(@PathVariable String instructorId, @PathVariable String locationId,
-                                         Model model){
-        log.debug("Getting location id " + locationId + " for instructor id: " + instructorId);
-
-        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(instructorId));
-        Optional<Location> locationOptional =
-                service.findByInstructorIdAndLocationId(Long.valueOf(instructorId), Long.valueOf(locationId));
-
-        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
-        LocationDto locationDto = locationConverter.convertFromEntity(locationOptional.get());
-
-        model.addAttribute("location", locationDto);
-        model.addAttribute("instructor", instructorDto);
-        return VIEWS_INSTRUCTORS_LOCATIONS_SHOW;
-    }
-
-    @GetMapping("/instructors/{instructorId}/slots")
-    public String listInstructorSlots(@PathVariable String instructorId, Model model){
-        log.debug("Getting slots list for instructor id: " + instructorId);
-
-        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(instructorId));
-        Set<Slot> slots = service.findSlotsByInstructorId(Long.valueOf(instructorId));
-
-        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
-        Set<SlotDto> slotsDto = slotConverter.convertFromEntities(slots);
+        SlotDto slotDto = slotConverter.convertFromEntity(slotOptional.get());
+        Set<InstructorDto> instructorsDto = instructorConverter.convertFromEntities(instructors);
 
         // use dto to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("slots", slotsDto);
-        model.addAttribute("instructor", instructorDto);
-        return VIEWS_INSTRUCTORS_SLOTS_LIST;
+        model.addAttribute("instructors", instructorsDto);
+        model.addAttribute("slot", slotDto);
+        return VIEWS_SLOTS_INSTRUCTORS_LIST;
     }
 
-    @GetMapping("/instructors/{instructorId}/slots/new")
-    public String newInstructorSlot(@PathVariable String instructorId, Model model){
-        log.debug("Getting instructor id " + instructorId);
+    @GetMapping("/slots/{slotId}/instructors/{instructorId}/new")
+    public String initNewSlotInstructor(@PathVariable Long slotId, @PathVariable Long instructorId, Model model) {
+        log.debug("Getting slot id " + slotId);
 
-        // TODO make sure we have a good id value, raise exception if null
-        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(instructorId));
-        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
+        // Find Slot and convert into DTO
+        Optional<Slot> slotOptional = slotService.findById(Long.valueOf(slotId));
+        SlotDto slotDto = slotConverter.convertFromEntity(slotOptional.get());
+        slotDto.setInstructors(instructorConverter.convertFromEntities(slotOptional.get().getInstructors()));
 
-        SlotDto slotDto = new SlotDto();
+        // Find Student and convert into DTO
+        Optional<Instructor> instructorOptional = instructorService.findById(instructorId);
+        InstructorDto instructorDto = instructorConverter.convertFromEntity(instructorOptional.get());
+        instructorDto.setSlots(slotConverter.convertFromEntities(instructorOptional.get().getSlots()));
+
+        // Link the two DTOs
+        slotDto.getInstructors().add(instructorDto);
         instructorDto.getSlots().add(slotDto);
 
         model.addAttribute("slot", slotDto);
-        return VIEWS_INSTRUCTORS_SLOTS_NEW;
-    }
-
-    @GetMapping("/instructors/{instructorId}/slots/{slotId}/delete")
-    public String deleteInstructorSlot(@PathVariable String instructorId, @PathVariable String slotId,
-                                           Model model){
-        log.debug("Getting slot id " + slotId + " for instructor id: " + instructorId);
-
-        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(instructorId));
-        service.deleteByInstructorIdAndSlotId(Long.valueOf(instructorId), Long.valueOf(slotId));
-
-        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
-
         model.addAttribute("instructor", instructorDto);
-        return REDIRECT_INSTRUCTORS_SLOTS;
+        return VIEWS_SLOTS_INSTRUCTORS_INSTRUCTORFORM;
     }
 
-    @GetMapping("/instructors/{instructorId}/slots/{slotId}/show")
-    public String showInstructorSlot(@PathVariable String instructorId, @PathVariable String slotId, Model model){
-        log.debug("Getting slot id " + slotId + " for instructor id: " + instructorId);
+    @PostMapping("/slots/{slotId}/instructors/{instructorID}/new")
+    public String processNewSlotInstructor(@PathVariable Long slotId,
+                                           @PathVariable Long studentId,
+                                           BindingResult result, ModelMap model) {
 
-        Optional<Instructor> instructorOptional = service.findById(Long.valueOf(instructorId));
-        Optional<Slot> slotOptional =
-                service.findByInstructorIdAndSlotId(Long.valueOf(instructorId), Long.valueOf(slotId));
+        // Find Slot and convert into DTO
+        Optional<Slot> slotOptional = slotService.findById(slotId);
+        SlotDto slotDto = slotConverter.convertFromEntity(slotOptional.get());
+        slotDto.setInstructors(instructorConverter.convertFromEntities(slotOptional.get().getInstructors()));
 
-        InstructorDto instructorDto = converter.convertFromEntity(instructorOptional.get());
+        // Find Student and convert into DTO
+        Optional<Instructor> instructorOptional = instructorService.findById(studentId);
+        InstructorDto instructorDto = instructorConverter.convertFromEntity(instructorOptional.get());
+        instructorDto.setSlots(slotConverter.convertFromEntities(instructorOptional.get().getSlots()));
+
+        if (!instructorDto.getSlots().isEmpty()
+                && instructorDto.getSlots().stream().anyMatch(slot -> slot.getInstructors().contains(instructorDto))) {
+            result.rejectValue("instructor", "duplicate", "already exists");
+        }
+
+        // Link the two DTOs
+        slotDto.getInstructors().add(instructorDto);
+        instructorDto.getSlots().add(slotDto);
+
+        if (result.hasErrors()) {
+            model.put("slot", slotDto);
+            model.put("instructor", instructorDto);
+            return VIEWS_SLOTS_INSTRUCTORS_INSTRUCTORFORM;
+        } else {
+            Slot slot = slotConverter.convertFromDto(slotDto);
+            slot.setInstructors(instructorConverter.convertFromDtos(slotDto.getInstructors()));
+
+            Instructor instructor = instructorConverter.convertFromDto(instructorDto);
+            instructor.setSlots(slotConverter.convertFromDtos(instructorDto.getSlots()));
+
+            instructorService.save(instructor);
+
+            return REDIRECT_SLOTS_INSTRUCTORS + "/" + slotDto.getId() + "/show";
+        }
+    }
+
+    @GetMapping("/slots/{slotId}/instructors/{instructorId}/delete")
+    public String deleteSlotInstructor(@PathVariable Long slotId, @PathVariable Long instructorId, Model model){
+        log.debug("Getting slot id: " + slotId + " and instructor Id: " + instructorId);
+
+        Optional<Slot> slotOptional = slotService.findById(slotId);
+        slotService.deleteBySlotIdAndInstructorId(slotId, instructorId);
+
         SlotDto slotDto = slotConverter.convertFromEntity(slotOptional.get());
 
+        // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("slot", slotDto);
-        model.addAttribute("instructor", instructorDto);
-        return VIEWS_INSTRUCTORS_SLOTS_SHOW;
+        return REDIRECT_SLOTS_INSTRUCTORS;
     }
+
+    @GetMapping("/slots/{slotId}/instructors/{instructorId}/show")
+    public String showSlotInstructor(@PathVariable Long slotId, @PathVariable Long instructorId, Model model){
+        log.debug("Getting instructor id " + instructorId + " for slot id: " + slotId);
+
+        Optional<Slot> slotOptional = slotService.findById(slotId);
+        Optional<Instructor> instructorOptional =
+                slotService.findBySlotIdAndInstructorId(slotId, instructorId);
+
+        SlotDto slotDto = slotConverter.convertFromEntity(slotOptional.get());
+        InstructorDto instructorDto = instructorConverter.convertFromEntity(instructorOptional.get());
+
+        model.addAttribute("instructor", instructorDto);
+        model.addAttribute("slot", slotDto);
+        return VIEWS_SLOTS_INSTRUCTORS_SHOW;
+    }
+
 }

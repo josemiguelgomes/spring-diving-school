@@ -10,7 +10,9 @@ import com.zem.diveschool.persistence.model.Slot;
 import com.zem.diveschool.persistence.services.InstructorService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -121,6 +123,25 @@ public class InstructorExtendedServiceImpl extends AbstractExtendedServiceImpl<I
 
         // Step 4 - persist on database
         service.save(instructorOptional.get());
+    }
+
+    @Override
+    public void saveImageFile(Long instructorId, MultipartFile file) {
+        try {
+            Byte[] byteObjects = new Byte[file.getBytes().length];
+
+            int i = 0;
+
+            for (byte b : file.getBytes()){
+                byteObjects[i++] = b;
+            }
+
+            super.saveImageFile(instructorId, byteObjects);
+
+        } catch (IOException e) {
+            //todo handle better
+            e.printStackTrace();
+        }
     }
 
 }
