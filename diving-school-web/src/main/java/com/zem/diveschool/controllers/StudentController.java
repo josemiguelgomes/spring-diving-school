@@ -45,23 +45,23 @@ public class StudentController {
     private static final String REDIRECT_STUDENTS = "redirect:/students/list";
     private static final String REDIRECT_SLOTS_STUDENTS = "redirect:/slots/students";
 
-    private final StudentExtendedService service;
+    private final StudentExtendedService studentService;
     private final SlotExtendedService slotService;
 
-    private final StudentConverter converter;
+    private final StudentConverter studentConverter;
     private final SlotConverter slotConverter;
     private final LocationConverter locationConverter;
     private final CardConverter cardConverter;
 
-    public StudentController(StudentExtendedService service,
+    public StudentController(StudentExtendedService studentService,
                              SlotExtendedService slotService,
-                             StudentConverter converter,
+                             StudentConverter studentConverter,
                              SlotConverter slotConverter,
                              LocationConverter locationConverter,
                              CardConverter cardConverter) {
-        this.service = service;
+        this.studentService = studentService;
         this.slotService = slotService;
-        this.converter = converter;
+        this.studentConverter = studentConverter;
         this.slotConverter = slotConverter;
         this.locationConverter = locationConverter;
         this.cardConverter = cardConverter;
@@ -74,16 +74,16 @@ public class StudentController {
 
     @GetMapping({"students", "/students/list", "/students/index", "/students/index.html"})
     public String listStudents(@NotNull Model model){
-        Set<Student> students = service.findAll();
-        Set<StudentDto> studentsDto = converter.convertFromEntities(students);
+        Set<Student> students = studentService.findAll();
+        Set<StudentDto> studentsDto = studentConverter.convertFromEntities(students);
         model.addAttribute("students", studentsDto);
         return VIEWS_STUDENTS_LIST;
     }
 
     @GetMapping({"/students/{id}/show"})
     public String showById(@PathVariable String id, @NotNull Model model){
-        Optional<Student> studentOptional = service.findById(Long.valueOf(id));
-        StudentDto studentDto = converter.convertFromEntity(studentOptional.get());
+        Optional<Student> studentOptional = studentService.findById(Long.valueOf(id));
+        StudentDto studentDto = studentConverter.convertFromEntity(studentOptional.get());
 
         studentDto.setHomeAddress(locationConverter.convertFromEntity(studentOptional.get().getHomeAddress()));
         studentDto.setCards(cardConverter.convertFromEntities(studentOptional.get().getCards()));
@@ -101,8 +101,8 @@ public class StudentController {
 
     @GetMapping("students/{id}/update")
     public String updateStudent(@PathVariable String id, @NotNull Model model){
-        Optional<Student> studentOptional = service.findById(Long.valueOf(id));
-        StudentDto studentDto = converter.convertFromEntity(studentOptional.get());
+        Optional<Student> studentOptional = studentService.findById(Long.valueOf(id));
+        StudentDto studentDto = studentConverter.convertFromEntity(studentOptional.get());
 
         studentDto.setHomeAddress(locationConverter.convertFromEntity(studentOptional.get().getHomeAddress()));
 
@@ -115,12 +115,12 @@ public class StudentController {
         if (result.hasErrors()) {
            return VIEWS_STUDENTS_STUDENTFORM;
         } else {
-           Student student = converter.convertFromDto(studentDto);
+           Student student = studentConverter.convertFromDto(studentDto);
            student.setHomeAddress(locationConverter.convertFromDto(studentDto.getHomeAddress()));
 
-           Student savedStudent = service.save(student);
+           Student savedStudent = studentService.save(student);
 
-           StudentDto savedStudentDto = converter.convertFromEntity(savedStudent);
+           StudentDto savedStudentDto = studentConverter.convertFromEntity(savedStudent);
            savedStudentDto.setHomeAddress(locationConverter.convertFromEntity(savedStudent.getHomeAddress()));
            return REDIRECT_STUDENTS + "/" + savedStudentDto.getId() + "/show";
         }
@@ -128,7 +128,7 @@ public class StudentController {
 
     @GetMapping("students/{id}/delete")
     public String deleteById(@PathVariable String id){
-        service.deleteById(Long.valueOf(id));
+        studentService.deleteById(Long.valueOf(id));
         return REDIRECT_STUDENTS;
     }
 
@@ -136,15 +136,16 @@ public class StudentController {
 
     @GetMapping("/students/{id}/photo")
     public String showUploadForm(@PathVariable String id, @NotNull Model model){
-        Optional<Student> studentOptional = service.findById(Long.valueOf(id));
-        StudentDto studentDto = converter.convertFromEntity(studentOptional.get());
+        Optional<Student> studentOptional = studentService.findById(Long.valueOf(id));
+        StudentDto studentDto = studentConverter.convertFromEntity(studentOptional.get());
         model.addAttribute("student", studentDto);
         return VIEWS_STUDENTS_IMAGEUPLOADFORM;
     }
 
     @PostMapping("/students/{id}/photo")
-    public String handleImagePost(@PathVariable String id, @RequestParam("imagefile") MultipartFile file){
-        service.saveImageFile(Long.valueOf(id), file);
+    public String handleImagePost(@PathVariable String id,
+                                  @RequestParam("imagefile") MultipartFile file){
+        studentService.saveImageFile(Long.valueOf(id), file);
         return REDIRECT_STUDENTS + "/" + id + "/show";
     }
 
@@ -164,9 +165,9 @@ public class StudentController {
         }
 
         // find students by last name
-        Student student = converter.convertFromDto(studentDto);
-        Set<Student> students = service.findAllByLastNameLike("%" + student.getLastName() + "%");
-        Set<StudentDto> studentsDto = converter.convertFromEntities(students);
+        Student student = studentConverter.convertFromDto(studentDto);
+        Set<Student> students = studentService.findAllByLastNameLike("%" + student.getLastName() + "%");
+        Set<StudentDto> studentsDto = studentConverter.convertFromEntities(students);
 
         if (studentsDto.isEmpty()) {
             // no students found
@@ -193,7 +194,7 @@ public class StudentController {
         Set<Student> students = slotService.findStudentsBySlotId(Long.valueOf(slotId));
 
         SlotDto slotDto = slotConverter.convertFromEntity(slotOptional.get());
-        Set<StudentDto> studentsDto = converter.convertFromEntities(students);
+        Set<StudentDto> studentsDto = studentConverter.convertFromEntities(students);
 
         // use dto to avoid lazy load errors in Thymeleaf.
         model.addAttribute("students", studentsDto);
@@ -208,11 +209,11 @@ public class StudentController {
         // Find Slot and convert into DTO
         Optional<Slot> slotOptional = slotService.findById(Long.valueOf(slotId));
         SlotDto slotDto = slotConverter.convertFromEntity(slotOptional.get());
-        slotDto.setStudents(converter.convertFromEntities(slotOptional.get().getStudents()));
+        slotDto.setStudents(studentConverter.convertFromEntities(slotOptional.get().getStudents()));
 
         // Find Student and convert into DTO
-        Optional<Student> studentOptional = service.findById(Long.valueOf(studentId));
-        StudentDto studentDto = converter.convertFromEntity(studentOptional.get());
+        Optional<Student> studentOptional = studentService.findById(Long.valueOf(studentId));
+        StudentDto studentDto = studentConverter.convertFromEntity(studentOptional.get());
         studentDto.setSlots(slotConverter.convertFromEntities(studentOptional.get().getSlots()));
 
         // Link the two DTOs
@@ -224,19 +225,19 @@ public class StudentController {
         return VIEWS_SLOTS_STUDENTS_STUDENTFORM;
     }
 
-    @PostMapping("/slots/{slotId}/students/{student}/new")
-    public String processNewStudentCard(@PathVariable String slotId,
-                                        @PathVariable String studentId,
+    @PostMapping("/slots/{slotId}/students/{studentID}/new")
+    public String processNewSlotStudent(@PathVariable Long slotId,
+                                        @PathVariable Long studentId,
                                         BindingResult result, ModelMap model) {
 
         // Find Slot and convert into DTO
-        Optional<Slot> slotOptional = slotService.findById(Long.valueOf(slotId));
+        Optional<Slot> slotOptional = slotService.findById(slotId);
         SlotDto slotDto = slotConverter.convertFromEntity(slotOptional.get());
-        slotDto.setStudents(converter.convertFromEntities(slotOptional.get().getStudents()));
+        slotDto.setStudents(studentConverter.convertFromEntities(slotOptional.get().getStudents()));
 
         // Find Student and convert into DTO
-        Optional<Student> studentOptional = service.findById(Long.valueOf(studentId));
-        StudentDto studentDto = converter.convertFromEntity(studentOptional.get());
+        Optional<Student> studentOptional = studentService.findById(studentId);
+        StudentDto studentDto = studentConverter.convertFromEntity(studentOptional.get());
         studentDto.setSlots(slotConverter.convertFromEntities(studentOptional.get().getSlots()));
 
         if (!studentDto.getSlots().isEmpty()
@@ -254,12 +255,12 @@ public class StudentController {
             return VIEWS_SLOTS_STUDENTS_STUDENTFORM;
         } else {
             Slot slot = slotConverter.convertFromDto(slotDto);
-            slot.setStudents(converter.convertFromDtos(slotDto.getStudents()));
+            slot.setStudents(studentConverter.convertFromDtos(slotDto.getStudents()));
 
-            Student student = converter.convertFromDto(studentDto);
+            Student student = studentConverter.convertFromDto(studentDto);
             student.setSlots(slotConverter.convertFromDtos(studentDto.getSlots()));
 
-            service.save(student);
+            studentService.save(student);
 
             return REDIRECT_SLOTS_STUDENTS + "/" + slotDto.getId() + "/show";
         }
@@ -288,7 +289,7 @@ public class StudentController {
                 slotService.findBySlotIdAndStudentId(Long.valueOf(slotId), Long.valueOf(studentId));
 
         SlotDto slotDto = slotConverter.convertFromEntity(slotOptional.get());
-        StudentDto studentDto = converter.convertFromEntity(studentOptional.get());
+        StudentDto studentDto = studentConverter.convertFromEntity(studentOptional.get());
 
         model.addAttribute("student", studentDto);
         model.addAttribute("slot", slotDto);
